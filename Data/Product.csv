@@ -1,0 +1,7 @@
+Product_Id,Product,Category,Term,No_of_people_covered,Premium,Payment_frequency,Net_Amt_Insured,Amt_on_Maturity,Amt_on_Maturity_Bin
+1,Protect Your Future,Long Term Care,10,4,1000,Monthly,1e+05,180000,<200000
+2,Live Free,Life,15,2,1500,Monthly,2e+05,405000,<400000
+3,Secured Happiness,Health,20,1,2000,Monthly,150000,720000,<400000
+4,Making Tomorrow Better,Disability,30,4,700,Quarterly,1e+05,126000,<200000
+5,Secured Life,Health,24,2,900,Quarterly,2e+05,129600,<200000
+6,Live Happy,Life,16,5,2000,Yearly,150000,48000,<200000

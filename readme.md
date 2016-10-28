@@ -27,7 +27,7 @@ This template showcases the use of Random Forest and Gradient Boosting to model 
 [This guide](Resources/Instructions/Typical_Workflow.md) describes the roles of multiple personas involved in creating, deploying, and consuming this solution.
 
 ## Quick Start
-If you’re just interested in creating this solution on your computer, use this fully automated solution that uploads the data to your SQL Server, preprocesses data, performs feature engineering, trains and scores the models by executing a PowerShell script. This is the fastest way to deploy the entire solution. See [PowerShell Instructions](Resources/Instructions/Powershell_Instructions.md) for this deployment.
+If you’re just interested in creating this solution yourself, use this fully automated solution that uploads the data to your SQL Server, preprocesses data, performs feature engineering, trains and scores the models by executing a PowerShell script. This is the fastest way to deploy the entire solution. See [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) to deploy this solution on an Azure VM, or use the [PowerShell Instructions](Resources/Instructions/Powershell_Instructions.md) to deploy to your own machine.
 
 ##Template Contents 
 

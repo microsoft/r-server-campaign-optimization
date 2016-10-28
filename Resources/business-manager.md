@@ -13,7 +13,7 @@ This solution packet shows how to create and refine data, train R models, and pe
 
 You can try out this dashboard in either of the following ways:
 
-* Visit the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) and push the `Try it Now` button.
+* Visit the [online version](https://pcsadwebapp.azurewebsites.net/Solutions/Byod?solutionId=campaignoptimization).
 
 *  <a href="https://powerbi.microsoft.com/en-us/desktop/" target="_blank">Install PowerBI Desktop</a> and <a href="../Campaign%20Optimization%20Dashboard.pbix" target="_blank">download and open the CampaignManagement Dashboard</a> to see the simulated results.
 

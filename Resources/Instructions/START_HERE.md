@@ -2,9 +2,15 @@
 <h1>Campaign Optimization:
 START HERE: Setup SQL Server 2016 </h1>
 <h2>Quick Start</h2>
-The instructions on this page will help you to add this solution to your own SQL Server 2016.  If you instead would like to try this solution out on a virtual machine, visit the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) and use the Deploy button.  All the configuration described below will be done for you, as well as the initial deployment of the solution.  You will be all set to follow along with the [Typical Workflow Walkthrough.](Typical_Workflow.md).
+The instructions on this page will help you to add this solution to your own SQL Server 2016.  
+
+If you instead would like to try this solution out on a virtual machine, visit the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) and use the Deploy button.  All the configuration described below will be done for you, as well as the initial deployment of the solution.  You will be all set to follow along with the [Typical Workflow Walkthrough.](Typical_Workflow.md).
+
 <h2>Prepare your SQL Server 2016 Installation</h2>
 The rest of this page assumes you are configuring your own SQL Server 2016 for this solution.
+
+If you need a trial version of SQL Server 2016, see [What's New in SQL Server 2016](https://msdn.microsoft.com/en-us/library/bb500435.aspx) for download or VM options. 
+
 Complete the steps in the Set up SQL Server R Services (In-Database) Instructions. The set up instructions file can found at  <a href="https://msdn.microsoft.com/en-us/library/mt696069.aspx" target="_blank"> https://msdn.microsoft.com/en-us/library/mt696069.aspx</a>
 
 <h2>Set up logins in SQL Server</h2>

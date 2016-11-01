@@ -11,14 +11,9 @@ Data scientists who are testing and developing solutions can work from the conve
 
 This solution packet includes the R code a data scientist would develop in the **R** folder.  It then incorporates this R code in  stored procedures (.sql files) that can be found in the **SQLR** folder.  Finally, there is a PowerShell script (.ps1 file) that automates the running of the SQL/R code.
  
-To try this out yourself: 
-* Follow the instructions in **[START HERE](Instructions/START_HERE.md)**  to create the full solution on your SQL server.
-* Once the data has been created and processed, models have been trained, and best model has been used to score the leads, use the [PowerBI Instructions](Instructions/Visualize_Results.md) to configure the dashboard to display the results.
+To try this out yourself, see the [Quick Start](../readme.md#quickstart) section on the main page.
 
-
-If you need a trial version of SQL Server 2016, see [What's New in SQL Server 2016](https://msdn.microsoft.com/en-us/library/bb500435.aspx) for download or VM options. 
-
-The rest of this page describes what happens in each of the steps: dataset creation, model development, scoring, and deployment in more detail.
+This page describes what happens in each of the steps: dataset creation, model development, scoring, and deployment in more detail.
 
 ##  Analytical Dataset Preprocessing and Feature Engineering
 
@@ -72,7 +67,7 @@ The deployed data resides in a newly created database table, showing recommendat
 
 ![Visualize](Images/visualize.png?raw=true)
 
-You can find an example of this in the  [CampaignManagement Dashboard](Campaign%20Management%20Dashboard.pbix).
+You can find an example of this in the  [Campaign Optimization Dashboard](Campaign%20Optimization%20Dashboard.pbix).
 
 
 
@@ -92,9 +87,7 @@ To run the scripts requires the following:
 
 
 To try this out yourself: 
-* Follow the instructions in **[START HERE](Instructions/START_HERE.md)** 
-* Once the data has been created and processed, models have been trained, and best model has been used to score the leads, use the [PowerBI Instructions](Instructions/Visualize_Results.md) to configure the dashboard to display the results.
-
+* View the [Quick Start](../readme.md#quickstart) section on the main page.
 
 [&lt; Back to ReadMe](../readme.md)
 

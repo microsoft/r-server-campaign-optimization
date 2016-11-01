@@ -1,10 +1,11 @@
 <img src="../Images/management.png" align="right">
 <h1>Campaign Optimization:
-Typical Workflow Walkthrough of Solution using a deployment from the Cortana Intelligence Gallary</h1>
+Typical Workflow </h1>
+<h2> Cortana Intelligence Gallary Deployment</h2>
 
 This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c).
 
-To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your VM has all the tools each persona would use on the one single machine.
+To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your VM has all the tools each persona would use on a single machine, the VM that was created for you during deployment.  Follow the steps below once you have connected to that machine.
 
 ## Server Setup and Configuration with Danny the DB Admin
 

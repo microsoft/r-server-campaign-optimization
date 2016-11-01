@@ -57,4 +57,4 @@ Let's look at our current results. Proceed to <a href="Visualize_Results.md">Vis
 
 You've just completed the fully automated solution that simulates the data, trains and scores the models by executing PowerShell scripts.  
 
-See the [Typical Workflow Walkthrough](Typical_Workflow.md) for a description of how these files were first created in R by a Data Scientist.
+See the [Typical Workflow](Typical_Workflow.md) for a description of how these files were first created in R by a Data Scientist.  If you've deployed a virtual machine from Cortana Intelligence Gallery, use [this version of the Typical Workflow](CIG_Workflow.md).

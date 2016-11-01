@@ -28,13 +28,13 @@ Running this PowerShell script will create stored procedures for the the operati
 3. Create a directory on your computer where you will put this solution.  CD to the directory and then clone the repository into it:
     
     ```
-    git clone https://github.com/Microsoft/SQL-Server-R-Services-Samples.git
+    git clone https://github.com/Microsoft/r-server-campaign-optimization.git
     ```
 
-4.  Now CD to the **CampaignManagement/SQLR** directory and run the following command, inserting your server name (or "." if you are on the same machine as the SQL server)
+4.  Now CD to the **r-server-campaign-optimization/SQLR** directory and run the following command, inserting your server name (or "." if you are on the same machine as the SQL server)
     
     ```
-    .\Campaign_Management.ps1 -ServerName "Server Name" -DBName "Campaign"
+    .\Campaign_Optimization.ps1 -ServerName "Server Name" -DBName "Campaign"
     ```
 5.  Answer the prompts.  The first time through, do not skip any steps.  (If you exit before completing all steps, the next time through you may skip the steps that have already been completed.)  
 

@@ -34,7 +34,7 @@ Now that Debra's environment is set up, she  opens her IDE and performs the foll
 
 2.  First she'll develop R scripts to prepare the data.  To view the scripts she writes, open the following files from the CampaignManagement/R directory:
 
-    a.	**step1_data_processing.R**:  Performs preprocessing steps -- outlier treatment and missing value treatment on the input datasets. 
+    a.	**step1_data_processing.R**:  Performs preprocessing steps -- data cleaning and missing value treatment on the input datasets. 
 
     c.	**step2_feature_engineering.R**:  Performs Feature Engineering and creates the Analytical Dataset.   Feature Engineering consists of creating new variables in the market touchdown dataset by aggregating the data in multiple levels.  The table is aggregated at a lead level, so variables like channel which will have more than one value for each user are pivoted and aggregated to variables like SMS count, Email count, Call Count, Last Communication Channel, Second Last Communication Channel etc.
 

@@ -33,7 +33,7 @@ The R code shown here was then incorporated into the [.sql files](../../SQLR/rea
 
     a.	**step0_data_generation.R**:  Simulates the 4 input datasets.  Use this to create different size datasets.  
 
-    b.	**step1_data_processing.R**: Uploads .csv files to the database and perfroms preprocessing steps such as outlier treatment and missing value treatment on the input datasets.  Notice it is set up to use the files from the ../Data directory.  Change the path if you wish to use different data, such as that created from the step0_data_generation.R script.
+    b.	**step1_data_processing.R**: Uploads .csv files to the database and perfroms preprocessing steps such as missing value treatment on the input datasets.  Notice it is set up to use the files from the ../Data directory.  Change the path if you wish to use different data, such as that created from the step0_data_generation.R script.
 
     c.	**step2_feature_engineering.R**:  Performs Feature Engineering and creates the Analytical Dataset.   Feature Engineering consists of creating new variables in the market touchdown dataset by aggregating the data in multiple levels.  The table is aggregated at a lead level, so variables like channel which will have more than one value for each user are pivoted and aggregated to variables like SMS count, Email count, Call Count, Last Communication Channel, Second Last Communication Channel etc.
 

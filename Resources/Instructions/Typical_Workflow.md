@@ -77,7 +77,7 @@ Now that Debra's environment is set up, she  opens her IDE and performs the foll
 
 <img src="../Images/visualize.png">
 
-The dashboard file is included in the **Resources** directory.
+The dashboard file is included in the main directory.
 
 8.  A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
 

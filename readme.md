@@ -9,11 +9,10 @@ When a business launches a marketing campaign to interest customers in some new 
 
 This template uses simulated data from the insurance industry to model the campaign response for an acquisition campaign. The model uses predictors like demographic details of the lead, historical campaign performance and product details. The model predicts the probability of a lead making a purchase from each channel, at various times of the day and days of the week, for every lead in the database. The final recommendation for targeting each user is decided based on the combination of **channel**, **day of week** and **time of day** with the highest probability of making a purchase. 
 
-For customers who prefer an on-premise solution, the implementation with SQL Server R Services is a great option, which takes advantage of the power of SQL Server and the innnovation of the R language. 
+For customers who prefer an on-premise solution, the implementation with SQL Server R Services is a great option, which takes advantage of the power of SQL Server and the innnovation of the R language.  We then use PowerBI to visualize the deployed results. 
 
-We have modeled the steps in the template after a real-life data science process, where the data preparation, model training and evaluation can be done by a data scientist, from the convenience of their R IDE, and the deployment is done using SQL stored procedures with embedded R code. We also use PowerBI to visualize the deployed results. View the details and follow the solution from start to finish with [this typical workflow](Resources/Instructions/Typical_Workflow.md) involving multiple personas.
 
-For convenience we also illustrate how all of these steps can be executed on a SQL Server client environment (such as SQL Server Management Studio), as well as from other applications. We provide a Windows PowerShell script that invokes the SQL scripts and demonstrate the end-to-end modeling process.
+
 
 ## For the Business Manager
 
@@ -21,13 +20,24 @@ A high level description of this solution is [described here](Resources/business
 
 ## For the Data Scientist 
 
-This template showcases the use of Random Forest and Gradient Boosting to model for Campaign Responses. Data Scientists can follow the steps of data creation, model development, scoring and deployment.  The final deployed recommendations will then be visualized in PowerBI. [See more details and explanations of all the files involved in this solution.](Resources/data-scientist.md).
+This template showcases the use of Random Forest and Gradient Boosting to model for Campaign Responses. Data Scientists can follow the steps of data creation, model development, scoring and deployment.  The final deployed recommendations will then be visualized in PowerBI. [See more details and explanations of all the files involved in this solution.](Resources/data-scientist.md).  See the Typical Workflow below to follow along in the steps of this solution.
 
-## Typical Workflow
-[This guide](Resources/Instructions/Typical_Workflow.md) describes the roles of multiple personas involved in creating, deploying, and consuming this solution.
 
 ## Quick Start
-If you’re just interested in creating this solution yourself, use this fully automated solution that uploads the data to your SQL Server, preprocesses data, performs feature engineering, trains and scores the models by executing a PowerShell script. This is the fastest way to deploy the entire solution. See [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) to deploy this solution on an Azure VM, or use the [PowerShell Instructions](Resources/Instructions/Powershell_Instructions.md) to deploy to your own machine.
+If you’re interested in creating this solution yourself, use this fully automated solution that uploads the data to your SQL Server, preprocesses data, performs feature engineering, trains and scores the models by executing a PowerShell script. This is the fastest way to deploy the entire solution. 
+
+* Visit the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) to deploy this solution on an Azure VM.
+
+* Or use the [PowerShell Instructions](Resources/Instructions/Powershell_Instructions.md) to deploy to your own machine.  There are a number of steps to perform here that have already been done for you if you use the above Cortana Intelligence Gallery deployment.
+
+## Typical Workflow
+We have modeled the steps in the template after a real-life data science process, where the data preparation, model training and evaluation can be done by a data scientist, from the convenience of their R IDE, and the deployment is done using SQL stored procedures with embedded R code.
+
+Follow along with this typical workflow and view the details and follow the solution from start to finish:
+
+* If you are using the solution deployed from the Cortana Intelligence Gallery, [click here](Resources/Instructions/CIG_Workflow.md).
+
+* If you are deploying this solution on your own machine, [click here](Resources/Instructions/Typical_Workflow.md) 
 
 ##Template Contents 
 

@@ -72,11 +72,14 @@ Now that Debra's environment is set up, she  opens her IDE and performs the foll
 
 6.  Finally Debra will create and execute **step4_campaign_recommendations.R** to scores data for leads to be used in a new campaign. The code uses the champion model to score each lead multiple times - for each combination of day of week, time of day, and channel - and selects the combination with the highest probability to convert for each lead.  This becomes the recommendation for that lead.  The scored datatable shows the best way to contact each lead for the next campaign. The recommendations in this table (`Recommendations`) are used for the next campaign the company wants to deploy.
 
+
 7.  Debra will now use PowerBI to visualize the recommendations created from her model.  She creates the PowerBI Dashboard which you can find in the **Resources** directory.  She uses an ODBC connection to connect to the data, so that it will always show the most recently modeled and scored data, using the [instructions here](Visualize_Results.md).
 
 <img src="../Images/visualize.png">
 
 The dashboard file is included in the **Resources** directory.
+
+8.  A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
 
 
 ## Step 3: Operationalize with Debra and Danny
@@ -85,10 +88,11 @@ Debra has completed her tasks.  She has connected to the SQL database, executed 
 
 While this task is complete for the current set of leads, our company will want to perform these actions for each new campaign that they deploy.  Instead of going back to Debra each time, Danny can operationalize the code in TSQL files which he can then run himself each month for the newest campaign rollouts.
 
-Debra hands over her scripts to Danny who adds the code to the files you can see in the **CampaignManagement\\SQL** directory. 
-Finally, Danny will automate the process or running this code by developing the PowerShell script to invoke the TSQL files.  You can find this script in the **CampaignManagement\\SQL** directory, and execute it yourself by following the [PowerShell Instructions](Powershell_Instructions.md).  As noted earlier, this is the fastest way to execute all the code included in this solution.  (This is the third way to create the same set of tables and models as the above R scripts.)
+Debra hands over her scripts to Danny who adds the code to the files you can see in the **SQL** directory. 
+Finally, Danny will automate the process or running this code by developing the PowerShell script to invoke the TSQL files.  
 
-A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
+You can find this script in the **SQL** directory, and execute it yourself by following the [PowerShell Instructions](Powershell_Instructions.md).  As noted earlier, this is the fastest way to execute all the code included in this solution.  (This will re-create the same set of tables and models as the above R scripts.)
+
 
 
 ## Step 4: Deploy and Visualize with Bernie the Business Analyst 

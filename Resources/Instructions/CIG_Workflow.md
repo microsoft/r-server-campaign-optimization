@@ -91,6 +91,8 @@ Now that Debra's environment is set up, she  opens her IDE and creates a Project
 
 The dashboard file is included in the `Campaign` directory.
 
+8.  A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
+
 
 ## Step 3: Operationalize with Debra and Danny
 
@@ -101,8 +103,7 @@ While this task is complete for the current set of leads, our company will want 
 Debra hands over her scripts to Danny who adds the code to the database as stored procedures.  You can see these procedures by logging into SSMS and opening the `Programmability>Stored Procedures` section of the `Campaign` database.
 <img src="../Images/storedproc.png">
 
-A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
-
+You can find this script in the **SQL** directory, and execute it yourself by following the [PowerShell Instructions](Powershell_Instructions.md).  As noted earlier, this was already executed when your VM was first created.  
 
 ## Step 4: Deploy and Visualize with Bernie the Business Analyst 
 

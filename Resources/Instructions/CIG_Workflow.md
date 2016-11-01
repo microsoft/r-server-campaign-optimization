@@ -77,7 +77,7 @@ Now that Debra's environment is set up, she  opens her IDE and creates a Project
 
   * This step may take 10-15 minutes to complete.  Feel free to skip it if you wish, the data already exists in the SQL database. *
 
-7.  Debra will now use PowerBI to visualize the recommendations created from her model.  She creates the PowerBI Dashboard which you can find in the **Resources** directory.  She uses an ODBC connection to connect to the data, so that it will always show the most recently modeled and scored data, using the [instructions here](Visualize_Results.md).
+7.  Debra will now use PowerBI to visualize the recommendations created from her model.  She creates the PowerBI Dashboard which you can find in the `Campaign` directory.  She uses an ODBC connection to connect to the data, so that it will always show the most recently modeled and scored data, using the [instructions here](Visualize_Results.md).
 
 <img src="../Images/visualize.png">
 

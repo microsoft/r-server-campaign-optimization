@@ -1,28 +1,32 @@
 <img src="../Images/management.png" align="right">
 <h1>Campaign Optimization:
 Typical Workflow </h1>
-<h2> Cortana Intelligence Gallary Deployment</h2>
+<h2> Cortana Intelligence Gallery Deployment</h2>
 
 ## Introduction
 When a business launches a marketing campaign to interest customers in some new or existing product(s), they will typically use  a set of  business rules to select leads for their campaign.  Machine learning can be used to help increase the response rate from these leads.   This solution packet shows how to use a prediction model to increase the response rate to a campaign by recommending  **how to contact** (for example, e-mail, SMS, or cold call) as well as **when to contact** (day of week and time of day) each lead identified for use in a new campaign.
 
-This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c). If you are using your own SQL Server for this solution, [use this page instead](Typical_Workflow.md).
+This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c). 
 
-To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your VM has all the tools each persona would use on a single machine, the VM that was created for you during deployment.  Follow the steps below once you have connected to that machine.
+*If you are using your own SQL Server for this solution, [use this guide instead](Typical_Workflow.md).*
 
-## Server Setup and Configuration with Danny the DB Admin
+To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  Follow the steps below once you have connected to that machine.
 
-Let me introduce you to  Danny, the DB Admin. It is Danny's job to configure and maintain the SQL Server that stores all the historical data about campaigns at our insurance company.  
+## Step 1: Server Setup and Configuration with Danny the DB Admin
+
+Let me introduce you to  Danny, the Database Administrator. It is Danny's job to configure and maintain the SQL Server that stores all the historical data about campaigns at our insurance company.  
 
 Danny was responsible for installing and configuring the SQL Server.  He has added a user named 'rdemo' with all the necessary permissions to execute R scripts on the server and modify the `Campaign` database.  This has already been done on your VM.
 
-## Data Prep and Modeling with Debra the Data Scientist
+## Step 2: Data Prep and Modeling with Debra the Data Scientist
 
-Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. She will actually create two models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
+Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. Debra's preferred language for developing the models is using R and SQL. She  uses Microsoft R Services with SQL Server 2016 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open R.  After analyzing the data she opted to create multiple models and choose the best one.  
 
-Debra would work on her own machine, using  using  [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) to execute these R scripts. R Client has been installed on your VM.
+She will create two machine learning models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
 
-On your VM we have Visual Studio installed along with R Tools for Visual Studio.  You will however have to either log in or create a new account for using this tool.  If you are more familiar with RStudio, you might want to install it to your machine instead.
+Debra would work on her own machine, using  [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) to execute these R scripts. R Client has been installed on your VM.
+
+Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer using RStudio as your IDE, you can install it to your machine instead.
 
 
 Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, navigate to the `Campaign/R` directory.  There you will see three files with the name `CampaignOptimization`:

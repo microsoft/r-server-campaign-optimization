@@ -5,22 +5,27 @@ Typical Workflow </h1>
 ## Introduction
 When a business launches a marketing campaign to interest customers in some new or existing product(s), they will typically use  a set of  business rules to select leads for their campaign.  Machine learning can be used to help increase the response rate from these leads.   This solution packet shows how to use a prediction model to increase the response rate to a campaign by recommending  **how to contact** (for example, e-mail, SMS, or cold call) as well as **when to contact** (day of week and time of day) each lead identified for use in a new campaign.
 
-This guide assumes you are using your own SQL Server for this solution.  If you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) you should instead [visit this page](CIG_Workflow.md).
+This guide assumes you are using your own SQL Server for this solution.  
+
+*If you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) you should instead [use this guide](CIG_Workflow.md).*
 
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  
 
 NOTE: If you’re just interested in the outcomes of this process we have also created a fully automated solution that simulates the data, trains and scores the models by executing PowerShell scripts. This is the fastest way to deploy. See [PowerShell Instructions](Powershell_Instructions.md) for this deployment.
 
-## Server Setup and Configuration with Danny the DB Admin
+## Step 1: Server Setup and Configuration with Danny the DB Admin
 
-Let me introduce you to  Danny, the DB Admin. It is Danny's job to configure and maintain the SQL Server that stores all the historical data about campaigns at our insurance company.  
+Let me introduce you to Danny, the Database Administrator. It is Danny's job to configure and maintain the SQL Server that stores all the historical data about campaigns at our insurance company.  
 
 Danny was responsible for installing and configuring the SQL Server.  You can perform these steps by using the instructions in <a href="START_HERE.md">START HERE</a>. 
 
-## Data Prep and Modeling with Debra the Data Scientist
+## Step 2: Data Prep and Modeling with Debra the Data Scientist
 
-Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. She will actually create two models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
+Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. Debra's preferred language for developing the models is using R and SQL. She  uses Microsoft R Services with SQL Server 2016 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open R.  After analyzing the data she opted to create multiple models and choose the best one.  
+
+She will create two machine learning models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
+
 
 Debra will work on her own machine, using  using  [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) to execute these R scripts. She will need to [install and configure an R IDE](https://msdn.microsoft.com/en-us/microsoft-r/r-client-get-started#configure-ide) to use with R Client.  
 
@@ -74,7 +79,7 @@ Now that Debra's environment is set up, she  opens her IDE and performs the foll
 The dashboard file is included in the **Resources** directory.
 
 
-## Operationalize with Debra and Danny
+## Step 3: Operationalize with Debra and Danny
 
 Debra has completed her tasks.  She has connected to the SQL database, executed code both locally and on the SQL machine to clean the data, create new features, train two models and select the champaion model. She's scored data, created recommendations, and also created a summary report which she will hand off to Bernie - see below.
 
@@ -86,7 +91,7 @@ Finally, Danny will automate the process or running this code by developing the 
 A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
 
 
-## Deploy and Visualize with Bernie the Business Analyst 
+## Step 4: Deploy and Visualize with Bernie the Business Analyst 
 
 Now that the predictions are created and the recommendations have been saved, we will meet our last persona - Bernie, the Business Analyst. Bernie will use the Power BI Dashboard to learn more about the recommendations (first tab). He will also review summaries of the data used to create the model (second tab).  While both tabs contain information about Day of Week, Time of Day, and Channel, it is important to understand that on the Recommendations tab this refers to predicted recommendations to use in the future, while on the Summaries tab these values refer to historical data used to create those recommendations.  
 

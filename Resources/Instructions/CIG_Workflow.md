@@ -92,7 +92,7 @@ Now that Debra's environment is set up, she  opens her IDE and creates a Project
 The dashboard file is included in the `Campaign` directory.
 
 
-## Operationalize with Debra and Danny
+## Step 3: Operationalize with Debra and Danny
 
 Debra has completed her tasks.  She has connected to the SQL database, executed code both locally and on the SQL machine to clean the data, create new features, train two models and select the champaion model. She's scored data, created recommendations, and also created a summary report which she will hand off to Bernie - see below.
 
@@ -104,7 +104,7 @@ Debra hands over her scripts to Danny who adds the code to the database as store
 A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
 
 
-## Deploy and Visualize with Bernie the Business Analyst 
+## Step 4: Deploy and Visualize with Bernie the Business Analyst 
 
 Now that the predictions are created and the recommendations have been saved, we will meet our last persona - Bernie, the Business Analyst. Bernie will use the Power BI Dashboard to learn more about the recommendations (first tab). He will also review summaries of the data used to create the model (second tab).  While both tabs contain information about Day of Week, Time of Day, and Channel, it is important to understand that on the Recommendations tab this refers to predicted recommendations to use in the future, while on the Summaries tab these values refer to historical data used to create those recommendations.  
 

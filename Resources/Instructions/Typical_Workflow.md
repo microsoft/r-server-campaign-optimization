@@ -1,6 +1,12 @@
 <img src="../Images/management.png" align="right">
 <h1>Campaign Optimization:
-Typical Workflow Walkthrough</h1>
+Typical Workflow </h1>
+
+## Introduction
+When a business launches a marketing campaign to interest customers in some new or existing product(s), they will typically use  a set of  business rules to select leads for their campaign.  Machine learning can be used to help increase the response rate from these leads.   This solution packet shows how to use a prediction model to increase the response rate to a campaign by recommending  **how to contact** (for example, e-mail, SMS, or cold call) as well as **when to contact** (day of week and time of day) each lead identified for use in a new campaign.
+
+This guide assumes you are using your own SQL Server for this solution.  If you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) you should instead [visit this page](CIG_Workflow.md).
+
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  
 

@@ -3,7 +3,10 @@
 Typical Workflow </h1>
 <h2> Cortana Intelligence Gallary Deployment</h2>
 
-This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c).
+## Introduction
+When a business launches a marketing campaign to interest customers in some new or existing product(s), they will typically use  a set of  business rules to select leads for their campaign.  Machine learning can be used to help increase the response rate from these leads.   This solution packet shows how to use a prediction model to increase the response rate to a campaign by recommending  **how to contact** (for example, e-mail, SMS, or cold call) as well as **when to contact** (day of week and time of day) each lead identified for use in a new campaign.
+
+This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c). If you are using your own SQL Server for this solution, [use this page instead](Typical_Workflow.md).
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your VM has all the tools each persona would use on a single machine, the VM that was created for you during deployment.  Follow the steps below once you have connected to that machine.
 
@@ -72,7 +75,7 @@ Now that Debra's environment is set up, she  opens her IDE and creates a Project
   FROM [Campaign].[dbo].[CM_AD]
   ```
 
-5.  Now she is ready for training the models.  She creates and executes the script you can find in **step3_training_evaluation.R**. Again, remember to replace the `connection_string` value with your information at the top of the file before you run this yourself.)  This step will train models and evaluate each.  when you run this code, you can examine the two ROC curves for the models in the plot window once the execution is finished.
+5.  Now she is ready for training the models.  She creates and executes the script you can find in **step3_training_evaluation.R**. Again, remember to replace the `connection_string` value with your information at the top of the file before you run this yourself.)  This step will train two different models and evaluate each.  when you run this code, you can examine the two ROC curves for the models in the plot window once the execution is finished.
 
 6.  Finally Debra will create and execute **step4_campaign_recommendations.R** to scores data for leads to be used in a new campaign. The code uses the champion model to score each lead multiple times - for each combination of day of week, time of day, and channel - and selects the combination with the highest probability to convert for each lead.  This becomes the recommendation for that lead.  The scored datatable shows the best way to contact each lead for the next campaign. The recommendations in this table (`Recommendations`) are used for the next campaign the company wants to deploy.
 

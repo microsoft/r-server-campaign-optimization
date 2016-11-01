@@ -34,7 +34,10 @@ In this template with SQL Server R Services, two versions of the implementation:
 | step4\_campaign\_recommendations.R | Build final recommendations from scoring 63 combinations per lead and selecting combo with highest conversion probability  |
 
 
-Follow the [R Instructions](Instructions/R_Instructions.md) to execute these scripts.
+See the Typical Workflow documentation to execute these scripts:
+* If you are using the solution deployed from the Cortana Intelligence Gallery, [click here](Resources/Instructions/CIG_Workflow.md).
+
+* If you are deploying this solution on your own machine, [click here](Resources/Instructions/Typical_Workflow.md) 
 
 
 ## Model Development in SQL Server 2016 R Services

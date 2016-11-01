@@ -2,8 +2,9 @@
 <h1>Campaign Optimization:
 Execution with PowerShell</h1>
 
+If you have deployed a VM through the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c), all steps below have already been performed and your database on that machine has all the resulting tables and stored procedures.  See the [Typical Workflow](CIG_Workflow.md) for a description of how these files were first created in R by a Data Scientist.
 
-Run this PowerShell script to perform the automated version of the solution – dataset creation, modeling, and scoring as described  [here](../data-scientist.md).
+If you are configuring your own server, run this PowerShell script to perform the automated version of the solution – dataset creation, modeling, and scoring as described  [here](../data-scientist.md).
 
 
 Make sure you have set up your SQL Server by following the instructions in <a href="START_HERE.md">START HERE</a>.  Then proceed with the steps below to run the solution template using the automated PowerShell files. Run this on the machine where SQL Server 2016 is installed.
@@ -11,7 +12,6 @@ Make sure you have set up your SQL Server by following the instructions in <a hr
 
 Running this PowerShell script will create stored procedures for the the operationalization of this solution.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](../../SQLR/README.md).
 
-If you have deployed a VM through the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c), these steps have already been performed and your database on that machine has all the resulting tables and stored procedures.  See the [Typical Workflow Walkthrough](Typical_Workflow.md) for a description of how these files were first created in R by a Data Scientist.
 
 
 1.	Click on the windows key on your keyboard. Type the words `PowerShell`.  Right click on Windows Powershell to and select `Run as administrator` to open the PowerShell window.

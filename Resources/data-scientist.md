@@ -2,12 +2,12 @@
 
 # For the Data Scientist
 
-SQL Server R Services brings the compute to the data by allowing R to run on the same computer as the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
+SQL Server R Services brings the compute to the data by running R on the computer that hosts the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
 
-This solution packet shows how to create and refine data, train R models, and perform scoring on the SQL Server machine. The final scored database table in SQL Server gives the recommendations for **how** and **when** to contact each lead. This data is then visualized in PowerBI.  Also in PowerBI is a summary of the success of the recommendations after your new campaign has completed (shown in this template with simulated data).
+This solution walks through the steps to create and refine data, train R models, and perform scoring on the SQL Server machine. The final scored database table in SQL Server gives the recommendations for **how** and **whe** to contact each lead. This data is then visualized in PowerBI, which also contains a summary of the success of the recommendations used in your new campaign after it has completed. (Simulated data is shown in this template to illustrate the feature.)
 
 
-Data scientists who are testing and developing solutions can work from the convenience of their R IDE on their client machine, while <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx" target="_blank">pushing the compute to the SQL Server machine</a>.  They can then deploy the completed solutions to SQL Server 2016 by embedding calls to R in stored procedures. These solutions can then be further automated by the use of SQL Server Integration Services and SQL Server agent.
+Data scientists who are testing and developing solutions can work, conveniently, from their favorite R IDE on their client machine and then <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx" target="_blank">push the compute to the SQL Server machine</a>.  The completed solutions are deployed to SQL Server 2016 by embedding calls to R in stored procedures. These solutions can then be further automated with SQL Server Integration Services and SQL Server agent.
 
 This solution packet includes the R code a data scientist would develop in the **R** folder.  It then incorporates this R code in  stored procedures (.sql files) that can be found in the **SQLR** folder.  Finally, there is a PowerShell script (.ps1 file) that automates the running of the SQL/R code.
  

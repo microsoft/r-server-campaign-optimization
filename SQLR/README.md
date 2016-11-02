@@ -36,7 +36,7 @@ To run the scripts requires the following:
 
 ### Workflow Automation
 -------------------
-Follow the [PowerShell instructions](../Resources/Instructions/Powershell_instructions.md) to execute all the scripts described below.
+Follow the [PowerShell instructions](../Resources/Instructions/Powershell_Instructions.md) to execute all the scripts described below.
  
 
 ### Step 0: Creating Tables

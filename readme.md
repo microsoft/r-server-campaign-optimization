@@ -7,10 +7,10 @@
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#for-the-business-manager">For the Business Manager</a></li>
-<li><a hrf="#for-the-data-scientist">For the Data Scientist</a></li>
-<li><a hrf="#quick-start">Quick Start</a></li>
-<li><a hrf="#typical-workflow">Typical Workflow</a></li>
-<li><a hrf="#template-contents">Template Contents</a></li>
+<li><a href="#for-the-data-scientist">For the Data Scientist</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#typical-workflow">Typical Workflow</a></li>
+<li><a href="#template-contents">Template Contents</a></li>
 </div>
 
 

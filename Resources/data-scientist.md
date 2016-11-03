@@ -6,10 +6,10 @@
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
 <li><a href="#analytical-dataset-preprocessing-and-feature-engineering">Analytical Dataset Preprocessing and Feature Engineering</a></li>
 <li><a href="#model-development">Model Development</a></li>
-<li><a hrf="#scoring">Scoring</a></li>
-<li><a hrf="#>deploy-and-visualize-results">Deploy and Visualize Results</a></li>
-<li><a hrf="#template-contents">Template Contents</a></li>
-<li><a hrf="#system-requirements">System Requirements</a></li>
+<li><a href="#scoring">Scoring</a></li>
+<li><a href="#>deploy-and-visualize-results">Deploy and Visualize Results</a></li>
+<li><a href="#template-contents">Template Contents</a></li>
+<li><a href="#system-requirements">System Requirements</a></li>
 </div>
 
 SQL Server R Services brings the compute to the data by running R on the computer that hosts the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 

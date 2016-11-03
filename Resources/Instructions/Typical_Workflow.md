@@ -7,9 +7,9 @@ Typical Workflow </h1>
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#step1">Step 1: Server Setup and Configuration with Danny the DB Admin</a></li>
-<li><a hrf="#step2">Step 2: Data Prep and Modeling with Debra the Data Scientist</a></li>
-<li><a hrf="#>step3">Step 3: Operationalize with Debra and Danny</a></li>
-<li><a hrf="#step4">Step 4: Deploy and Visualize with Bernie the Business Analyst </a></li>
+<li><a href="#step2">Step 2: Data Prep and Modeling with Debra the Data Scientist</a></li>
+<li><a href="#>step3">Step 3: Operationalize with Debra and Danny</a></li>
+<li><a href="#step4">Step 4: Deploy and Visualize with Bernie the Business Analyst </a></li>
 </div>
 
 ## Introduction

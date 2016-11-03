@@ -1,7 +1,17 @@
-<img src="../Images/management.png" align="right">
 <h1>Campaign Optimization:
 Typical Workflow </h1>
 <h2> Cortana Intelligence Gallery Deployment</h2>
+
+<div style="width:300px; float:right; padding-left:20px">
+<img src="../Images/management.png" >
+<h2>Table of Contents</h2>
+<ul style=" list-style-type:none; padding:0; margin-left:0px;">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#step1">Step 1: Server Setup and Configuration with Danny the DB Admin</a></li>
+<li><a hrf="#step2">Step 2: Data Prep and Modeling with Debra the Data Scientist</a></li>
+<li><a hrf="#>step3">Step 3: Operationalize with Debra and Danny</a></li>
+<li><a hrf="#step4">Step 4: Deploy and Visualize with Bernie the Business Analyst </a></li>
+</div>
 
 ## Introduction
 When a business launches a marketing campaign to interest customers in some new or existing product(s), they will typically use  a set of  business rules to select leads for their campaign.  Machine learning can be used to help increase the response rate from these leads.   This solution packet shows how to use a prediction model to increase the response rate to a campaign by recommending  **how to contact** (for example, e-mail, SMS, or cold call) as well as **when to contact** (day of week and time of day) each lead identified for use in a new campaign.
@@ -12,12 +22,14 @@ This guide assumes you have deployed the Campaign Optimzation solution from the 
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  Follow the steps below once you have connected to that machine.
 
+ <a name="step1" id="step1"></a>
 ## Step 1: Server Setup and Configuration with Danny the DB Admin
 
 Let me introduce you to  Danny, the Database Administrator. It is Danny's job to configure and maintain the SQL Server that stores all the historical data about campaigns at our insurance company.  
 
 Danny was responsible for installing and configuring the SQL Server.  He has added a user named 'rdemo' with all the necessary permissions to execute R scripts on the server and modify the `Campaign` database.  This has already been done on your VM.
 
+ <a name="step2" id="step2"></a>
 ## Step 2: Data Prep and Modeling with Debra the Data Scientist
 
 Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. Debra's preferred language for developing the models is using R and SQL. She  uses Microsoft R Services with SQL Server 2016 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open R.  After analyzing the data she opted to create multiple models and choose the best one.  
@@ -93,7 +105,7 @@ The dashboard file is included in the `Campaign` directory.
 
 8.  A summary of this process and all the files involved is described in more detail [here](../data-scientist.md).
 
-
+ <a name="step3" id="step3"></a>
 ## Step 3: Operationalize with Debra and Danny
 
 Debra has completed her tasks.  She has connected to the SQL database, executed code both locally and on the SQL machine to clean the data, create new features, train two models and select the champaion model. She's scored data, created recommendations, and also created a summary report which she will hand off to Bernie - see below.
@@ -105,6 +117,7 @@ Debra hands over her scripts to Danny who adds the code to the database as store
 
 You can find this script in the **SQL** directory, and execute it yourself by following the [PowerShell Instructions](Powershell_Instructions.md).  As noted earlier, this was already executed when your VM was first created.  
 
+ <a name="step4" id="step4"></a>
 ## Step 4: Deploy and Visualize with Bernie the Business Analyst 
 
 Now that the predictions are created and the recommendations have been saved, we will meet our last persona - Bernie, the Business Analyst. Bernie will use the Power BI Dashboard to learn more about the recommendations (first tab). He will also review summaries of the data used to create the model (second tab).  While both tabs contain information about Day of Week, Time of Day, and Channel, it is important to understand that on the Recommendations tab this refers to predicted recommendations to use in the future, while on the Summaries tab these values refer to historical data used to create those recommendations.  

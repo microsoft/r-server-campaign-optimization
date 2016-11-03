@@ -1,6 +1,16 @@
-<img src="Images/management.png" align="right">
-
 # For the Data Scientist
+
+<div style="width:300px; float:right; padding-left:20px">
+<img src="Resources/Images/management.png" >
+<h2>Table of Contents</h2>
+<ul style=" list-style-type:none; padding:0; margin-left:0px;">
+<li><a href="#analytical-dataset-preprocessing-and-feature-engineering">Analytical Dataset Preprocessing and Feature Engineering</a></li>
+<li><a href="#model-development">Model Development</a></li>
+<li><a hrf="#scoring">Scoring</a></li>
+<li><a hrf="#>deploy-and-visualize-results">Deploy and Visualize Results</a></li>
+<li><a hrf="#template-contents">Template Contents</a></li>
+<li><a hrf="#system-requirements">System Requirements</a></li>
+</div>
 
 SQL Server R Services brings the compute to the data by running R on the computer that hosts the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
 
@@ -62,7 +72,7 @@ This script scores 63 combinations for each lead: 7 Days x 3 Times x 3 Channels 
 ![Scoring](Images/model_score.png?raw=true)
 
   
-##  Deploy / Visualize Results
+##  Deploy and Visualize Results
 The deployed data resides in a newly created database table, showing recommendations for each lead.  The final step of this solution visualizes these recommendations, and once the new campaigns have been completed we can also visualize a summary of how well the model worked.  
 
 ![Visualize](Images/visualize.png?raw=true)

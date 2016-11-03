@@ -1,8 +1,20 @@
 # Campaign Optimization - Predicting How and When to Contact Leads
-<img src="Resources/Images/management.png" align="right">
+
+
+<div style="width:300px; float:right; padding-left:20px">
+<img src="Resources/Images/management.png" >
+<h2>Table of Contents</h2>
+<ul style=" list-style-type:none; padding:0; margin-left:0px;">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#for-the-business-manager">For the Business Manager</a></li>
+<li><a hrf="#for-the-data-scientist">For the Data Scientist</a></li>
+<li><a hrf="#quick-start">Quick Start</a></li>
+<li><a hrf="#typical-workflow">Typical Workflow</a></li>
+<li><a hrf="#template-contents">Template Contents</a></li>
+</div>
+
 
 ## Implemented on SQL Server 2016 R Services
-
 ## Introduction
 
 When a business launches a marketing campaign to interest customers in new or existing product(s), they often use a set of business rules to select leads for their campaign to target. Machine learning can be used to help increase the response rate from these leads. This solution demonstrates how to use a model to predict actions that are expected to maximize the purchase rate of leads targeted by the campaign. These predictions serve as the basis for recommendations to be used by a renewed campaign on **how to contact** (for example, e-mail, SMS, or cold call) and **when to contact** (day of week and time of day) the targeted leads. 

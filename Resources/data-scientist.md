@@ -1,7 +1,7 @@
 # For the Data Scientist
 
-<div style="width:300px; float:right; padding-left:20px">
-<img src="Resources/Images/management.png" >
+<div style="width:200px; float:right; padding-left:20px">
+<img src="../Images/management.png" >
 <h2>Table of Contents</h2>
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
 <li><a href="#analytical-dataset-preprocessing-and-feature-engineering">Analytical Dataset Preprocessing and Feature Engineering</a></li>

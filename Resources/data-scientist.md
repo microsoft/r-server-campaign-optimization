@@ -1,4 +1,4 @@
-<img src="../Images/management.png" align="right">
+# <img src="Images/management.png" align="right">
 # For the Data Scientist
 
 <div style="width:200px; float:right; padding-left:20px">
@@ -12,9 +12,7 @@
 <li><a href="#system-requirements">System Requirements</a></li>
 </div>
 
-#<img src="Images/management.png" align="right">
 
-# For the Data Scientist
 
 SQL Server R Services takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server package) by allowing R to run on the same server as the database. 
 

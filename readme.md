@@ -1,8 +1,8 @@
+<img src="Resources/Images/management.png" align="right">
 # Campaign Optimization - Predicting How and When to Contact Leads
 
 
 <div style="width:300px; float:right; padding-left:20px">
-<img src="Resources/Images/management.png" >
 <h2>Table of Contents</h2>
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
 <li><a href="#introduction">Introduction</a></li>

@@ -1,8 +1,9 @@
+<img src="../Images/management.png" align="right">
+
 <h1>Campaign Optimization:
 Typical Workflow </h1>
 
 <div style="width:300px; float:right; padding-left:20px">
-<img src="../Images/management.png" >
 <h2>Table of Contents</h2>
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
 <li><a href="#introduction">Introduction</a></li>

@@ -84,7 +84,7 @@ The corresponding **SQL** stored procedures can be run manually in **step4_campa
 ![Scoring](Images/model_score.png?raw=true)
 
   
-##  Deploy / Visualize Results
+##  Deploy and Visualize Results
 The deployed data resides in a newly created database table, showing recommendations for each lead.  The final step of this solution visualizes these recommendations, and once the new campaigns have been completed we can also visualize a summary of how well the model worked.  
 
 ![Visualize](Images/visualize.png?raw=true)

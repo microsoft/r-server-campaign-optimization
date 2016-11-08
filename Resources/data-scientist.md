@@ -4,6 +4,8 @@
 <div style="width:200px; float:right; padding-left:20px">
 <h2>Table of Contents</h2>
 <ul style=" list-style-type:none; padding:0; margin-left:0px;">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#campaign-optimization">Campaign Optimization</a></li>
 <li><a href="#analytical-dataset-preprocessing-and-feature-engineering">Analytical Dataset Preprocessing and Feature Engineering</a></li>
 <li><a href="#model-development">Model Development</a></li>
 <li><a href="#scoring">Scoring</a></li>
@@ -12,7 +14,7 @@
 <li><a href="#system-requirements">System Requirements</a></li>
 </div>
 
-
+## Introduction
 
 SQL Server R Services takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server package) by allowing R to run on the same server as the database. 
 

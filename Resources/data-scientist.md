@@ -9,7 +9,7 @@
 <li><a href="#analytical-dataset-preprocessing-and-feature-engineering">Analytical Dataset Preprocessing and Feature Engineering</a></li>
 <li><a href="#model-development">Model Development</a></li>
 <li><a href="#scoring">Scoring</a></li>
-<li><a href="#>deploy-and-visualize-results">Deploy and Visualize Results</a></li>
+<li><a href="#deploy-and-visualize-results">Deploy and Visualize Results</a></li>
 <li><a href="#template-contents">Template Contents</a></li>
 <li><a href="#system-requirements">System Requirements</a></li>
 </div>

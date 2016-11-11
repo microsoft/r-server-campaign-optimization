@@ -1,5 +1,4 @@
 /****** Stored Procedure to test and evaluate the models trained in step 3-b) ******/
-
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -18,8 +17,8 @@ BEGIN
 	DROP TABLE if exists CM_AD_Test
 	SELECT * 
 	INTO CM_AD_Test 
-    FROM CM_AD1 
-    WHERE Split_Vector = 0
+    	FROM CM_AD1 
+    	WHERE Split_Vector = 0
 
 
 	DROP TABLE IF EXISTS best_model
@@ -33,31 +32,24 @@ BEGIN
      					   @script = N' 
 
 ##########################################################################################################################################
-##	Set the compute context to SQL for faster testing
-##########################################################################################################################################
-sql <- RxInSqlServer(connectionString = connection_string)
-local <- RxLocalSeq()
-rxSetComputeContext(sql)
-
-##########################################################################################################################################
 ##	Specify the types of the features before the testing
 ##########################################################################################################################################
 # Names of numeric variables: 
-# "No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured",
-# "SMS_Count", "Email_Count", "Call_Count"
+#numeric <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured",
+#			  "SMS_Count", "Email_Count", "Call_Count")
 
-# Import the analytical data set to get the variables names, types and levels for factors.
-CM_AD <- RxSqlServerData(table = "CM_AD", connectionString = connection_string, stringsAsFactors = T)
-column_info <- rxCreateColInfo(CM_AD)
+# Get the variables names, types and levels for factors.
+CM_AD_N <- RxSqlServerData(table = "CM_AD_N", connectionString = connection_string, stringsAsFactors = T)
+column_info <- rxCreateColInfo(CM_AD_N)
 
-####################################################################################################
+##########################################################################################################################################
 ##	Point to the training set and use the column_info list to specify the types of the features.
-####################################################################################################
+##########################################################################################################################################
 prediction <-  RxSqlServerData(table = "CM_AD_Test", connectionString = connection_string, colInfo = column_info)
 
-####################################################################################################
+##########################################################################################################################################
 ## Model evaluation metrics
-####################################################################################################
+##########################################################################################################################################
 evaluate_model <- function(observed, predicted_probability, threshold) { 
   
   # Given the observed labels and the predicted probability, determine the AUC.
@@ -90,12 +82,13 @@ evaluate_model <- function(observed, predicted_probability, threshold) {
                 "AUC" = auc) 
   return(metrics) 
 } 
-####################################################################################################
+##########################################################################################################################################
 ## Random forest scoring
-####################################################################################################
+##########################################################################################################################################
 # Prediction on the testing set.
 forest_model <- unserialize(forest_model)
-forest_prediction  <-  RxSqlServerData(table = "forest_prediction ", connectionString = connection_string, stringsAsFactors = T, colInfo = column_info)
+forest_prediction  <-  RxSqlServerData(table = "forest_prediction ", connectionString = connection_string, stringsAsFactors = T,
+				       colInfo = column_info)
 rxPredict(modelObject = forest_model,
 	      data = prediction,
 		  outData = forest_prediction, 
@@ -103,21 +96,20 @@ rxPredict(modelObject = forest_model,
           extraVarsToWrite = c("Conversion_Flag"),
 		  overwrite = TRUE)
 
-# Importing the predictions to evaluate the metrics. The Compute Context is set to local for the AUC computation. 
+# Importing the predictions to evaluate the metrics. 
 forest_prediction <- rxImport(forest_prediction)
 threshold <- median(forest_prediction$`1_prob`)
-rxSetComputeContext(local)
 forest_metrics <- evaluate_model(observed = forest_prediction$Conversion_Flag,
                                  predicted_probability = forest_prediction$`1_prob`,
 				 threshold = threshold)
-rxSetComputeContext(sql)
 
-####################################################################################################
+##########################################################################################################################################
 ## Boosted tree scoring
-####################################################################################################
+##########################################################################################################################################
 # Prediction on the testing set.
 boosted_model <- unserialize(boosted_model)
-boosted_prediction <-  RxSqlServerData(table = "boosted_prediction ", connectionString = connection_string, stringsAsFactors = T, colInfo = column_info)
+boosted_prediction <-  RxSqlServerData(table = "boosted_prediction ", connectionString = connection_string, stringsAsFactors = T,
+				       colInfo = column_info)
 rxPredict(modelObject = boosted_model,
           data = prediction,
 		  outData = boosted_prediction, 
@@ -125,17 +117,16 @@ rxPredict(modelObject = boosted_model,
 		  extraVarsToWrite = c("Conversion_Flag"),
           overwrite = TRUE)
 
-# Importing the predictions to evaluate the metrics. The Compute Context is set to local for the AUC computation. 
+# Importing the predictions to evaluate the metrics.
 boosted_prediction <- rxImport(boosted_prediction)
 threshold <- median(boosted_prediction$`1_prob`)
-rxSetComputeContext(local)
 boosted_metrics <- evaluate_model(observed = boosted_prediction$Conversion_Flag,
                                   predicted_probability = boosted_prediction$`1_prob`,
 				  threshold = threshold)
 
-####################################################################################################
+##########################################################################################################################################
 ## Combine metrics and write to SQL. Compute Context is kept to Local to export data. 
-####################################################################################################
+##########################################################################################################################################
 metrics_df <- rbind(forest_metrics, boosted_metrics)
 metrics_df <- as.data.frame(metrics_df)
 rownames(metrics_df) <- NULL
@@ -148,9 +139,9 @@ metrics_table <- RxSqlServerData(table = "Campaign_metrics",
 rxDataStep(inData = metrics_df,
            outFile = metrics_table,
            overwrite = TRUE)
-####################################################################################################
+##########################################################################################################################################
 ## Select the best model based on AUC
-####################################################################################################
+##########################################################################################################################################
 OutputDataSet <- data.frame(ifelse(forest_metrics[5] >= boosted_metrics[5], "RF", "GBT"))		 		   	   	   
 	   '
 , @params = N'@forest_model varbinary(max), @boosted_model varbinary(max), @connection_string varchar(300)'
@@ -161,3 +152,5 @@ OutputDataSet <- data.frame(ifelse(forest_metrics[5] >= boosted_metrics[5], "RF"
 ;
 END
 GO
+
+	

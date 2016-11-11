@@ -1,4 +1,3 @@
-
 ##########################################################################################################################################
 ## This R script will do the following:
 ## 1. Read the 4 data sets Campaign_Detail, Lead_Demography, Market_Touchdown, and Product, and load them into SQL.
@@ -14,13 +13,11 @@
 
 ##########################################################################################################################################
 
-# Load revolution R library. 
+# Load packages. 
 library(RevoScaleR)
 
-# Compute Contexts.
-connection_string <- "Driver=SQL Server; Server=[Server Name]; Database=Campaign; UID=[User ID]; PWD=[User Password]"
-sql <- RxInSqlServer(connectionString = connection_string)
-local <- RxLocalSeq()
+# Load the connection string and compute context definitions.
+source("sql_connection.R")
 
 # Set the Compute Context to Local, to load files in-memory.
 rxSetComputeContext(local)
@@ -59,76 +56,108 @@ rxDataStep(inData = table_Product, outFile = Product, overwrite = TRUE)
 
 ##########################################################################################################################################
 
-# Set the Compute Context to SQL to perform computations on SQL tables.
-rxSetComputeContext(sql)
+# Open a connection with SQL Server to be able to write queries with the rxExecuteSQLDDL function.
+outOdbcDS <- RxOdbcData(table = "NewData", connectionString = connection_string, useFastRead=TRUE)
+rxOpen(outOdbcDS, "w")
 
 # Inner join of the tables Product and Campaign_Detail
-Campaign_Product_sql <- RxSqlServerData(      
-  sqlQuery = "SELECT Campaign_Detail.*, Product.Product, Product.Term, Product.No_of_people_covered, Product.Premium, 
-                     Product.Payment_frequency, Product.Net_Amt_Insured, Product.Amt_on_Maturity, Product.Amt_on_Maturity_Bin
-                FROM Campaign_Detail JOIN Product
-                ON Product.Product_Id = Campaign_Detail.Product_Id",
-    connectionString = connection_string)
-Campaign_Product <- RxSqlServerData(table = "Campaign_Product", connectionString = connection_string)
-rxDataStep(inData = Campaign_Product_sql, outFile = Campaign_Product, overwrite = TRUE )
+rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Campaign_Product;"
+, sep=""))
+
+rxExecuteSQLDDL(outOdbcDS, sSQLString = paste(
+  "SELECT Campaign_Detail.*, Term , No_of_people_covered, 
+  Payment_frequency, Net_Amt_Insured, Amt_on_Maturity_Bin,
+  Product, Premium
+  INTO Campaign_Product
+  FROM Campaign_Detail JOIN Product
+  ON Product.Product_Id = Campaign_Detail.Product_Id;"
+  , sep=""))
 
 # Inner join of the tables Market_Touchdown and Lead_Demography
-Market_Lead_sql <- RxSqlServerData(  
-  sqlQuery = "SELECT Lead_Demography.*, Market_Touchdown.Channel, Market_Touchdown.Time_Of_Day, Market_Touchdown.Conversion_Flag,
-                     Market_Touchdown.Campaign_Id, Market_Touchdown.Day_Of_Week, Market_Touchdown.Comm_Id, Market_Touchdown.Time_Stamp
-              FROM Market_Touchdown JOIN Lead_Demography
-              ON Market_Touchdown.Lead_Id = Lead_Demography.Lead_Id",
-  connectionString = connection_string)
-Market_Lead <- RxSqlServerData(table = "Market_Lead", connectionString = connection_string)
-rxDataStep(inData = Market_Lead_sql, outFile = Market_Lead, overwrite = TRUE )
+rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Market_Lead;"
+, sep=""))
 
-# Inner join of the two previous tables.
-Campaign_Product_Market_Lead_sql <- RxSqlServerData(  
-  sqlQuery = "SELECT Market_Lead.*, Campaign_Product.Product, Campaign_Product.Category, Campaign_Product.Term, 
-                     Campaign_Product.No_of_people_covered, Campaign_Product.Premium, Campaign_Product.Payment_frequency,                      Campaign_Product.Amt_on_Maturity_Bin, Campaign_Product.Sub_Category, Campaign_Product.Campaign_Drivers, 
-                     Campaign_Product.Campaign_Name, Campaign_Product.Launch_Date, Campaign_Product.Call_For_Action, 
-                     Campaign_Product.Focused_Geography, Campaign_Product.Tenure_Of_Campaign, Campaign_Product.Net_Amt_Insured, 
-                     Campaign_Product.Product_Id
-              FROM Campaign_Product JOIN Market_Lead 
-              ON Campaign_Product.Campaign_Id = Market_Lead.Campaign_Id "
-  ,connectionString = connection_string)
-Merged <- RxSqlServerData(table = "Merged", connectionString = connection_string)
-rxDataStep(inData = Campaign_Product_Market_Lead_sql, outFile = Merged, overwrite = TRUE )
+rxExecuteSQLDDL(outOdbcDS, sSQLString = paste(
+"SELECT Lead_Demography.Lead_Id, Age, Phone_No, Annual_Income_Bucket, Credit_Score, Country, State,
+        No_Of_Dependents, Highest_Education, Ethnicity,
+        No_Of_Children, Household_Size, Gender, 
+        Marital_Status, Channel, Time_Of_Day, Conversion_Flag, Campaign_Id, Day_Of_Week, Comm_Id, Time_Stamp
+ INTO Market_Lead
+ FROM Market_Touchdown JOIN Lead_Demography
+ ON Market_Touchdown.Lead_Id = Lead_Demography.Lead_Id;"
+, sep=""))
 
-# Drop intermediate tables.
-rxSqlServerDropTable(table = "Campaign_Product")
-rxSqlServerDropTable(table = "Market_Lead")
+# Point to an inner join of the two previous tables. This table will not be materialized. It is created on the fly when removing NAs. 
+# Numeric variables are converted to characters only to get their mode for NA cleaning. 
+# numeric_names <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured", "Term")
 
+Merged_sql <- RxSqlServerData(  
+  sqlQuery = 
+"SELECT Lead_Id, Age, Phone_No, Annual_Income_Bucket, Credit_Score, Country, State,
+        CAST(No_Of_Dependents AS char(1)) AS No_Of_Dependents, Highest_Education, Ethnicity,
+        CAST(No_Of_Children AS char(1)) AS No_Of_Children, CAST(Household_Size AS char(1)) AS Household_Size, Gender, 
+        Marital_Status, Channel, Time_Of_Day, Conversion_Flag, Market_Lead.Campaign_Id, Day_Of_Week, Comm_Id, Time_Stamp,
+        Product, Category, Term, CAST(No_of_people_covered AS char(1)) AS No_of_people_covered,
+        CAST(Premium AS varchar(4)) AS Premium, Payment_frequency,
+        Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
+        Focused_Geography, Tenure_Of_Campaign, CAST(Net_Amt_Insured AS varchar(7)) AS Net_Amt_Insured , Product_Id
+ FROM Campaign_Product JOIN Market_Lead 
+ ON Campaign_Product.Campaign_Id = Market_Lead.Campaign_Id "
+  ,connectionString = connection_string, stringsAsFactors = TRUE)
 
 ##########################################################################################################################################
+
 
 ## Clean the Merged data set: replace NAs with the mode
 
 ##########################################################################################################################################
 
 # Assumption: no NAs in the Id variables (Lead_Id, Product_Id, Campaign_Id, Comm_Id) and in (Phone_No, Launch_Date, Time_Stamp).
+# Find the variables that have missing values (NA). 
+colnames <- names(rxGetVarInfo(Merged_sql))
+var <- colnames[!colnames %in% c("Lead_Id", "Product_Id", "Campaign_Id", "Comm_Id", "Phone_No", "Launch_Date", "Time_Stamp")]
+formula <- as.formula(paste("~", paste(var, collapse = "+")))
+summary <- rxSummary(formula, Merged_sql, byTerm = TRUE)
+var_with_NA <- summary$sDataFrame[summary$sDataFrame$MissingObs > 0, 1] 
+var_number_with_NA <- which(summary$sDataFrame$MissingObs > 0) 
+
+# Compute the mode of variables with missing values. 
+mode <- c()
+k <- 0
+for(n in var_number_with_NA ){
+  k <- k + 1
+  mode[k] <- as.character(summary$categorical[[n]][which.max(summary$categorical[[n]][,2]),1])
+}
+
+# Point again to the merged table without stringsAsFactors = TRUE and with correct variable types. 
+Merged_sql2 <- RxSqlServerData(  
+  sqlQuery = 
+"SELECT Market_Lead.*, Product, Category, Term, No_of_people_covered, Premium, Payment_frequency,
+        Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
+        Focused_Geography, Tenure_Of_Campaign, Net_Amt_Insured, Product_Id
+ FROM Campaign_Product JOIN Market_Lead
+ ON Campaign_Product.Campaign_Id = Market_Lead.Campaign_Id "
+  ,connectionString = connection_string)
 
 # Function to deal with NAs. 
 Mode_Replace <- function(data) {
   data <- data.frame(data)
-  var <- colnames(data)[!colnames(data) %in% c("Lead_Id", "Phone_No","Campaign_Id","Comm_Id","Time_Stamp","Launch_Date","Product_Id")]
-  for(j in 1:length(var)){
-    row_na <- which(is.na(data[,var[j]]) ==TRUE) 
-    if(length(row_na) > 0){
-      xtab <- table(data[,var[j]])
-      mode <- names(which(xtab==max(xtab)))
-      if(is.character(data[,var[j]]) | is.factor(data[,var[j]])){
-        data[row_na,var[j]] <- mode
-      } else{
-        data[row_na,var[j]] <- as.integer(mode)
-      }}}
+  for(j in 1:length(var_with_NA)){
+    row_na <- which(is.na(data[,var_with_NA[j]]) == TRUE) 
+        if (var_with_NA[j] %in% c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured")){
+          data[row_na,var_with_NA[j]] <- as.integer(mode[j])
+        } else{
+          data[row_na,var_with_NA[j]] <- mode[j]
+        }
+  }
   return(data)
 }
 
-# Create the CM_AD0 table by dealing with NAs in Merged and save it to a SQL table.
+# Create the CM_AD0 table by dealing with NAs in Merged_sql and save it to a SQL table.
 CM_AD0 <- RxSqlServerData(table = "CM_AD0", connectionString = connection_string)
-rxDataStep(inData = Merged, outFile = CM_AD0, overwrite = TRUE, transformFunc = Mode_Replace)
+rxDataStep(inData = Merged_sql2 , outFile = CM_AD0, overwrite = TRUE, transformFunc = Mode_Replace, 
+           transformObjects = list(var_with_NA = var_with_NA, mode = mode))
 
 # Drop intermediate tables.
-rxSqlServerDropTable(table = "Merged")
- 
+rxSqlServerDropTable(table = "Campaign_Product", connectionString = connection_string)
+rxSqlServerDropTable(table = "Market_Lead", connectionString = connection_string)

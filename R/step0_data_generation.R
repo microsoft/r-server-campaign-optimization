@@ -17,10 +17,8 @@
 library(RevoScaleR)
 library(data.table)
 
-# Compute Contexts.
-connection_string <- "Driver=SQL Server; Server=[Server Name]; Database=Campaign; UID=[User ID]; PWD=[User Password]"
-sql <- RxInSqlServer(connectionString = connection_string)
-local <- RxLocalSeq()
+# Load the connection string and compute context definitions.
+source("sql_connection.R")
 
 # Set the Compute Context to Local, to generate data sets in-memory.
 rxSetComputeContext(local)
@@ -328,7 +326,7 @@ n3 <- nrow(campaign_table3)
 campaign_table3$Conversion_Flag <- rep("0", n3)
 
 campaign_table3$Campaign_Id <- 
-  ifelse(campaign_table3$Campaign_Id == "2", 1, as.character(floor(runif(n = n3, min = 2, max = campaign_table3$Campaign_Id))))
+  ifelse(campaign_table3$Campaign_Id == "2", "1", as.character(floor(runif(n = n3, min = 2, max = as.numeric(campaign_table3$Campaign_Id)))))
 
 
 campaign_table3$Channel <- 

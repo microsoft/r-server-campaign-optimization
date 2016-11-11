@@ -20,7 +20,23 @@ $ServerName = "",
 [parameter(Mandatory=$true,ParameterSetName = "CM")]
 [ValidateNotNullOrEmpty()]
 [String]
-$DBName = ""
+$DBName = "",
+
+[parameter(Mandatory=$true,ParameterSetName = "CM")]
+[ValidateNotNullOrEmpty()]
+[String]
+$username ="",
+
+
+[parameter(Mandatory=$true,ParameterSetName = "CM")]
+[ValidateNotNullOrEmpty()]
+[String]
+$password ="",
+
+[parameter(Mandatory=$true,ParameterSetName = "CM")]
+[ValidateNotNullOrEmpty()]
+[String]
+$uninterrupted=""
 )
 
 ##########################################################################
@@ -61,13 +77,6 @@ function GetConnectionString
     $connectionString
 }
 
-##########################################################################
-# Get the credential of SQL user
-##########################################################################
-Write-Host -foregroundcolor 'green' ("Please enter the credential for Database {0} of SQL server {1}" -f $dbname, $server)
-$username = Read-Host 'Username:'
-$pwd = Read-Host 'Password:' -AsSecureString
-$password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($pwd))
 
 ##########################################################################
 # Construct the SQL connection strings
@@ -90,6 +99,128 @@ if ($? -eq $false)
 
 $query = "USE $DBName;"
 Invoke-Sqlcmd -ServerInstance $ServerName -Username $username -Password $password -Query $query 
+
+
+##########################################################################
+# Running without interruption
+##########################################################################
+$startTime= Get-Date
+Write-Host "Start time is:" $startTime
+
+if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
+{
+   try
+       {
+        # create training and test tables
+        Write-Host -ForeGroundColor 'green' ("Create SQL tables: Campaign_Detail, Lead_Demography,  Market_Touchdown and Product")
+        $script = $filePath + "step0_create_tables.sql"
+        ExecuteSQL $script
+    
+        Write-Host -ForeGroundColor 'green' ("Populate SQL tables: Campaign_Detail, Lead_Demography,  Market_Touchdown and Product")
+        $dataList = "Campaign_Detail", "Lead_Demography", "Market_Touchdown", "Product"
+		
+		# upload csv files into SQL tables
+        foreach ($dataFile in $dataList)
+        {
+            $destination = $parentPath + "/data/" + $dataFile + ".csv"
+            Write-Host -ForeGroundColor 'magenta'("    Populate SQL table: {0}..." -f $dataFile)
+            $tableName = $DBName + ".dbo." + $dataFile
+            $tableSchema = $parentPath + "/data/" + $dataFile + ".xml"
+            bcp $tableName format nul -c -x -f $tableSchema  -U $username -S $ServerName -P $password  -t ','
+            Write-Host -ForeGroundColor 'magenta'("    Loading {0} to SQL table..." -f $dataFile)
+            bcp $tableName in $destination -t ',' -S $ServerName -f $tableSchema -F 2 -C "RAW" -b 50000 -U $username -P $password
+            Write-Host -ForeGroundColor 'magenta'("    Done...Loading {0} to SQL table..." -f $dataFile)
+        }
+    }
+    catch
+    {
+        Write-Host -ForegroundColor DarkYellow "Exception in populating database tables:"
+        Write-Host -ForegroundColor Red $Error[0].Exception 
+        throw
+    }
+
+
+    # create the stored procedures for preprocessing
+    $script = $filepath + "step1_data_processing.sql"
+    ExecuteSQL $script
+
+    # execute the merging
+    Write-Host -ForeGroundColor 'Cyan' (" Merging the 4 raw tables...")
+    $query = "EXEC Merging_Raw_Tables"
+    ExecuteSQLQuery $query
+
+    # execute the NA replacement
+    Write-Host -ForeGroundColor 'Cyan' (" Replacing missing values with the mode...")
+    $query = "EXEC fill_NA_all"
+    ExecuteSQLQuery $query
+
+
+    # create the ultility procedure for feature engineering
+    $script = $filepath + "step2_feature_engineering.sql"
+    ExecuteSQL $script
+
+    # execute the feature engineering
+    Write-Host -ForeGroundColor 'Cyan' (" Computing new features and keeping last record per customer...")
+    $query = "EXEC feature_engineering"
+    ExecuteSQLQuery $query
+
+    # normalization
+    $script = $filepath + "step3_normalization.sql"
+    Write-Host -ForeGroundColor 'Cyan' (" Normalizing the data...")
+    ExecuteSQL $script
+
+    # create the stored procedure for splitting into train and test data sets
+    $script = $filepath + "step3a_splitting.sql"
+    ExecuteSQL $script
+
+    # execute the procedure
+    $splitRatio = 0.7
+    Write-Host -ForeGroundColor 'Cyan' (" Splitting the data set...")
+    $query = "EXEC splitting $splitRatio, '$connectionString'"
+    ExecuteSQLQuery $query
+
+    # create the stored procedure for training
+    $script = $filepath + "step3b_train_model.sql"
+    ExecuteSQL $script
+
+    # execute the training
+    Write-Host -ForeGroundColor 'Cyan' (" Training Random Forest (RF)...")
+    $modelName = 'RF'
+    $query = "EXEC TrainModel $modelName, '$connectionString'"
+    ExecuteSQLQuery $query
+
+    Write-Host -ForeGroundColor 'Cyan' (" Training Gradient Boosted Trees (GBT)...")
+    $modelName = 'GBT'
+    $query = "EXEC TrainModel $modelName, '$connectionString'"
+    ExecuteSQLQuery $query
+
+    # create the stored procedure for predicting
+    $script = $filepath + "step3c_test_model.sql"
+    ExecuteSQL $script
+
+    # execute the evaluation
+    Write-Host -ForeGroundColor 'Cyan' (" Testing Random Forest (RF) and Gradient Boosted Trees (GBT)...")
+    $models = "'RF', 'GBT'"
+    $query = "EXEC TestModel $models, '$connectionString'"
+    ExecuteSQLQuery $query
+
+    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select best_model from best_model;"
+    $best_model = $best_model.best_model
+
+    # create the stored procedure for recommendations
+    $script = $filepath + "step4_campaign_recommendations.sql"
+    ExecuteSQL $script 
+
+    # compute campaign recommendations
+    Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations using $best_model...")
+    $query = "EXEC campaign_recommendation $best_model, '$connectionString'"
+    ExecuteSQLQuery $query
+
+    Write-Host -foregroundcolor 'green'("Market Campaign Workflow Finished Successfully!")
+}
+
+if ($uninterrupted -eq 'n' -or $uninterrupted -eq 'N')
+{
 
 ##########################################################################
 # Create input tables and populate with data from csv files.
@@ -155,7 +286,7 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 
     # execute the NA replacement
     Write-Host -ForeGroundColor 'Cyan' (" Replacing missing values with the mode...")
-    $query = "EXEC fill_NA '$connectionString'"
+    $query = "EXEC fill_NA_all"
     ExecuteSQLQuery $query
 }
 
@@ -180,6 +311,23 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
     ExecuteSQLQuery $query
 }
 
+
+##########################################################################
+# Normalization
+##########################################################################
+
+Write-Host -foregroundcolor 'green' ("Step 3: Normalize the data")
+$ans = Read-Host 'Continue [y|Y], Exit [e|E], Skip [s|S]?'
+if ($ans -eq 'E' -or $ans -eq 'e')
+{
+    return
+} 
+if ($ans -eq 'y' -or $ans -eq 'Y')
+{   
+    $script = $filepath + "step3_normalization.sql"
+    Write-Host -ForeGroundColor 'Cyan' (" Normalizing the data...")
+    ExecuteSQL $script
+}
 ##########################################################################
 # Create and execute the stored procedure to split data into train/test
 ##########################################################################
@@ -292,8 +440,14 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 
     # compute campaign recommendations
     Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations...")
-    $query = "EXEC campaign_recommendation_not_in_memory $best_model, '$connectionString'"
+    $query = "EXEC campaign_recommendation $best_model, '$connectionString'"
     ExecuteSQLQuery $query
 }
 
 Write-Host -foregroundcolor 'green'("Market Campaign Workflow Finished Successfully!")
+}
+
+$endTime =Get-Date
+$totalTime = ($endTime-$startTime).ToString()
+Write-Host "Finished running at:" $endTime
+Write-Host "Total time used: " -foregroundcolor 'green' $totalTime.ToString()

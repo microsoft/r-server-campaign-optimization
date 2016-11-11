@@ -1,67 +1,31 @@
-
-/****** Stored Procedure to create a table that has, for each Lead_Id and its corresponding variables******/
-/****** One row for each possible combination of Day_of_Week, Channel and Time_Of_Day  ******/
 SET ANSI_NULLS ON 
 GO 
 SET QUOTED_IDENTIFIER ON 
 GO 
 
+/** Stored Procedure to Compute the predicted probabilities for each Lead_Id, for each combination of Day-Channel-Time using best_model ******/
 
-DROP PROCEDURE IF EXISTS [dbo].[generate_full_table]
+DROP PROCEDURE IF EXISTS [dbo].[scoring]
 GO
-CREATE PROCEDURE [generate_full_table]
+
+CREATE PROCEDURE [scoring] @best_model varchar(300), @connectionString varchar(300)
+
 AS
 BEGIN
 
+/* Create a table containing all the unique combinations of Day_of_Week. Channel and Time_Of_Day were created before normalization. */
 	DROP TABLE IF EXISTS Day_Of_Week
-	DROP TABLE IF EXISTS Time_Of_Day
-	DROP TABLE IF EXISTS Channel
 	DROP TABLE IF EXISTS Unique_Combos
 
-/* Create table containing all the unique combinations of Day_of_Week, Channel, Time_Of_Day  */
-	CREATE TABLE Day_Of_Week (Day_Of_Week nchar(1)) 	
+	CREATE TABLE Day_Of_Week (Day_Of_Week char(1)) 	
 	INSERT INTO Day_Of_Week (Day_Of_Week) VALUES ('1'), ('2'), ('3'), ('4'),('5'),('6'),('7')
-
-	CREATE TABLE Time_Of_Day (Time_Of_Day varchar(15)) 
-	INSERT INTO Time_Of_Day (Time_Of_Day) VALUES ('Morning'), ('Afternoon'), ('Evening')
-
-	CREATE TABLE Channel (Channel varchar(15)) 
-	INSERT INTO Channel (Channel) VALUES ('Email'), ('Cold Calling'), ('SMS')
 
 	SELECT *
 	INTO Unique_Combos
-	FROM(SELECT * FROM Channel)  c, (SELECT * FROM Day_Of_Week) d, (SELECT * FROM Time_Of_Day) t
-/* Create the full table */
-	INSERT INTO AD_full_merged
-	SELECT * 
-	FROM (
-		SELECT Lead_Id, Age, Annual_Income_Bucket, Credit_Score, [State], No_Of_Dependents, Highest_Education, Ethnicity,
-		       No_Of_Children, Household_Size, Gender, Marital_Status, Campaign_Id, Product_Id, Product, Term,
-		       No_Of_People_Covered, Premium, Payment_frequency, Amt_on_Maturity_Bin, Sub_Category,Campaign_Drivers,
-                       Campaign_Name, Call_For_Action, Tenure_Of_Campaign,Net_Amt_Insured, SMS_Count, Email_Count,  Call_Count, 
-                       Previous_Channel, Conversion_Flag
-		FROM CM_AD) a,
-		(SELECT * FROM Unique_Combos) b
+	FROM(SELECT Channel_id AS Channel FROM Channel_N)  c, (SELECT * FROM Day_Of_Week) d, (SELECT Time_Of_Day_id AS Time_Of_Day FROM Time_Of_Day_N) t
 
-/* Drop intermediate tables */
-	DROP TABLE Day_Of_Week
-	DROP TABLE Time_Of_Day
-	DROP TABLE Channel
-	DROP TABLE Unique_Combos
-;
-END
-GO
-
-/********** NOT In-Memory Versions; Slower but to be used for large data sets ********/
-/*Stored Procedure to Compute the predicted probabilities for each Lead_Id, for each combination of Day-Channel-Time using best_model**/
-
-DROP PROCEDURE IF EXISTS [dbo].[scoring_not_in_memory]
-GO
-
-CREATE PROCEDURE [scoring_not_in_memory] @best_model varchar(300), @connectionString varchar(300)
-
-AS
-BEGIN
+/* Scoring on a table created on the fly. */
+/* It has, for each Lead_Id and its corresponding variables, One row for each possible combination of Day_of_Week, Channel and Time_Of_Day. */
     DECLARE @bestmodel varbinary(max) = (SELECT model FROM Campaign_Models WHERE model_name = @best_model);
     EXEC sp_execute_external_script @language = N'R',
 				    @script = N'								  
@@ -72,18 +36,27 @@ best_model <- unserialize(best_model)
 ##	Specify the types of the features before the scoring
 ##########################################################################################################################################
 # Names of numeric variables: 
-# "No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured",
-# "SMS_Count", "Email_Count", "Call_Count"
+#numeric <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured",
+#			  "SMS_Count", "Email_Count", "Call_Count")
 
-# Import the analytical data set to get the variables names, types and levels for factors.
-CM_AD <- RxSqlServerData(table = "CM_AD", connectionString = connection_string, stringsAsFactors = T)
-column_info <- rxCreateColInfo(CM_AD)
+# Get the variables names, types and levels for factors.
+CM_AD_N <- RxSqlServerData(table = "CM_AD_N", connectionString = connection_string, stringsAsFactors = T)
+column_info <- rxCreateColInfo(CM_AD_N)
 
 ##########################################################################################################################################
 ##	Point to the input and output tables and use the column_info list to specify the types of the features.
 ##########################################################################################################################################
-# Point to the full merged data set. 
-AD_full_merged <- RxSqlServerData(table = "AD_full_merged", connectionString = connection_string, colInfo = column_info)
+AD_full_merged_sql <- RxSqlServerData(
+  sqlQuery = "	SELECT * 
+		FROM (
+		      SELECT Lead_Id, Age, Annual_Income_Bucket, Credit_Score, [State], No_Of_Dependents, Highest_Education, Ethnicity,
+			     No_Of_Children, Household_Size, Gender, Marital_Status, Campaign_Id, Product_Id, Term,
+			     No_of_people_covered, Premium, Payment_frequency, Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers,
+			     Tenure_Of_Campaign, Net_Amt_Insured, SMS_Count, Email_Count,  Call_Count, 
+			     Previous_Channel, Conversion_Flag
+			     FROM CM_AD_N) a,
+		      (SELECT * FROM Unique_Combos)  b", 
+  stringsAsFactors = T, connectionString = connection_string, colInfo = column_info)
 
 # Point to the output data set.
 Prob_Id <- RxSqlServerData(table = "Prob_Id", connectionString = connection_string)
@@ -91,8 +64,8 @@ Prob_Id <- RxSqlServerData(table = "Prob_Id", connectionString = connection_stri
 ##########################################################################################################################################
 ##	Score the full data by using the best model.
 ##########################################################################################################################################
-rxPredict(best_model, data = AD_full_merged, outData = Prob_Id, type = "prob",
-          extraVarsToWrite = c("Lead_Id", "Day_Of_Week","Time_Of_Day","Channel"), overwrite = T)
+rxPredict(best_model, data = AD_full_merged_sql, outData = Prob_Id, type = "prob", overwrite = T,
+		  extraVarsToWrite = c("Lead_Id", "Day_Of_Week", "Time_Of_Day", "Channel"))
 '
 , @params = N' @best_model varbinary(max), @connection_string varchar(300)' 
 , @best_model = @bestmodel 
@@ -101,23 +74,21 @@ rxPredict(best_model, data = AD_full_merged, outData = Prob_Id, type = "prob",
 END
 GO
 
-/****** Stored Procedure to provide, for each Lead_Id, a combination of Day_of_Week, Channel, and Time_Of_Da that has the highest conversion probability  ******/
+/** Stored Procedure to provide, for each Lead, the Day_of_Week, Channel, and Time_Of_Day with the highest conversion probability **/
 
-DROP PROCEDURE IF EXISTS [dbo].[campaign_recommendation_not_in_memory]
+DROP PROCEDURE IF EXISTS [dbo].[campaign_recommendation]
 GO
 
-CREATE PROCEDURE [campaign_recommendation_not_in_memory] @best_model varchar(300),
-							 @connectionString varchar(300)
-											
-											  
+CREATE PROCEDURE [campaign_recommendation] @best_model varchar(300),
+					   @connectionString varchar(300)
+																						  
 AS
 BEGIN
 
 	DROP TABLE IF EXISTS Recommended_Combinations
 	DROP TABLE IF EXISTS Recommendations
 
-	EXEC [generate_full_table] 
-	EXEC [scoring_not_in_memory] @best_model = @best_model, @connectionString = @connectionString 
+	EXEC [scoring] @best_model = @best_model, @connectionString = @connectionString 
 
 /* For each Lead_Id, get one of the combinations of Day_of_Week, Channel, and Time_Of_Day giving highest conversion probability */ 
 	
@@ -127,122 +98,28 @@ BEGIN
 		SELECT maxp.Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb, 
 		       ROW_NUMBER() OVER (partition by maxp.Lead_Id ORDER BY NEWID()) as RowNo
 		FROM (
-				SELECT Lead_Id, max([1_prob]) as MaxProb
-				FROM Prob_Id
-				GROUP BY Lead_Id) maxp
+			SELECT Lead_Id, max([1_prob]) as MaxProb
+			FROM Prob_Id
+			GROUP BY Lead_Id) maxp
 		JOIN Prob_Id
 		ON (maxp.Lead_Id = Prob_Id.Lead_Id AND maxp.MaxProb = Prob_Id.[1_prob])
          ) candidates
 	WHERE RowNo = 1
 
-/* 	Add demographics information to the recommendation table  */
+/* Add demographics information to the recommendation table  */
 
-	SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name as [Campaign Name], [State], CAST(Conversion_Flag AS int) as Converts,
-               CM_AD.Day_Of_Week as [Day of Week], CM_AD.Time_Of_Day as [Time of Day], CM_AD.Channel,  CM_AD.Lead_Id as [Lead ID],
-	       Recommended_Combinations.Day_Of_Week as [Recommended Day], Recommended_Combinations.Time_Of_Day as [Recommended Time],
-	       Recommended_Combinations.Channel as [Recommended Channel], Recommended_Combinations.MaxProb
+	SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name as [Campaign Name], [State], CM_AD.Channel, 
+               CM_AD.Day_Of_Week as [Day of Week], CM_AD.Time_Of_Day as [Time of Day], CAST(Conversion_Flag AS int) as Converts,
+	       Recommended_Combinations.Day_Of_Week as [Recommended Day], Time_Of_Day_N.Time_Of_Day as [Recommended Time],
+	       Channel_N.Channel as [Recommended Channel], Recommended_Combinations.MaxProb, Recommended_Combinations.Lead_Id as [Lead ID]
         INTO Recommendations
-	FROM CM_AD JOIN Recommended_Combinations
-        ON CM_AD.Lead_Id = Recommended_Combinations.Lead_Id
-;
-END
-GO
+	FROM CM_AD 
+	JOIN Recommended_Combinations ON CM_AD.Lead_Id = Recommended_Combinations.Lead_Id
+	JOIN Channel_N ON Channel_N.Channel_id = Recommended_Combinations.Channel
+	JOIN Time_Of_Day_N ON Time_Of_Day_N.Time_Of_Day_id = Recommended_Combinations.Time_Of_Day
 
-/********** In-Memory Versions; Faster but to be used for smaller data sets ********/
-/****** Stored Procedure to Compute the predicted probabilities for each Lead_Id, for each combination of Day-Channel-Time using best_model****/
-
-DROP PROCEDURE IF EXISTS [dbo].[scoring_in_memory]
-GO
-
-CREATE PROCEDURE [scoring_in_memory] @best_model varchar(300)
-
-AS
-BEGIN
-    
-	DECLARE @inquery nvarchar(max) = N'SELECT * FROM AD_full_merged';
-	DECLARE @bestmodel varbinary(max) = (SELECT model FROM Campaign_Models WHERE model_name = @best_model);
-
-	/* Increase the memory allocated to R services in order to perform in-memory computations */						
-	ALTER RESOURCE POOL "default" WITH (max_memory_percent = 60);  
-	ALTER EXTERNAL RESOURCE POOL "default" WITH (max_memory_percent = 40);  
-	ALTER RESOURCE GOVERNOR reconfigure; 
-	
-	INSERT INTO Prob_Id	
-	EXEC sp_execute_external_script @language = N'R',
-									@script = N'								  
-
-##########################################################################################################################################
-##	Get the best model
-##########################################################################################################################################
-best_model <- unserialize(best_model)
-
-##########################################################################################################################################
-##	Import the input table AD_full_merged
-##########################################################################################################################################
-AD_full_merged <- InputDataSet
-
-##########################################################################################################################################
-##	Score the full data by using the best model
-##########################################################################################################################################
-score <- rxPredict(best_model, data = AD_full_merged, type = "prob",
-          extraVarsToWrite = c("Lead_Id", "Day_Of_Week","Time_Of_Day","Channel"))
-OutputDataSet <- score
-'
-, @input_data_1 = @inquery
-, @params = N' @best_model varbinary(max)' 
-, @best_model = @bestmodel 
-;
-
-	/* Set back the memory allocation to default. */						
-	ALTER RESOURCE POOL "default" WITH (max_memory_percent = 80);  
-	ALTER EXTERNAL RESOURCE POOL "default" WITH (max_memory_percent = 20);  
-	ALTER RESOURCE GOVERNOR reconfigure; 
-
-END
-GO
-
-/****** Stored Procedure to provide, for each Lead_Id, a combination of Day_of_Week, Channel, and Time_Of_Day that has the highest conversion probability  ******/
-
-DROP PROCEDURE IF EXISTS [dbo].[campaign_recommendation_in_memory]
-GO
-
-CREATE PROCEDURE [campaign_recommendation_in_memory] @best_model varchar(300)
-											
-											  
-AS
-BEGIN
-
-	DROP TABLE IF EXISTS Recommended_Combinations
-	DROP TABLE IF EXISTS Recommendations
-
-	EXEC [generate_full_table] 
-	EXEC [scoring_in_memory] @best_model = @best_model
-
-/* For each Lead_Id, get one of the combinations of Day_of_Week, Channel, and Time_Of_Day giving highest conversion probability */ 
-	
-	SELECT Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb
-	INTO Recommended_Combinations
-	FROM (
-		SELECT maxp.Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb, 
-		       ROW_NUMBER() OVER (partition by maxp.Lead_Id ORDER BY NEWID()) as RowNo
-		FROM (
-				SELECT Lead_Id, max([1_prob]) as MaxProb
-				FROM Prob_Id
-				GROUP BY Lead_Id) maxp
-		JOIN Prob_Id
-		ON (maxp.Lead_Id = Prob_Id.Lead_Id AND maxp.MaxProb = Prob_Id.[1_prob])
-         ) candidates
-	WHERE RowNo = 1
-
-/* 	Add demographics information to the recommendation table  */
-
-	SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name as [Campaign Name], [State], CAST(Conversion_Flag AS int) as Converts,
-               CM_AD.Day_Of_Week as [Day of Week], CM_AD.Time_Of_Day as [Time of Day], CM_AD.Channel,  CM_AD.Lead_Id as [Lead ID],
-	       Recommended_Combinations.Day_Of_Week as [Recommended Day], Recommended_Combinations.Time_Of_Day as [Recommended Time],
-	       Recommended_Combinations.Channel as [Recommended Channel], Recommended_Combinations.MaxProb
-        INTO Recommendations
-	FROM CM_AD JOIN Recommended_Combinations
-        ON CM_AD.Lead_Id = Recommended_Combinations.Lead_Id
+/* Drop intermediate table  */
+	DROP TABLE Recommended_Combinations
 ;
 END
 GO

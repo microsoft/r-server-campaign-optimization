@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -15,22 +14,23 @@ BEGIN
 
 	DROP TABLE if exists Campaign_Product
 	DROP TABLE if exists Market_Lead
-        DROP TABLE if exists Merged
+    DROP TABLE if exists CM_AD0
 	UPDATE STATISTICS Product;
 	UPDATE STATISTICS Campaign_Detail;
 	UPDATE STATISTICS Lead_Demography;
 	UPDATE STATISTICS Market_Touchdown;
 
 /* Inner join of the tables Product and Campaign_Detail */ 
-	SELECT Campaign_Detail.*, Product.Product, Product.Term, Product.No_of_people_covered, Product.Premium, 
-	       Product.Payment_frequency, Product.Net_Amt_Insured, Product.Amt_on_Maturity, Product.Amt_on_Maturity_Bin
+	SELECT Campaign_Detail.*, Term, No_of_people_covered, Payment_frequency, Net_Amt_Insured, Amt_on_Maturity_Bin, 
+               Product, Premium
 	INTO Campaign_Product
 	FROM Campaign_Detail JOIN Product
 	ON Product.Product_Id = Campaign_Detail.Product_Id
 
 /* Inner join of the tables Market_Touchdown and Lead_Demography */
-	SELECT Lead_Demography.*, Market_Touchdown.Channel, Market_Touchdown.Time_Of_Day, Market_Touchdown.Conversion_Flag,
-               Market_Touchdown.Campaign_Id, Market_Touchdown.Day_Of_Week, Market_Touchdown.Comm_Id, Market_Touchdown.Time_Stamp
+	SELECT Lead_Demography.Lead_Id, Age, Phone_No, Annual_Income_Bucket, Credit_Score, Country, [State],
+               No_Of_Dependents, Highest_Education, Ethnicity, No_Of_Children, Household_Size, Gender, 
+               Marital_Status, Channel, Time_Of_Day, Conversion_Flag, Campaign_Id, Day_Of_Week, Comm_Id, Time_Stamp
 	INTO Market_Lead
 	FROM Market_Touchdown JOIN Lead_Demography
 	ON Market_Touchdown.Lead_Id = Lead_Demography.Lead_Id
@@ -38,65 +38,90 @@ BEGIN
 /* Inner join of the tables Campaign_Product and Market_Lead */ 
 	UPDATE STATISTICS Campaign_Product;
 	UPDATE STATISTICS Market_Lead;
-
-	SELECT Market_Lead.*, Campaign_Product.Product, Campaign_Product.Category, Campaign_Product.Term, 
-           Campaign_Product.No_of_people_covered, Campaign_Product.Premium, Campaign_Product.Payment_frequency, 
-           Campaign_Product.Amt_on_Maturity_Bin, Campaign_Product.Sub_Category, Campaign_Product.Campaign_Drivers, 
-           Campaign_Product.Campaign_Name, Campaign_Product.Launch_Date, Campaign_Product.Call_For_Action, 
-           Campaign_Product.Focused_Geography, Campaign_Product.Tenure_Of_Campaign, Campaign_Product.Net_Amt_Insured, 
-           Campaign_Product.Product_Id
-	INTO Merged
+	
+	SELECT Market_Lead.*, Product, Category, Term, No_of_people_covered, Premium, Payment_frequency,
+           Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
+           Focused_Geography, Tenure_Of_Campaign, Net_Amt_Insured, Product_Id
+	INTO CM_AD0
 	FROM Campaign_Product JOIN Market_Lead
 	ON Campaign_Product.Campaign_Id = Market_Lead.Campaign_Id 
 
-/* Delete intermediate tables */
-	DROP TABLE if exists Campaign_Product
-	DROP TABLE if exists Market_Lead
 ;
 END
 GO
 
-/****** Stored Procedure to deal with NA in the raw merged data set ******/
-/****** Replace NAs with the mode ******/
-
+/****** Stored Procedure to compute the mode and fill the missing values with it for 1 column. ******/
 DROP PROCEDURE IF EXISTS [dbo].[fill_NA]
 GO
 
-CREATE PROCEDURE [fill_NA] @connectionString varchar(300)
+CREATE PROCEDURE [fill_NA] @name varchar(max), @table varchar(max)
 AS
 BEGIN
-  EXEC sp_execute_external_script @language = N'R',
-                                  @script = N'								  
-# Input Data Set 
-Merged <- RxSqlServerData(table = "Merged", connectionString = connection_string)
+	
+	DECLARE @mode varchar(50);
+	DECLARE @sql1 nvarchar(max);
+	DECLARE @Parameter nvarchar(500);
+	SELECT @sql1 = N'
+    SELECT @modeOUT = mode
+	FROM (SELECT TOP(1) ' + @name + ' as mode, count(*) as cnt
+		   FROM ' + @table + ' 
+	       GROUP BY ' + @name + ' 
+	       ORDER BY cnt desc) as t ';
+	SET @Parameter = N'@modeOUT varchar(max) OUTPUT';
+	EXEC sp_executesql @sql1, @Parameter, @modeOUT=@mode OUTPUT;
 
-# Function to deal with NAs. 
-## We assume no NA in Lead_Id, Phone_No, Campaign_Id, Comm_Id, Time_Stamp, Launch_Date, and Product_Id.
-## For the other variables, we detect the rows with NAs, and if any, we replace them with the mode.
-## Among those, for integer variables, the mode has to be converted to an integer before writing the results (to comply with the type).
+    DECLARE @sql2 nvarchar(max)
+	SET @sql2 = 
+   'UPDATE ' + @table + '
+	SET ' + @name + ' = ISNULL(' + @name + ', (SELECT '''  + @mode + '''))';
 
-Mode_Replace <- function(data) {
-  data <- data.frame(data)
-  var <- colnames(data)[!colnames(data) %in% c("Lead_Id", "Phone_No","Campaign_Id","Comm_Id","Time_Stamp","Launch_Date","Product_Id")]
-  for(j in 1:length(var)){
-	  row_na <- which(is.na(data[,var[j]]) ==TRUE) 
-	  if(length(row_na) > 0){
-      xtab <- table(data[,var[j]])
-      mode <- names(which(xtab==max(xtab)))
-	  if(is.character(data[,var[j]]) | is.factor(data[,var[j]])){
-		data[row_na,var[j]] <- mode
-		} else{
-		data[row_na,var[j]] <- as.integer(mode)
-		}}}
-  return(data)
-	}
-
-# Clean the data set and save it into a SQL table.
-CM_AD0 <- RxSqlServerData(table = "CM_AD0", connectionString = connection_string)
-rxDataStep(inData = Merged, outFile = CM_AD0, overwrite = TRUE, transformFunc = Mode_Replace)
-'
-, @params = N'@connection_string varchar(300)'
-, @connection_string = @connectionString
-;
+	EXEC sp_executesql @sql2;
+	 		   
 END
 GO
+;
+
+
+/****** Stored Procedure to replace the missing values with the modes for all columns ******/
+DROP PROCEDURE IF EXISTS [dbo].[fill_NA_all]
+GO
+
+CREATE PROCEDURE [fill_NA_all] 
+AS
+BEGIN
+     /* Select all column names into the table sql_columns */
+	DROP TABLE if EXISTS sql_columns
+	SELECT name 
+	INTO sql_columns
+	FROM syscolumns 
+	WHERE id = object_id('CM_AD0')
+
+    /* Exclude variables for which we assume there are no missing values */
+	DELETE FROM sql_columns 
+	WHERE name = 'Lead_Id' or name = 'Phone_No' or name = 'Product_Id' 
+	   or name = 'Campaign_Id' or name = 'Comm_Id' or name = 'Launch_Date' or name = 'Time_Stamp'
+
+    /* Loops to fill missing values for the variables in CM_AD0 */
+	DECLARE @name_1 NVARCHAR(100)
+	DECLARE @getname CURSOR
+
+	SET @getname = CURSOR FOR
+	SELECT name
+	FROM  sql_columns
+
+	OPEN @getname
+	FETCH NEXT
+	FROM @getname INTO @name_1
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		print @name_1
+		EXEC fill_NA @name_1,'CM_AD0' 
+		FETCH NEXT
+		FROM @getname INTO @name_1
+	END
+	CLOSE @getname
+	DEALLOCATE @getname
+END
+GO
+;
+

@@ -10,10 +10,10 @@ title: Typical Workflow for Cortana Intelligence Gallery Deployment
 <div class="row">
     <div class="col-md-6">
         <div class="toc">
-        <li><a href="#step1">Step 1: Server Setup and Configuration with Danny the DB Admin</a></li>
-        <li><a href="#step2">Step 2: Data Prep and Modeling with Debra the Data Scientist</a></li>
-        <li><a href="#step3">Step 3: Operationalize with Debra and Danny</a></li>
-        <li><a href="#step4">Step 4: Deploy and Visualize with Bernie the Business Analyst </a></li>
+        <li><a href="#step1">Step 1: Server Setup and Configuration</a></li>
+        <li><a href="#step2">Step 2: Data Prep and Modeling</a></li>
+        <li><a href="#step3">Step 3: Operationalize</a></li>
+        <li><a href="#step4">Step 4: Deploy and Visualize</a></li>
         </div>
     </div>
 

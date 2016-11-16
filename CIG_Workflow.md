@@ -41,7 +41,7 @@ If you wish to run code on your local computer that connects to the VM SQL Serve
 
 Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
 
-To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  
+To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  (Or you can use your own computer with optional instructions below.  If using your computer make sure to follow the instructions above to change the password and open the firewall.)
 
  <a name="step1" id="step1"></a>
         

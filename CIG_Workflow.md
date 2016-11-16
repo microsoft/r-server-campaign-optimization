@@ -58,16 +58,22 @@ Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is insta
 
 ### Local Computer Instructions 
 
-While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the Windows Firewall on the VM to allow a connection to the SQL Server.  Connect to the VM and execute the following command in a PowerShell window:
+While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the Windows Firewall on the VM to allow a connection to the SQL Server.  
+
+#### Configure the VM Firewall
+
+Connect to the VM and execute the following command in a PowerShell window:
 
     netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
 
 
 Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
 
+#### Configure Local Computer
+
 If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) installed and configured for your IDE. 
 
-Finally, own your computer you will need a copy of the code.  On you computer open a PowerShell window, navigate to the directory you wish to put the code, and execute the following command:  
+Finally, on your own computer you will need a copy of the solution code.  On your local computer, open a PowerShell window, navigate to the directory you wish to put the code, and execute the following command:  
 
     git clone https://github.com/Microsoft/r-server-campaign-optimization.git
 

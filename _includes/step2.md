@@ -15,9 +15,9 @@
 
 3.  If you are following along, if you have modified any of the default values created by this solution package you will need to replace the connection string in the **SQL_connection.R** file with details of your login and database name.  
    
-        ```
+       
         connection_string <- "Driver=SQL Server;Server=.;Database=Campaign;UID=rdemo;PWD=D@tascience"
-        ```
+        
 
     *Make sure there are no spaces around the "=" in the connection string - it will not work correctly when spaces are present*
 
@@ -25,23 +25,21 @@
 
     This connection string contains all the information necessary to connect to the SQL Server from inside the R session. As you can see in the script, this information is then used in the `RxInSqlServer()` command to setup a `sql` string.  The `sql` string is in turn used in the `rxSetComputeContext()` to execute code directly on the SQL Server machine.  You can see this in the **SQL_connection.R** file:
 
-        ```
         connection_string <- "Driver=SQL Server;Server=.;Database=Campaign;UID=rdemo;PWD=D@tascience"
         sql <- RxInSqlServer(connectionString = connection_string)
         rxSetComputeContext(sql)
-        ```
+      
 
     
  4.  After running the step1 and step2 scripts, Debra goes to SQL Server Management Studio to log in and view the results of feature engineering by running the following query in SSMS.
         
-        ```
+
         SELECT TOP 1000 [Lead_Id]
-         ,[Sms_Count]
-         ,[Email_Count]
-         ,[Call_Count]
-         ,[Previous_Channel]
+        ,[Sms_Count]
+        ,[Email_Count]
+        ,[Call_Count]
+        ,[Previous_Channel]
         FROM [Campaign].[dbo].[CM_AD]
-       ```
 
 
 5.  Now she is ready for training the models.  She creates and executes the script you can find in **step3_training_evaluation.R**.  This step will train two different models and evaluate each.  

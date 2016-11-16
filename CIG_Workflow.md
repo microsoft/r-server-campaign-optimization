@@ -34,6 +34,11 @@ SQL Server on your VM has been set up with a user `rdemo` and a default password
       
         ALTER LOGIN rdemo WITH PASSWORD = 'newpassword';  
        
+If you wish to run code on your local computer that connects to the VM SQL Server, you must first open the Windows firewall on the VM to allow a connection to the SQL Server. To configure the firewall, execute the following command in a PowerShell window on the VM:
+
+    netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
+
+Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  
 
@@ -58,18 +63,7 @@ Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is insta
 
 ### Local Computer Instructions 
 
-While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the Windows Firewall on the VM to allow a connection to the SQL Server.  
-
-#### Configure the VM Firewall
-
-Connect to the VM and execute the following command in a PowerShell window:
-
-    netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
-
-
-Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
-
-#### Configure Local Computer
+While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the firewall from the VM as instructed above.  
 
 If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) installed and configured for your IDE. 
 
@@ -79,7 +73,7 @@ Finally, on your own computer you will need a copy of the solution code.  On you
 
 ### Follow Along with Debra
 
-Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the `Campaign/R` directory on the VM desktop, or the `r-server-campaign-optimization` on your local machine.  There you will see three files with the name `CampaignOptimization`:
+Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the **Campaign/R** directory on the VM desktop, (or the **r-server-campaign-optimization/R** directory on your local machine).  There you will see three files with the name `CampaignOptimization`:
 
 <img src="images/project.png">
 

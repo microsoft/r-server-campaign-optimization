@@ -1,7 +1,7 @@
 
 1.  First she'll develop R scripts to prepare the data.  To view the scripts she writes, open the files mentioned below.  If you are using Visual Studio, you will see these file in the `Solution Explorer` tab on the right.  In RStudio, the files can be found in the `Files` tab, also on the right. 
 
-    a.  **SQLR_ connection.R**: configures the compute context used in all the rest of the scripts. The connection string is pre-poplulated with the default values created for a VM from the Cortana Intelligence Gallery.  Change the values accordingly for your implementation.
+    a.  **SQLR_ connection.R**: configures the compute context used in all the rest of the scripts. The connection string is pre-poplulated with the default values created for a VM from the Cortana Intelligence Gallery.  You must  change the values accordingly for your implementation if you are not using the default local server (`.`),  user (`rdemo`), and password (`D@tascience`).  
 
     a.  **step0_data_generation.R**:  This file was used to generate data for the current solution - in a real setting it would not be present.  It is left here in case you'd like to generate more data.  Otherwise simply ignore this file.
 

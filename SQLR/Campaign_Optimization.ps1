@@ -36,15 +36,24 @@ $password ="",
 [parameter(Mandatory=$true,ParameterSetName = "CM")]
 [ValidateNotNullOrEmpty()]
 [String]
-$uninterrupted=""
+$uninterrupted="",
+
+[parameter(Mandatory=$false,ParameterSetName = "CM")]
+[ValidateNotNullOrEmpty()]
+[String]
+$dataPath = ""
 )
 
+if ($dataPath -eq "")
+{
 ##########################################################################
 # Script level variables
 ##########################################################################
 $scriptPath = Get-Location
 $filePath = $scriptPath.Path+ "\"
 $parentPath = Split-Path -parent $scriptPath
+$dataPath = $parentPath + "/data/"
+}
 ##########################################################################
 # Function wrapper to invoke SQL command
 ##########################################################################
@@ -74,7 +83,7 @@ $sqlquery
 function GetConnectionString
 {
     $connectionString = "Driver=SQL Server;Server=$ServerName;Database=$DBName;UID=$username;PWD=$password"
-    $connectionString
+     $connectionString
 }
 
 
@@ -122,10 +131,10 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
 		# upload csv files into SQL tables
         foreach ($dataFile in $dataList)
         {
-            $destination = $parentPath + "/data/" + $dataFile + ".csv"
+            $destination = $dataPath + $dataFile + ".csv"
             Write-Host -ForeGroundColor 'magenta'("    Populate SQL table: {0}..." -f $dataFile)
             $tableName = $DBName + ".dbo." + $dataFile
-            $tableSchema = $parentPath + "/data/" + $dataFile + ".xml"
+            $tableSchema = $dataPath + $dataFile + ".xml"
             bcp $tableName format nul -c -x -f $tableSchema  -U $username -S $ServerName -P $password  -t ','
             Write-Host -ForeGroundColor 'magenta'("    Loading {0} to SQL table..." -f $dataFile)
             bcp $tableName in $destination -t ',' -S $ServerName -f $tableSchema -F 2 -C "RAW" -b 50000 -U $username -P $password
@@ -246,10 +255,10 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 		# upload csv files into SQL tables
         foreach ($dataFile in $dataList)
         {
-            $destination = $parentPath + "/data/" + $dataFile + ".csv"
+            $destination = $dataPath + $dataFile + ".csv"
             Write-Host -ForeGroundColor 'magenta'("    Populate SQL table: {0}..." -f $dataFile)
             $tableName = $DBName + ".dbo." + $dataFile
-            $tableSchema = $parentPath + "/data/" + $dataFile + ".xml"
+            $tableSchema = $dataPath + $dataFile + ".xml"
             bcp $tableName format nul -c -x -f $tableSchema  -U $username -S $ServerName -P $password  -t ','
             Write-Host -ForeGroundColor 'magenta'("    Loading {0} to SQL table..." -f $dataFile)
             bcp $tableName in $destination -t ',' -S $ServerName -f $tableSchema -F 2 -C "RAW" -b 20000 -U $username -P $password

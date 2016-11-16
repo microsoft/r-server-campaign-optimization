@@ -55,22 +55,29 @@ Debra would work on her own machine, using  [R Client](https://msdn.microsoft.co
 
 Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer you can <a href="https://www.rstudio.com/products/rstudio/download3/" target="_blank">download and install RStudio</a> to your machine instead.
 
-While you can follow along on the VM, you could also execute the code on your own computer if you wish.  However you will first need to open the Windows Firewall on the VM to allow a connection to the SQL Server.  Connect to the VM and execute the following command in a PowerShell window:
+### Local Computer Instructions 
 
-        netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
+While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the Windows Firewall on the VM to allow a connection to the SQL Server.  Connect to the VM and execute the following command in a PowerShell window:
+
+    netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
 
 Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
 
-If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) installed and configured for your IDE.  
+If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) installed and configured for your IDE. 
 
+Finally, own your computer you will need a copy of the code.  On you computer open a PowerShell window, navigate to the directory you wish to put the code, and execute the following command:
 
-Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the `Campaign/R` directory on your desktop.  There you will see three files with the name `CampaignOptimization`:
+    git clone https://github.com/Microsoft/r-server-campaign-optimization.git
+
+### Follow Along with Debra
+
+Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the `Campaign/R` directory on the VM desktop, or the `r-server-campaign-optimization` on your local machine.  There you will see three files with the name `CampaignOptimization`:
 
 <img src="images/project.png">
 
 
-* If you wish to use Visual Studio, double click on the "Visual Studio SLN" file (the third one in the image above).
-* If you have downloaded RStudio, double click on the "R Project" file (the first one in the image above).
+* If you are using Visual Studio, double click on the "Visual Studio SLN" file (the third one in the image above).
+* If you are using RStudio, double click on the "R Project" file (the first one in the image above).
 
     {% include step2.md %}
 

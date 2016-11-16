@@ -31,8 +31,9 @@ This guide assumes you have deployed the Campaign Optimzation solution from the 
 
 SQL Server on your VM has been set up with a user `rdemo` and a default password of `D@tascience`.  If you wish to change the password, connect to the VM, log into SSMS with Windows Authentication and execute the following query:
     
+        `
         ALTER LOGIN rdemo WITH PASSWORD = 'newpassword';  
-
+        `
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  
 
@@ -59,16 +60,20 @@ Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is insta
 
 While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the Windows Firewall on the VM to allow a connection to the SQL Server.  Connect to the VM and execute the following command in a PowerShell window:
 
+    `
     netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
+    `
 
 Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
 
 If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) installed and configured for your IDE. 
 
 Finally, own your computer you will need a copy of the code.  On you computer open a PowerShell window, navigate to the directory you wish to put the code, and execute the following command:
-
+    
+    `
     git clone https://github.com/Microsoft/r-server-campaign-optimization.git
-
+    `
+    
 ### Follow Along with Debra
 
 Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the `Campaign/R` directory on the VM desktop, or the `r-server-campaign-optimization` on your local machine.  There you will see three files with the name `CampaignOptimization`:

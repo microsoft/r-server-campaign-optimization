@@ -16,7 +16,7 @@ title: Typical Workflow for Cortana Intelligence Gallery Deployment
         <li><a href="#step4">Step 4: Deploy and Visualize</a></li>
         </div>
     </div>
-
+    
     <div class="col-md-6">
 
         {% include typicalintro.md %}
@@ -24,6 +24,7 @@ title: Typical Workflow for Cortana Intelligence Gallery Deployment
     </div>
 </div>
 
+ {% include typicalintro1.md %}
 
 This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c).  
 

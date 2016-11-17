@@ -30,7 +30,7 @@ This guide assumes you have deployed the Campaign Optimzation solution from the 
 
 *If you are using your own SQL Server for this solution, [use this guide instead](Typical_Workflow.html).*
 
-            {% include password.md %}
+{% include password.md %}
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  (Or you can use your own computer with optional instructions below.  If using your computer make sure to follow the instructions above to change the password and open the firewall.)
 
@@ -53,31 +53,10 @@ Debra would work on her own machine, using  [R Client](https://msdn.microsoft.co
 
 Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer you can <a href="https://www.rstudio.com/products/rstudio/download3/" target="_blank">download and install RStudio</a> to your machine instead.
   
-You can also execute the code on your local computer if you wish, but you must first <a href="#local" data-toggle="modal"> prepare both the VM and your computer</a>.
+You can also execute the code on your local computer if you wish, but you must first  prepare both the VM and your computer.
 
-<!-- Configure Local Computer -->
-<div id="local" class="modal fade" role="dialog" style="width: 90%">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">To Execute Code on your Local Computer</h4>
-      </div>
-      <div class="modal-body">
-        <p>
 
-            {% include local.md %}
-            
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+{% include local.md %}
 
 
 

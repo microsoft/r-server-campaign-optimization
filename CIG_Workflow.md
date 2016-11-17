@@ -53,7 +53,7 @@ Debra would work on her own machine, using  [R Client](https://msdn.microsoft.co
 
 Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer you can <a href="https://www.rstudio.com/products/rstudio/download3/" target="_blank">download and install RStudio</a> to your machine instead.
   
-OPTIONAL: You can execute the code on your local computer if you wish, but you must first  prepare both the VM and your computer <a href="local.html">using these instructions</a>.
+OPTIONAL: You can execute the R code on your local computer if you wish, but you must first  prepare both the VM and your computer <a href="local.html">using these instructions</a>.  Or you can view and execute the R code in a Jupyter Notebook on the VM by <a href="jupyter.html">following these instructions</a>.
 
 
 Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the **Campaign/R** directory on the VM desktop, (or the **r-server-campaign-optimization/R** directory on your local machine).  There you will see three files with the name `CampaignOptimization`:

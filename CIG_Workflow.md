@@ -56,7 +56,7 @@ Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is insta
 You can also execute the code on your local computer if you wish, but you must first <a href="#local" data-toggle="modal"> prepare both the VM and your computer</a>.
 
 <!-- Configure Local Computer -->
-<div id="local" class="modal fade" role="dialog">
+<div id="local" class="modal fade" role="dialog" style="width: 90%">
   <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
@@ -66,7 +66,9 @@ You can also execute the code on your local computer if you wish, but you must f
       </div>
       <div class="modal-body">
         <p>
+
             {% include local.md %}
+            
         </p>
       </div>
       <div class="modal-footer">

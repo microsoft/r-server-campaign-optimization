@@ -12,6 +12,7 @@ title: Site Map
 * [For the Database Analyst](dba.html)
 * [Typical Workflow](Typical.html)
     * [Typical Workflow for Cortana Intelligence Gallery Deployment](CIG_Workflow.html)
+        * [Setup for Local Code Execution](local.html)
     * [Typical Workflow for On Premises Deployment](Typical_Workflow.html)
 * [Quick Start](START_HERE.html)
     * [Setup SQL Server 2016 ](SetupSQL.html)

@@ -30,16 +30,7 @@ This guide assumes you have deployed the Campaign Optimzation solution from the 
 
 *If you are using your own SQL Server for this solution, [use this guide instead](Typical_Workflow.html).*
 
-SQL Server on your VM has been set up with a user `rdemo` and a default password of `D@tascience`.  If you wish to change the password, connect to the VM, log into SSMS with Windows Authentication and execute the following query:
-    
-      
-        ALTER LOGIN rdemo WITH PASSWORD = 'newpassword';  
-       
-If you wish to run code on your local computer that connects to the VM SQL Server, you must first open the Windows firewall on the VM to allow a connection to the SQL Server. To configure the firewall, execute the following command in a PowerShell window on the VM:
-
-    netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
-
-Note this allows anyone with the VM name/IP address to connect to your SQL Server.  You should also change the  password as indicated above if you open the firewall.  
+            {% include password.md %}
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  While each persona would be working on a different computer, for simplicity your Virtual Machine (VM) has all the tools each persona would use on the same machine.  (Or you can use your own computer with optional instructions below.  If using your computer make sure to follow the instructions above to change the password and open the firewall.)
 
@@ -61,18 +52,33 @@ She will create two machine learning models and compare them, then use the one s
 Debra would work on her own machine, using  [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) to execute these R scripts. R Client has been installed on your VM.
 
 Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer you can <a href="https://www.rstudio.com/products/rstudio/download3/" target="_blank">download and install RStudio</a> to your machine instead.
+  
+You can also execute the code on your local computer if you wish, but you must first 
+<a data-toggle="modal" data-target="#local">prepare both the VM and your computer</a>.
 
-### Local Computer Instructions 
+<!-- Configure Local Computer -->
+<div id="local" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">To Execute Code on your Local Computer</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+            {% include local.md %}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-While you can follow along on the VM, you may also execute the code on your own computer if you wish. To do so, you will first need to open the firewall from the VM as instructed above.  
 
-If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) installed and configured for your IDE. 
 
-Finally, on your own computer you will need a copy of the solution code.  On your local computer, open a PowerShell window, navigate to the directory you wish to put the code, and execute the following command:  
-
-    git clone https://github.com/Microsoft/r-server-campaign-optimization.git
-
-### Follow Along with Debra
 
 Now that Debra's environment is set up, she  opens her IDE and creates a Project.  To follow along with her, open the **Campaign/R** directory on the VM desktop, (or the **r-server-campaign-optimization/R** directory on your local machine).  There you will see three files with the name `CampaignOptimization`:
 

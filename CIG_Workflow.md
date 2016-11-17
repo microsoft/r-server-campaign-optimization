@@ -54,7 +54,7 @@ Debra would work on her own machine, using  [R Client](https://msdn.microsoft.co
 Debra also uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer you can <a href="https://www.rstudio.com/products/rstudio/download3/" target="_blank">download and install RStudio</a> to your machine instead.
   
 You can also execute the code on your local computer if you wish, but you must first 
-<a data-toggle="modal" data-target="#local">prepare both the VM and your computer</a>.
+<a href=#local" data-toggle="modal" data-target="modal">prepare both the VM and your computer</a>.
 
 <!-- Configure Local Computer -->
 <div id="local" class="modal fade" role="dialog">

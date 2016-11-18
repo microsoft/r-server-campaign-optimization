@@ -18,8 +18,9 @@ Once the server is running, open the Mozilla Firefox web browser.  Type
 
     https://localhost:9999
 
-into the address bar to access Jupyter. 
+into the address bar to access Jupyter. You will get a security warning, hit the "Advanced" button and add this to your exceptions to access the Jupyter session.
 
- There are a number of samples available on the VM server.  To add the Campaign Optimization solution, use the `Upload` button and navigate to the **Desktop\Campaign\R** folder where you will see the **Campaign Optimization R Notebook**.
+ There are a number of samples available on the VM server.  You can add the **Campaign Optimization R Notebook** by moving or copying it from **Desktop/Campaign/R** into **C:/<machinename>/notebook** (for example, if your machinename is "dsvm" the path is **C:/dsvm/notebook**).  You will also need to copy the 4 .csv files from the **Desktop/Campaign/Data** folder into the notebook folder.
+
 
 <a href="CIG_Workflow.html#step2">Return to Typical Workflow for Cortana Intelligence Gallery Deployment<a>

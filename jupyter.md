@@ -26,7 +26,11 @@ into the address bar to access Jupyter. You will get a security warning, hit the
 
     https://ipaddress:9999
         
-The ipaddress can be found in the Azure Portal under the "Network interfaces" section - use the Public IP Address.
+The ipaddress can be found in the Azure Portal under the "Network interfaces" section - use the Public IP Address.##
+
+## Using Jupyter
+
+To execute the code in a cell, ` Shift+Enter` when your cursor is in the cell.  Some of the cells may take a minute or two to work, and must be complete before the next cell can execute.  You can also select the Cell>Run All menu item to execute the entire notebook.
 
 
 <a href="CIG_Workflow.html#step2">Return to Typical Workflow for Cortana Intelligence Gallery Deployment<a>

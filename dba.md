@@ -105,7 +105,7 @@ In this step, we first merge the 4 raw data tables that we filled in Step 0 thro
 `Lead_Demography` and `Market_Touchdown` are merged into an intermediate table `Market_Lead` through an inner join on `Lead_Id`. Finally, the two intermediate tables are merged into one, `CM_AD0`, through an inner join on `Lead_Id`. 
 Intermediate tables are then deleted from the database. This is implemented though a stored procedure `[dbo].[merging_raw_tables]`.
 
-Then, the raw data in Merged is cleaned through a SQL stored procedure calling `[dbo].[fill_NA]`. This assumes that the ID variables (`Lead_Id`, `Product_Id`, `Campaign_Id`, `Comm_Id`) as well as dates and phone numbers do not contain blanks. For every variable that might contain missing values: we first look for the rows containing missing values. If it is not an empty set, we compute the mode (most repeated value) and replace the missing values with it. This stored procedure outputs a table, `CM_AD0`.
+Then, the raw data in Merged is cleaned through a SQL stored procedure calling `[dbo].[fill_NA_all]`. This assumes that the ID variables (`Lead_Id`, `Product_Id`, `Campaign_Id`, `Comm_Id`) as well as dates and phone numbers do not contain blanks. For every variable that might contain missing values, we compute the mode (most repeated value) and replace the missing values with it. This stored procedure outputs a table, `CM_AD0`.
 
 ### Input:
 

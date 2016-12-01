@@ -17,7 +17,7 @@ title: For the Database Analyst
         <li><a href="#step3">Step 3: Normalization</a></li>
         <li><a href="#step3a">Step 3a: Splitting the data set</a></li>
         <li><a href="#step3b">Step 3b: Training</a></li>
-        <li><a href="#step3c)">Step 3c: Predicting (Scoring)</a></li>
+        <li><a href="#step3c)">Step 3c: Testing and Evaluating</a></li>
         <li><a href="#step4">Step 4: Channel-day-time Recommendations</a></li>
         </div>
     </div>
@@ -29,9 +29,9 @@ title: For the Database Analyst
 Among the key variables to learn from data are the best communication channel (e.g. SMS, Email, Call), the day of the week and the time of the day through which/ during which a given potential customer is targeted by a marketing campaign. This template provides a customer-oriented business with an analytics tool that helps determine the best combination of these three variables for each customer, based (among others) on financial and demographic data.
 </p>
 
-For businesses that prefers an on-prem solution, the implementation with SQL Server R Services is a great option, which takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server). In this template, we implemented all steps in SQL stored procedures: data preprocessing, and feature engineering are implemented in pure SQL, while data cleaning, and the model training, scoring and evaluation steps are implemented with SQL stored procedures calling R (Microsoft R Server) code. 
+For businesses that prefer an on-prem solution, the implementation with SQL Server R Services is a great option, which takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server). In this template, we implemented all steps in SQL stored procedures: data preprocessing, and feature engineering are implemented in pure SQL, while data cleaning, and the model training, scoring and evaluation steps are implemented with SQL stored procedures calling R (Microsoft R Server) code. 
 
-All the steps can be executed on SQL Server client environment (such as SQL Server Management Studio), as well as from other applications. We provide a Windows PowerShell script which invokes the SQL scripts and demonstrates the end-to-end modeling process.
+All the steps can be executed on SQL Server client environment (SQL Server Management Studio). We provide a Windows PowerShell script which invokes the SQL scripts and demonstrates the end-to-end modeling process.
 
 ## System Requirements
 -----------------------
@@ -103,7 +103,7 @@ One other empty table is created and will be filled in the next steps.
 
 In this step, we first merge the 4 raw data tables that we filled in Step 0 through inner joins: `Campaign_Detail` and `Product` are merged into an intermediate table, `Campaign_Product`, through an inner join on `Product_Id`. 
 `Lead_Demography` and `Market_Touchdown` are merged into an intermediate table `Market_Lead` through an inner join on `Lead_Id`. Finally, the two intermediate tables are merged into one, `CM_AD0`, through an inner join on `Lead_Id`. 
-Intermediate tables are then deleted from the database. This is implemented though a stored procedure `[dbo].[Merging_Raw_Tables]`.
+Intermediate tables are then deleted from the database. This is implemented though a stored procedure `[dbo].[merging_raw_tables]`.
 
 Then, the raw data in Merged is cleaned through a SQL stored procedure calling `[dbo].[fill_NA]`. This assumes that the ID variables (`Lead_Id`, `Product_Id`, `Campaign_Id`, `Comm_Id`) as well as dates and phone numbers do not contain blanks. For every variable that might contain missing values: we first look for the rows containing missing values. If it is not an empty set, we compute the mode (most repeated value) and replace the missing values with it. This stored procedure outputs a table, `CM_AD0`.
 
@@ -165,7 +165,7 @@ In this step, we normalize the data by converting the factor variables with char
 ## Step 3a: Splitting the data set
 -----------------------------------
 
-In this step, we create a stored procedure `[dbo].[splitting]` that splits the data into a training set and a testing set. The user has to specify a splitting ratio between 0 and 1. For example, if the splitting ratio is 0.7, 70% of the data will be put in the training set, while the other 30% will be assigned to the testing set. The resulting data, with a random binary vector `Split_Vector`, is stored in the table `CM_AD1`.
+In this step, we create a stored procedure `[dbo].[splitting]` that splits the data into a training set and a testing set. The user has to specify a splitting percentage. For example, if the splitting percentage is 70, 70% of the data will be put in the training set, while the other 30% will be assigned to the testing set. The leads that will end in the training set, are stored in the table `Train_Id`.
 
 
 ### Input:
@@ -174,7 +174,7 @@ In this step, we create a stored procedure `[dbo].[splitting]` that splits the d
 
 ### Output:
 
-* `CM_AD1` table containing `Split_Vector` to split between training and testing set.
+* `Train_Id` table containing containing the `Lead_Id` that will end in the training set.
 
 ### Related files:
 
@@ -185,12 +185,12 @@ In this step, we create a stored procedure `[dbo].[splitting]` that splits the d
 ## Step 3b: Training
 ----------------------
 
-In this step, we create a stored procedure `[dbo].[TrainModel]` that trains a Random Forest (RF) or a Gradient Boosted Trees (GBT) on the training set. The trained models are serialized then stored in a table called `Campaign_Models`. The PowerShell script automatically calls the procedure twice in order to train both models. 
+In this step, we create a stored procedure `[dbo].[train_model]` that trains a Random Forest (RF) or a Gradient Boosted Trees (GBT) on the training set. The trained models are serialized then stored in a table called `Campaign_Models`. The PowerShell script automatically calls the procedure twice in order to train both models. 
 
 
 ### Input:
 
-* `CM_AD1` table.
+* `CM_AD_N` and `Train_Id` tables.
 
 ### Output:
 
@@ -205,24 +205,24 @@ In this step, we create a stored procedure `[dbo].[TrainModel]` that trains a Ra
 ## Step 3c: Predicting (Scoring)
 ---------------------------------
 
-In this step, we create a stored procedure `[dbo].[TestModel]` that scores the two trained models on the testing set, and then compute performance metrics (AUC and accuracy among others). The performance metrics are written in `metrics_table`, and the best model name based on AUC is written to the table `best_model`.
+In this step, we create a stored procedure `[dbo].[test_evaluate_models]` that scores the two trained models on the testing set, and then compute performance metrics (AUC and accuracy among others). The performance metrics are written in `Metrics_Table`, and the best model name based on AUC is written to the table `Best_Model`.
 
 
 Before proceeding to the next step, the user might want to inspect the metrics_table in order to select himself the model to be used for campaign recommendations. Since the AUC does not depend on the chosen decision threshold for the models, it is wiser to use it for model comparison. The PowerShell script will use by default the best model based on AUC but will give the user the option of choosing the other model.
 
 ### Input:
 
-* `CM_AD1` table.
+* `CM_AD_N` and `Train_Id` tables.
 
 ### Output:
 
-* `metrics_table` table containing the performance metrics of the two models.
-* `best_model` table containing the name of the model that gave the highest AUC on the testing set.
+* `Metrics_Table` table containing the performance metrics of the two models.
+* `Best_Model` table containing the name of the model that gave the highest AUC on the testing set.
 
 
 ### Related files:
 
-* step3c_test_model.sql
+* step3c_test_evaluate_models.sql
 
 <a name="step4">
 

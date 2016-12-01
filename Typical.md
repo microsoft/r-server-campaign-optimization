@@ -12,5 +12,5 @@ Follow along with this typical workflow and view the details and follow the solu
 
 * If you are using the solution deployed from the Cortana Intelligence Gallery, [click here](CIG_Workflow.html).
 
-* If you are deploying this solution on your own machine, [click here](Typical_Workflow.html) 
+* If you are using the solution deployed on your own SQL Server machine, [click here](Typical_Workflow.html) 
 

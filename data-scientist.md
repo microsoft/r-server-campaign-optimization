@@ -10,12 +10,12 @@ title: For the Data Scientist
     <div class="col-md-6">
         <div class="toc">
             <li><a href="#campaign-optimization">Campaign Optimization</a></li>
+            <li><a href="#system-requirements">System Requirements</a></li>
             <li><a href="#analytical-dataset-preprocessing-and-feature-engineering">Analytical Dataset Preprocessing and Feature Engineering</a></li>
             <li><a href="#model-development">Model Development</a></li>
             <li><a href="#scoring">Scoring</a></li>
             <li><a href="#deploy-and-visualize-results">Deploy and Visualize Results</a></li>
             <li><a href="#template-contents">Template Contents</a></li>
-            <li><a href="#system-requirements">System Requirements</a></li>
         </div>
     </div>
     <div class="col-md-6">
@@ -25,7 +25,7 @@ title: For the Data Scientist
     </div>
 </div>
 
-Data scientists who are testing and developing solutions can work from the convenience of their R IDE on their client machine, while <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx">setting the computation context to SQL</a>(see <bd>R</bd> folder for code).  They can then deploy the completed solutions to SQL Server 2016 by embedding calls to R in stored procedures (see **SQLR** folder for code). These solutions can then be further automated by the use of SQL Server Integration Services and SQL Server agent: a PowerShell script (.ps1 file) automates the running of the SQL code.
+Data scientists who are testing and developing solutions can work from the convenience of their R IDE on their client machine, while <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx">setting the computation context to SQL</a> (see <bd>R</bd> folder for code).  They can also deploy the completed solutions to SQL Server 2016 by embedding calls to R in stored procedures (see **SQLR** folder for code). These solutions can then be further automated by the use of SQL Server Integration Services and SQL Server agent: a PowerShell script (.ps1 file) automates the running of the SQL code.
 
 
 ## Campaign Optimization
@@ -40,6 +40,17 @@ In this template, the final scored database table in SQL Server gives the recomm
 To try this out yourself, see the [Quick Start](START_HERE.html) section on the main page.  
 
 This page describes what happens in each of the steps: dataset creation, model development, recommendations, and deployment in more detail.
+
+
+## System Requirements
+--------------------------
+
+To run the scripts requires the following:
+
+- SQL Server 2016 with Microsoft R server installed and configured.     
+- The SQL user name and password, and the user configured properly to execute R scripts in-memory;
+- SQL Database which the user has write permission and execute stored procedures;
+- For more information about SQL server 2016 and R service, please visit: [https://msdn.microsoft.com/en-us/library/mt604847.aspx](https://msdn.microsoft.com/en-us/library/mt604847.aspx)
 
 
 ##  Analytical Dataset Preprocessing and Feature Engineering
@@ -115,16 +126,6 @@ You can explore the  [online version](https://pcsadwebapp.azurewebsites.net/Solu
 ---------------------
 
 [View the contents of this solution template](contents.html).
-
-
-## System Requirements
-
-To run the scripts requires the following:
-
-- SQL Server 2016 with Microsoft R server installed and configured.     
-- The SQL user name and password, and the user configured properly to execute R scripts in-memory;
-- SQL Database which the user has write permission and execute stored procedures;
-- For more information about SQL server 2016 and R service, please visit: [https://msdn.microsoft.com/en-us/library/mt604847.aspx](https://msdn.microsoft.com/en-us/library/mt604847.aspx)
 
 
 To try this out yourself: 

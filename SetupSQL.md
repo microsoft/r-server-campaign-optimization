@@ -33,8 +33,8 @@ Complete the steps in the Set up SQL Server R Services (In-Database) Instruction
 ### Set up logins in SQL Server
 If you are administering your own server and want to add a user to run the code of this solution, use the steps below.
 
-1.	In SSMS, connect to the Server with your admin account
-2.	Create a new user: Right click on <code>Security</code> and select <code>New &gt; Login</code> <br/>
+1.	In SSMS, connect to the Server with your admin account.
+2.	Create a new user: Right click on <code>Security</code> and select <code>New &gt; Login.</code> <br/>
     <br/>
     <img src="images/newuser.png" >
 
@@ -55,7 +55,7 @@ If you are administering your own server and want to add a user to run the code 
     *	In the SQL Server Management Studio dialog box, click OK.  If you changed the mode in the previous step, you will need to also acknowledge the requirement to restart SQL Server.
     * If you changed the mode, restart the server.  In the Object Explorer, right-click your server, and then click <code>Restart</code>. If SQL Server Agent is running, it must also be restarted.
 
-6.	Now, click on <code>File</code> on the top left corner of the SQL Server window and select <code>Connect Object Explorer…</code> verify that you can connect to the server with this username(<code>rdemo</code>) &amp; password(<code>D@tascience</code>) using the SQL Server Authentication.
+6.	Now, click on <code>File</code> on the top left corner of the SQL Server window and select <code>Connect Object Explorer…</code> verify that you can connect to the server with this username(<code>rdemo</code>) and password(<code>D@tascience</code>) using the SQL Server Authentication.
 
 
 ### Ready to Run Code 
@@ -66,5 +66,5 @@ You are now ready to run the code for this solution.
 * Typically a data scientist will create and test a predictive model from their favorite R IDE, at which point the models will be stored in SQL Server and then scored in production using Transact-SQL (T-SQL) stored procedures. 
 You can follow along with this by following the <a href="Typical.html">Typical Workflow Walkthrough.</a>.
 
-* If you’re just interested in the outcomes of this process, we have created a fully automated solution that simulates the data, trains and scores the models by executing PowerShell scripts. This is the fastest way to deploy on your own machine. See <a href="Powershell_Instructions.html">PowerShell Instructions</a> for this deployment.
+* If you’re just interested in the outcomes of this process, we have created a fully automated solution that loads the data in the database, trains and scores the models and provides recommendations by executing a PowerShell script. This is the fastest way to deploy on your own machine. See <a href="Powershell_Instructions.html">PowerShell Instructions</a> for this deployment.
 	

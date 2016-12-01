@@ -88,6 +88,8 @@ Hit `Refresh` if necessary.
 
 Right click on `dbo.Recommendations` and select `View Top 1000 Rows` to preview the scored data.
 
+For a detailed description of these tables, go to **r-server-campaign-optimization/Resources/Tables_Description.md** or to **r-server-campaign-optimization/Resources/Campaign_Data_Dictionnary.xlsx** ,
+
 ## Visualizing Results 
 ---------------------
 
@@ -98,6 +100,6 @@ Let's look at our current results. Proceed to <a href="Visualize_Results.html">V
 ## Other Steps
 ----------------
 
-You've just completed the fully automated solution that simulates the data, trains and scores the models by executing PowerShell scripts.  
+You've just completed the fully automated solution that simulates the data, trains and scores the models, and provide recommendations by executing PowerShell scripts.  
 
 See the [Typical Workflow](Typical.html) for a description of how these files were first created in R by a Data Scientist and then incorporated into the SQL stored procedures that you just deployed.

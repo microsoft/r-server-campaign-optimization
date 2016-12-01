@@ -25,7 +25,7 @@
 
     This connection string contains all the information necessary to connect to the SQL Server from inside the R session. As you can see in the script, this information is then used in the `RxInSqlServer()` command to setup a `sql` string.  The `sql` string is in turn used in the `rxSetComputeContext()` to execute code directly in-database.  You can see this in the **SQL_connection.R** file:
 
-        connection_string <- "Driver=SQL Server;Server=.;Database=Campaign;UID=rdemo;PWD=D@tascience"
+        connection_string <- "Driver=SQL Server;Server=localhost;Database=Campaign;UID=rdemo;PWD=D@tascience"
         sql <- RxInSqlServer(connectionString = connection_string)
         rxSetComputeContext(sql)
       

@@ -53,7 +53,7 @@ In this template with SQL Server R Services, two versions of the implementation:
 
 <table class="table table-striped table-condensed">
 <tr><th> File </th><th> Description </th></tr>
-<tr><td> .\SQLR\step0_create\tables.sql </td><td> SQL Script to create empty tables in SQL. PowerShell script should be used to load the input data. </td></tr>
+<tr><td> .\SQLR\step0_create_tables.sql </td><td> SQL Script to create empty tables in SQL. PowerShell script should be used to load the input data. </td></tr>
 <tr><td> .\SQLR\step1_data_processing.sql  </td><td> Replaces Missing values in dataset with the modes. </td></tr>
 <tr><td> .\SQLR\step2_feature_engineering.sql </td><td> Performs Feature Engineering and creates the Analytical Dataset.</td></tr>
 <tr><td> .\SQLR\step3a_splitting.sql </td><td> Split the analytical dataset into Train and Test.</td></tr>

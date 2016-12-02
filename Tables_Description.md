@@ -1,5 +1,4 @@
-
----
+--
 layout: default
 title: Description of Database Tables
 ---

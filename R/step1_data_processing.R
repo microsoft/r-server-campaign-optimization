@@ -24,6 +24,26 @@ rxSetComputeContext(local)
 
 ##########################################################################################################################################
 
+## Function to get the top n rows of a table stored on SQL Server.
+## You can execute this function at any time during  your progress by removing the comment "#", and inputting:
+##  - the table name.
+##  - the number of rows you want to display.
+
+##########################################################################################################################################
+
+display_head <- function(table_name, n_rows){
+  table_sql <- RxSqlServerData(sqlQuery = sprintf("SELECT TOP(%s) * FROM %s", n_rows, table_name), connectionString = connection_string)
+  table <- rxImport(table_sql)
+  print(table)
+}
+
+# table_name <- "insert_table_name"
+# n_rows <- 10
+# display_head(table_name, n_rows)
+
+
+##########################################################################################################################################
+
 ## Read the 4 data sets from file, and upload them to SQL
 
 ##########################################################################################################################################
@@ -65,8 +85,8 @@ rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Campaign_Pro
 , sep=""))
 
 rxExecuteSQLDDL(outOdbcDS, sSQLString = paste(
-  "SELECT Campaign_Detail.*, Term , No_of_people_covered, 
-  Payment_frequency, Net_Amt_Insured, Amt_on_Maturity_Bin,
+  "SELECT Campaign_Detail.*, Term , No_Of_People_Covered, 
+  Payment_Frequency, Net_Amt_Insured, Amt_On_Maturity_Bin,
   Product, Premium
   INTO Campaign_Product
   FROM Campaign_Detail JOIN Product
@@ -97,9 +117,9 @@ Merged_sql <- RxSqlServerData(
         CAST(No_Of_Dependents AS char(1)) AS No_Of_Dependents, Highest_Education, Ethnicity,
         CAST(No_Of_Children AS char(1)) AS No_Of_Children, CAST(Household_Size AS char(1)) AS Household_Size, Gender, 
         Marital_Status, Channel, Time_Of_Day, Conversion_Flag, Market_Lead.Campaign_Id, Day_Of_Week, Comm_Id, Time_Stamp,
-        Product, Category, Term, CAST(No_of_people_covered AS char(1)) AS No_of_people_covered,
-        CAST(Premium AS varchar(4)) AS Premium, Payment_frequency,
-        Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
+        Product, Category, Term, CAST(No_Of_People_Covered AS char(1)) AS No_Of_People_Covered,
+        CAST(Premium AS varchar(4)) AS Premium, Payment_Frequency,
+        Amt_On_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
         Focused_Geography, Tenure_Of_Campaign, CAST(Net_Amt_Insured AS varchar(7)) AS Net_Amt_Insured , Product_Id
  FROM Campaign_Product JOIN Market_Lead 
  ON Campaign_Product.Campaign_Id = Market_Lead.Campaign_Id "
@@ -132,8 +152,8 @@ for(n in var_number_with_NA ){
 # Point again to the merged table without stringsAsFactors = TRUE and with correct variable types. 
 Merged_sql2 <- RxSqlServerData(  
   sqlQuery = 
-"SELECT Market_Lead.*, Product, Category, Term, No_of_people_covered, Premium, Payment_frequency,
-        Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
+"SELECT Market_Lead.*, Product, Category, Term, No_Of_People_Covered, Premium, Payment_Frequency,
+        Amt_On_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
         Focused_Geography, Tenure_Of_Campaign, Net_Amt_Insured, Product_Id
  FROM Campaign_Product JOIN Market_Lead
  ON Campaign_Product.Campaign_Id = Market_Lead.Campaign_Id "
@@ -142,12 +162,12 @@ Merged_sql2 <- RxSqlServerData(
 # Function to deal with NAs. 
 Mode_Replace <- function(data) {
   data <- data.frame(data)
-  for(j in 1:length(var_with_NA)){
-    row_na <- which(is.na(data[,var_with_NA[j]]) == TRUE) 
-        if (var_with_NA[j] %in% c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured")){
-          data[row_na,var_with_NA[j]] <- as.integer(mode[j])
+  for(j in 1:length(var_with_NA_1)){
+    row_na <- which(is.na(data[,var_with_NA_1[j]]) == TRUE) 
+        if (var_with_NA_1[j] %in% c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_Of_People_Covered", "Premium", "Net_Amt_Insured")){
+          data[row_na,var_with_NA_1[j]] <- as.integer(mode_1[j])
         } else{
-          data[row_na,var_with_NA[j]] <- mode[j]
+          data[row_na,var_with_NA_1[j]] <- mode_1[j]
         }
   }
   return(data)
@@ -156,7 +176,7 @@ Mode_Replace <- function(data) {
 # Create the CM_AD0 table by dealing with NAs in Merged_sql and save it to a SQL table.
 CM_AD0 <- RxSqlServerData(table = "CM_AD0", connectionString = connection_string)
 rxDataStep(inData = Merged_sql2 , outFile = CM_AD0, overwrite = TRUE, transformFunc = Mode_Replace, 
-           transformObjects = list(var_with_NA = var_with_NA, mode = mode))
+           transformObjects = list(var_with_NA_1 = var_with_NA, mode_1 = mode))
 
 # Drop intermediate tables.
 rxSqlServerDropTable(table = "Campaign_Product", connectionString = connection_string)

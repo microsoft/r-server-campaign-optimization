@@ -1,3 +1,4 @@
+
 SET ANSI_NULLS ON 
 GO 
 SET QUOTED_IDENTIFIER ON 
@@ -36,7 +37,7 @@ best_model <- unserialize(best_model)
 ##	Specify the types of the features before the scoring
 ##########################################################################################################################################
 # Names of numeric variables: 
-#numeric <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured",
+#numeric <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_Of_People_Covered", "Premium", "Net_Amt_Insured",
 #			  "SMS_Count", "Email_Count", "Call_Count")
 
 # Get the variables names, types and levels for factors.
@@ -46,12 +47,15 @@ column_info <- rxCreateColInfo(CM_AD_N)
 ##########################################################################################################################################
 ##	Point to the input and output tables and use the column_info list to specify the types of the features.
 ##########################################################################################################################################
+# For a faster implementation, we are taking the TOP 10K customers. 
+# For a full solution, you can remove TOP(10000) from the query below. 
+
 AD_full_merged_sql <- RxSqlServerData(
   sqlQuery = "	SELECT * 
 		FROM (
-		      SELECT Lead_Id, Age, Annual_Income_Bucket, Credit_Score, [State], No_Of_Dependents, Highest_Education, Ethnicity,
-			     No_Of_Children, Household_Size, Gender, Marital_Status, Campaign_Id, Product_Id, Term,
-			     No_of_people_covered, Premium, Payment_frequency, Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers,
+		      SELECT TOP(10000) Lead_Id, Age, Annual_Income_Bucket, Credit_Score, [State], No_Of_Dependents, Highest_Education,
+			     Ethnicity, No_Of_Children, Household_Size, Gender, Marital_Status, Campaign_Id, Product_Id, Term,
+			     No_Of_People_Covered, Premium, Payment_Frequency, Amt_On_Maturity_Bin, Sub_Category, Campaign_Drivers,
 			     Tenure_Of_Campaign, Net_Amt_Insured, SMS_Count, Email_Count,  Call_Count, 
 			     Previous_Channel, Conversion_Flag
 			     FROM CM_AD_N) a,
@@ -92,26 +96,26 @@ BEGIN
 
 /* For each Lead_Id, get one of the combinations of Day_of_Week, Channel, and Time_Of_Day giving highest conversion probability */ 
 	
-	SELECT Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb
+	SELECT Lead_Id, Day_of_Week, Channel, Time_Of_Day, Max_Prob
 	INTO Recommended_Combinations
 	FROM (
-		SELECT maxp.Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb, 
+		SELECT maxp.Lead_Id, Day_of_Week, Channel, Time_Of_Day, Max_Prob, 
 		       ROW_NUMBER() OVER (partition by maxp.Lead_Id ORDER BY NEWID()) as RowNo
 		FROM (
-			SELECT Lead_Id, max([1_prob]) as MaxProb
+			SELECT Lead_Id, max([1_prob]) as Max_Prob
 			FROM Prob_Id
 			GROUP BY Lead_Id) maxp
 		JOIN Prob_Id
-		ON (maxp.Lead_Id = Prob_Id.Lead_Id AND maxp.MaxProb = Prob_Id.[1_prob])
+		ON (maxp.Lead_Id = Prob_Id.Lead_Id AND maxp.Max_Prob = Prob_Id.[1_prob])
          ) candidates
 	WHERE RowNo = 1
 
 /* Add demographics information to the recommendation table  */
 
-	SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name as [Campaign Name], [State], CM_AD.Channel, 
-               CM_AD.Day_Of_Week as [Day of Week], CM_AD.Time_Of_Day as [Time of Day], CAST(Conversion_Flag AS int) as Converts,
-	       Recommended_Combinations.Day_Of_Week as [Recommended Day], Time_Of_Day_N.Time_Of_Day as [Recommended Time],
-	       Channel_N.Channel as [Recommended Channel], Recommended_Combinations.MaxProb, Recommended_Combinations.Lead_Id as [Lead ID]
+	SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name, [State], CM_AD.Channel, 
+               CM_AD.Day_Of_Week, CM_AD.Time_Of_Day, CAST(Conversion_Flag AS int) as Conversion_Flag,
+	       Recommended_Combinations.Day_Of_Week as [Recommended_Day], Time_Of_Day_N.Time_Of_Day as [Recommended_Time],
+	       Channel_N.Channel as [Recommended_Channel], Recommended_Combinations.Max_Prob, Recommended_Combinations.Lead_Id
         INTO Recommendations
 	FROM CM_AD 
 	JOIN Recommended_Combinations ON CM_AD.Lead_Id = Recommended_Combinations.Lead_Id

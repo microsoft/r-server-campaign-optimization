@@ -29,6 +29,26 @@ rxSetComputeContext(local)
 
 ##########################################################################################################################################
 
+## Function to get the top n rows of a table stored on SQL Server.
+## You can execute this function at any time during  your progress by removing the comment "#", and inputting:
+##  - the table name.
+##  - the number of rows you want to display.
+
+##########################################################################################################################################
+
+display_head <- function(table_name, n_rows){
+  table_sql <- RxSqlServerData(sqlQuery = sprintf("SELECT TOP(%s) * FROM %s", n_rows, table_name), connectionString = connection_string)
+  table <- rxImport(table_sql)
+  print(table)
+}
+
+# table_name <- "insert_table_name"
+# n_rows <- 10
+# display_head(table_name, n_rows)
+
+
+##########################################################################################################################################
+
 ## Input: - Point to the SQL table with the whole data set 
 ##        - Import the best model from the SQL server. 
 
@@ -57,6 +77,7 @@ if(best == "GBT"){
 
 ## Create a full data table with all the unique combinations of Day_of_Week, Channel, Time_Of_Day 
 
+
 ##########################################################################################################################################
 
 # Create a table with all the unique combinations of Day_of_Week, Channel, Time_Of_Day.
@@ -67,24 +88,27 @@ Unique_Combos <- merge(merge(Day_of_Week_unique, Channel_unique), Time_Of_Day_un
 colnames(Unique_Combos) <- c("Day_Of_Week", "Channel", "Time_Of_Day")
 
 # Export it to SQL
-Unique_Combos_sql <- RxSqlServerData(table = "Unique_Combos_sql", connectionString = connection_string)
+Unique_Combos_sql <- RxSqlServerData(table = "Unique_Combos", connectionString = connection_string)
 rxDataStep(inData = Unique_Combos, outFile = Unique_Combos_sql, overwrite = T)
 
 
 # We create a table that has, for each Lead_Id and its corresponding variables (except Day_of_Week, Channel, Time_Of_Day),
 # One row for each possible combination of Day_of_Week, Channel and Time_Of_Day.
-# This is a pointer. The table will be created on the fly while scoring. 
+# This is a pointer. The table will be created on the fly while scoring.
+
+# For a faster implementation, we are selecting only the top 10K customers. 
+# For a full solution, you can remove TOP(10000) from the query below. 
 
 AD_full_merged_sql <- RxSqlServerData(
   sqlQuery = "SELECT * 
               FROM (
-                    SELECT Lead_Id, Age, Annual_Income_Bucket, Credit_Score, State, No_Of_Dependents, Highest_Education, Ethnicity,
-                    No_Of_Children, Household_Size, Gender, Marital_Status, Campaign_Id, Product_Id, Term,
-                    No_of_people_covered, Premium, Payment_frequency, Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers,
-                    Tenure_Of_Campaign, Net_Amt_Insured, SMS_Count, Email_Count,  Call_Count, 
-                    Previous_Channel, Conversion_Flag
+                    SELECT TOP(10000) Lead_Id, Age, Annual_Income_Bucket, Credit_Score, State, No_Of_Dependents, Highest_Education,
+                           Ethnicity, No_Of_Children, Household_Size, Gender, Marital_Status, Campaign_Id, Product_Id, Term,
+                           No_Of_People_Covered, Premium, Payment_Frequency, Amt_On_Maturity_Bin, Sub_Category, Campaign_Drivers,
+                           Tenure_Of_Campaign, Net_Amt_Insured, SMS_Count, Email_Count,  Call_Count, 
+                           Previous_Channel, Conversion_Flag
                     FROM CM_AD) a,
-                    (SELECT * FROM Unique_Combos_sql) b", 
+                    (SELECT * FROM Unique_Combos) b", 
   stringsAsFactors = T, connectionString = connection_string, colInfo = column_info)
 
 
@@ -115,16 +139,16 @@ rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Recommended_
 , sep=""))
 
 rxExecuteSQLDDL(outOdbcDS, sSQLString = paste(
-"SELECT Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb
+"SELECT Lead_Id, Day_of_Week, Channel, Time_Of_Day, Max_Prob
  INTO Recommended_Combinations
  FROM (
-       SELECT maxp.Lead_Id, Day_of_Week, Channel, Time_Of_Day, MaxProb, 
+       SELECT maxp.Lead_Id, Day_of_Week, Channel, Time_Of_Day, Max_Prob, 
               ROW_NUMBER() OVER (partition by maxp.Lead_Id ORDER BY NEWID()) as RowNo
-       FROM ( SELECT Lead_Id, max([1_prob]) as MaxProb
+       FROM ( SELECT Lead_Id, max([1_prob]) as Max_Prob
               FROM Prob_Id
               GROUP BY Lead_Id) maxp
        JOIN Prob_Id 
-       ON (maxp.Lead_Id = Prob_Id.Lead_Id AND maxp.MaxProb = Prob_Id.[1_prob])
+       ON (maxp.Lead_Id = Prob_Id.Lead_Id AND maxp.Max_Prob = Prob_Id.[1_prob])
   ) candidates
   WHERE RowNo = 1;"
 , sep=""))
@@ -140,11 +164,11 @@ rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Recommendati
 , sep=""))
 
 rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("
-SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name as [Campaign Name], State,  
-       Conversion_Flag as Converts, CM_AD.Day_Of_Week as [Day of Week], CM_AD.Time_Of_Day as [Time of Day],
-       CM_AD.Channel, CM_AD.Lead_Id as [Lead ID], Recommended_Combinations.Day_Of_Week as [Recommended Day],
-       Recommended_Combinations.Time_Of_Day as [Recommended Time], Recommended_Combinations.MaxProb,
-       Recommended_Combinations.Channel as [Recommended Channel]
+SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name, State,  
+       Conversion_Flag, CM_AD.Day_Of_Week, CM_AD.Time_Of_Day,
+       CM_AD.Channel, CM_AD.Lead_Id, Recommended_Combinations.Day_Of_Week as [Recommended_Day],
+       Recommended_Combinations.Time_Of_Day as [Recommended_Time], Recommended_Combinations.Max_Prob,
+       Recommended_Combinations.Channel as [Recommended_Channel]
 INTO Recommendations
 FROM CM_AD JOIN Recommended_Combinations
 ON CM_AD.Lead_Id = Recommended_Combinations.Lead_Id;"

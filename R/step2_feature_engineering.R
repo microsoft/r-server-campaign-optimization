@@ -25,6 +25,26 @@ rxSetComputeContext(sql)
 
 ##########################################################################################################################################
 
+## Function to get the top n rows of a table stored on SQL Server.
+## You can execute this function at any time during  your progress by removing the comment "#", and inputting:
+##  - the table name.
+##  - the number of rows you want to display.
+
+##########################################################################################################################################
+
+display_head <- function(table_name, n_rows){
+  table_sql <- RxSqlServerData(sqlQuery = sprintf("SELECT TOP(%s) * FROM %s", n_rows, table_name), connectionString = connection_string)
+  table <- rxImport(table_sql)
+  print(table)
+}
+
+# table_name <- "insert_table_name"
+# n_rows <- 10
+# display_head(table_name, n_rows)
+
+
+##########################################################################################################################################
+
 ## Input: Point to the SQL table with the cleaned raw data set
 
 ##########################################################################################################################################
@@ -118,10 +138,10 @@ rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("CREATE TABLE CM_AD
   ,Product varchar(50)
   ,Category varchar(15)
   ,Term char(2)
-  ,No_of_people_covered int
+  ,No_Of_People_Covered int
   ,Premium int 
-  ,Payment_frequency varchar(50)
-  ,Amt_on_Maturity_Bin varchar(50)
+  ,Payment_Frequency varchar(50)
+  ,Amt_On_Maturity_Bin varchar(50)
   ,Sub_Category varchar(15)
   ,Campaign_Drivers varchar(50)
   ,Campaign_Name varchar(50)

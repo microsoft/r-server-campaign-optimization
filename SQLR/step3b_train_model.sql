@@ -12,19 +12,12 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Campaign_Models' AND xtype='
     )
 GO
 
-DROP PROCEDURE IF EXISTS [dbo].[TrainModel];
+DROP PROCEDURE IF EXISTS [dbo].[train_model];
 GO
 
-CREATE PROCEDURE [TrainModel] @modelName varchar(20), @connectionString varchar(300)
+CREATE PROCEDURE [train_model] @modelName varchar(20), @connectionString varchar(300)
 AS 
 BEGIN
-
-/* 	Create the training set by using the splitting vector.  */	
-	DROP TABLE if exists CM_AD_Train
-	SELECT * 
-	INTO CM_AD_Train 
-    	FROM CM_AD1 
-    	WHERE Split_Vector = 1
 
 /* 	Train the model on CM_AD_Train.  */	
 	DELETE FROM Campaign_Models WHERE model_name = @modelName;
@@ -42,7 +35,7 @@ rxSetComputeContext(sql)
 ##	Specify the types of the features before the training
 ##########################################################################################################################################
 # Names of numeric variables: 
-#numeric <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_of_people_covered", "Premium", "Net_Amt_Insured",
+#numeric <- c("No_Of_Dependents", "No_Of_Children", "Household_Size", "No_Of_People_Covered", "Premium", "Net_Amt_Insured",
 #			  "SMS_Count", "Email_Count", "Call_Count")
 
 # Get the variables names, types and levels for factors.
@@ -52,15 +45,19 @@ column_info <- rxCreateColInfo(CM_AD_N)
 ##########################################################################################################################################
 ##	Point to the training set and use the column_info list to specify the types of the features.
 ##########################################################################################################################################
-trainDS <- RxSqlServerData(table = "CM_AD_Train", connectionString = connection_string, colInfo = column_info)
+CM_AD_Train <- RxSqlServerData(  
+  sqlQuery = "SELECT *   
+              FROM CM_AD_N 
+              WHERE Lead_Id IN (SELECT Lead_Id from Train_Id)",
+  connectionString = connection_string, colInfo = column_info)
 
 ##########################################################################################################################################
 ##	Specify the variables to keep for the training 
 ##########################################################################################################################################
-variables_all <- rxGetVarNames(trainDS)
+variables_all <- rxGetVarNames(CM_AD_Train)
 # We remove time stamps, variables with zero variance, and variables directly correlated to ones that are kept.
 variables_to_remove <- c("Lead_Id", "Phone_No", "Country", "Comm_Id", "Time_Stamp", "Category", "Launch_Date", "Focused_Geography",
-						 "Split_Vector", "Call_For_Action", "Product", "Campaign_Name")
+						 "Call_For_Action", "Product", "Campaign_Name")
 traning_variables <- variables_all[!(variables_all %in% c("Conversion_Flag", variables_to_remove))]
 formula <- as.formula(paste("Conversion_Flag ~", paste(traning_variables, collapse = "+")))
 
@@ -70,7 +67,7 @@ formula <- as.formula(paste("Conversion_Flag ~", paste(traning_variables, collap
 if (model_name == "RF") {
 	# Train the Random Forest.
 	model <- rxDForest(formula = formula,
-	 			     data = trainDS,
+	 			     data = CM_AD_Train,
 				     nTree = 40,
  				     minBucket = 5,
 				     minSplit = 10,
@@ -80,7 +77,7 @@ if (model_name == "RF") {
 } else {
 	# Train the GBT.
 	model <- rxBTrees(formula = formula,
-				    data = trainDS,
+				    data = CM_AD_Train,
 				    learningRate = 0.05,				    
 				    minBucket = 5,
 				    minSplit = 10,
@@ -101,4 +98,3 @@ WHERE model_name = 'default model'
 ;
 END
 GO
-

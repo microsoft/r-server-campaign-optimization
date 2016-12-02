@@ -5,10 +5,10 @@ GO
 
 /****** Stored Procedure to join the 4 tables and create the raw data set  ******/
 
-DROP PROCEDURE IF EXISTS [dbo].[Merging_Raw_Tables]
+DROP PROCEDURE IF EXISTS [dbo].[merging_raw_tables]
 GO
 
-CREATE PROCEDURE [dbo].[Merging_Raw_Tables]
+CREATE PROCEDURE [dbo].[merging_raw_tables]
 AS
 BEGIN
 
@@ -21,7 +21,7 @@ BEGIN
 	UPDATE STATISTICS Market_Touchdown;
 
 /* Inner join of the tables Product and Campaign_Detail */ 
-	SELECT Campaign_Detail.*, Term, No_of_people_covered, Payment_frequency, Net_Amt_Insured, Amt_on_Maturity_Bin, 
+	SELECT Campaign_Detail.*, Term, No_Of_People_Covered, Payment_Frequency, Net_Amt_Insured, Amt_On_Maturity_Bin, 
                Product, Premium
 	INTO Campaign_Product
 	FROM Campaign_Detail JOIN Product
@@ -29,8 +29,8 @@ BEGIN
 
 /* Inner join of the tables Market_Touchdown and Lead_Demography */
 	SELECT Lead_Demography.Lead_Id, Age, Phone_No, Annual_Income_Bucket, Credit_Score, Country, [State],
-               No_Of_Dependents, Highest_Education, Ethnicity, No_Of_Children, Household_Size, Gender, 
-               Marital_Status, Channel, Time_Of_Day, Conversion_Flag, Campaign_Id, Day_Of_Week, Comm_Id, Time_Stamp
+           No_Of_Dependents, Highest_Education, Ethnicity, No_Of_Children, Household_Size, Gender, 
+           Marital_Status, Channel, Time_Of_Day, Conversion_Flag, Campaign_Id, Day_Of_Week, Comm_Id, Time_Stamp
 	INTO Market_Lead
 	FROM Market_Touchdown JOIN Lead_Demography
 	ON Market_Touchdown.Lead_Id = Lead_Demography.Lead_Id
@@ -39,8 +39,8 @@ BEGIN
 	UPDATE STATISTICS Campaign_Product;
 	UPDATE STATISTICS Market_Lead;
 	
-	SELECT Market_Lead.*, Product, Category, Term, No_of_people_covered, Premium, Payment_frequency,
-           Amt_on_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
+	SELECT Market_Lead.*, Product, Category, Term, No_Of_People_Covered, Premium, Payment_Frequency,
+           Amt_On_Maturity_Bin, Sub_Category, Campaign_Drivers, Campaign_Name, Launch_Date, Call_For_Action, 
            Focused_Geography, Tenure_Of_Campaign, Net_Amt_Insured, Product_Id
 	INTO CM_AD0
 	FROM Campaign_Product JOIN Market_Lead
@@ -89,15 +89,15 @@ GO
 CREATE PROCEDURE [fill_NA_all] 
 AS
 BEGIN
-     /* Select all column names into the table sql_columns */
-	DROP TABLE if EXISTS sql_columns
+     /* Select all column names into the table Sql_Columns */
+	DROP TABLE if EXISTS Sql_Columns
 	SELECT name 
-	INTO sql_columns
+	INTO Sql_Columns
 	FROM syscolumns 
 	WHERE id = object_id('CM_AD0')
 
     /* Exclude variables for which we assume there are no missing values */
-	DELETE FROM sql_columns 
+	DELETE FROM Sql_Columns 
 	WHERE name = 'Lead_Id' or name = 'Phone_No' or name = 'Product_Id' 
 	   or name = 'Campaign_Id' or name = 'Comm_Id' or name = 'Launch_Date' or name = 'Time_Stamp'
 
@@ -107,7 +107,7 @@ BEGIN
 
 	SET @getname = CURSOR FOR
 	SELECT name
-	FROM  sql_columns
+	FROM  Sql_Columns
 
 	OPEN @getname
 	FETCH NEXT

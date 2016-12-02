@@ -77,12 +77,12 @@ Product_Id	char(1),
 Product varchar(50),
 Category varchar(50),
 Term int,
-No_of_people_covered int,
+No_Of_People_Covered int,
 Premium	int,
-Payment_frequency varchar(20),
+Payment_Frequency varchar(20),
 Net_Amt_Insured	int,
-Amt_on_Maturity int,
-Amt_on_Maturity_Bin	varchar(30)
+Amt_On_Maturity int,
+Amt_On_Maturity_Bin	varchar(30)
 );
 
 CREATE CLUSTERED COLUMNSTORE INDEX Product_cci ON Product WITH (DROP_EXISTING = OFF);
@@ -117,10 +117,10 @@ CREATE TABLE CM_AD
 ,Product varchar(50)
 ,Category varchar(15)
 ,Term char(2)
-,No_of_people_covered int
+,No_Of_People_Covered int
 ,Premium int 
-,Payment_frequency varchar(50)
-,Amt_on_Maturity_Bin varchar(50)
+,Payment_Frequency varchar(50)
+,Amt_On_Maturity_Bin varchar(50)
 ,Sub_Category varchar(15)
 ,Campaign_Drivers varchar(50)
 ,Campaign_Name varchar(50)

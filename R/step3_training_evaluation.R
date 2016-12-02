@@ -26,6 +26,26 @@ rxSetComputeContext(local)
 
 ##########################################################################################################################################
 
+## Function to get the top n rows of a table stored on SQL Server.
+## You can execute this function at any time during  your progress by removing the comment "#", and inputting:
+##  - the table name.
+##  - the number of rows you want to display.
+
+##########################################################################################################################################
+
+display_head <- function(table_name, n_rows){
+  table_sql <- RxSqlServerData(sqlQuery = sprintf("SELECT TOP(%s) * FROM %s", n_rows, table_name), connectionString = connection_string)
+  table <- rxImport(table_sql)
+  print(table)
+}
+
+# table_name <- "insert_table_name"
+# n_rows <- 10
+# display_head(table_name, n_rows)
+
+
+##########################################################################################################################################
+
 ## Input: Point to the SQL table with the data set for modeling
 
 ##########################################################################################################################################
@@ -48,31 +68,37 @@ column_info <- rxCreateColInfo(CM_AD)
 
 ##########################################################################################################################################
 
-# Write a splitting function to randomly split the data into a training set and a testing set, with proportion p.
-# It creates a random variable, Split_Vector. For each unique Lead_Id, it is equal to 1 with proportion p, and 0 otherwise. 
-# When p = 1, the observtion goes to the training set. When p = 0, it goes to the testing set.
+# Randomly split the data into a training set and a testing set, with a splitting % p.
+# p % goes to the training set, and the rest goes to the testing set. Default is 70%. 
 
-Splitting <- function(p = 0.70){
-  CM_AD1 <- RxSqlServerData(table = "CM_AD1", stringsAsFactors = T, connectionString = connection_string)
-  rxDataStep(inData = CM_AD, outFile = CM_AD1, overwrite = TRUE,transforms = list(
-    Split_Vector = rbinom(.rxNumRows, 1, p)),
-    transformObjects = list(p = p))
-} 
+p <- "70" 
 
-Splitting(p = 0.7)
+## Open a connection with SQL Server to be able to write queries with the rxExecuteSQLDDL function.
+outOdbcDS <- RxOdbcData(table = "NewData", connectionString = connection_string, useFastRead=TRUE)
+rxOpen(outOdbcDS, "w")
 
-# Point to the training set. It will be created on the fly when training models. 
+## Create the Train_Id table containing Lead_Id of training set. 
+rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Train_Id;", sep=""))
+
+rxExecuteSQLDDL(outOdbcDS, sSQLString = sprintf(
+  "SELECT Lead_Id
+   INTO Train_Id
+   FROM CM_AD
+   WHERE ABS(CAST(BINARY_CHECKSUM(Lead_ID, NEWID()) as int)) %s < %s ;"
+  ,"% 100", p ))
+
+## Point to the training set. It will be created on the fly when training models. 
 CM_AD_Train <- RxSqlServerData(  
   sqlQuery = "SELECT *   
-              FROM CM_AD1 
-              WHERE Split_Vector = 1",
+              FROM CM_AD 
+              WHERE Lead_Id IN (SELECT Lead_Id from Train_Id)",
   connectionString = connection_string, colInfo = column_info)
 
-# Point to the testing set. It will be created on the fly when testing models. 
+## Point to the testing set. It will be created on the fly when testing models. 
 CM_AD_Test <- RxSqlServerData(  
   sqlQuery = "SELECT *   
-              FROM CM_AD1 
-              WHERE Split_Vector = 0",
+              FROM CM_AD 
+              WHERE Lead_Id NOT IN (SELECT Lead_Id from Train_Id)",
   connectionString = connection_string, colInfo = column_info)
 
 
@@ -85,7 +111,7 @@ CM_AD_Test <- RxSqlServerData(
 # Write the formula after removing variables not used in the modeling.
 variables_all <- rxGetVarNames(CM_AD_Train)
 variables_to_remove <- c("Lead_Id", "Phone_No", "Country", "Comm_Id", "Time_Stamp", "Category", "Launch_Date", "Focused_Geography",
-                         "Split_Vector", "Call_For_Action", "Product", "Campaign_Name")
+                         "Call_For_Action", "Product", "Campaign_Name")
 traning_variables <- variables_all[!(variables_all %in% c("Conversion_Flag", variables_to_remove))]
 formula <- as.formula(paste("Conversion_Flag ~", paste(traning_variables, collapse = "+")))
 
@@ -200,7 +226,7 @@ evaluate_model <- function(observed, predicted_probability, threshold, model_nam
 ##########################################################################################################################################
 
 # Make Predictions, then import them into R. The observed Conversion_Flag is kept through the argument extraVarsToWrite.
-Prediction_Table_RF <- RxSqlServerData(table = "Prediction_Table_RF", stringsAsFactors = T, connectionString = connection_string)
+Prediction_Table_RF <- RxSqlServerData(table = "Forest_Prediction", stringsAsFactors = T, connectionString = connection_string)
 rxPredict(forest_model, data = CM_AD_Test, outData = Prediction_Table_RF, overwrite = T, type = "prob",
           extraVarsToWrite = c("Conversion_Flag"))
 
@@ -222,7 +248,7 @@ Metrics_RF <- evaluate_model(observed = observed, predicted_probability = Predic
 ##########################################################################################################################################
 
 # Make Predictions, then import them into R. The observed Conversion_Flag is kept through the argument extraVarsToWrite.
-Prediction_Table_GBT <- RxSqlServerData(table = "Prediction_Table_GBT", stringsAsFactors = T, connectionString = connection_string)
+Prediction_Table_GBT <- RxSqlServerData(table = "Boosted_Prediction", stringsAsFactors = T, connectionString = connection_string)
 rxPredict(btree_model,data = CM_AD_Test, outData = Prediction_Table_GBT, overwrite = T, type="prob",
           extraVarsToWrite = c("Conversion_Flag"))
 

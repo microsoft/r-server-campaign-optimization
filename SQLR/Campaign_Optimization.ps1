@@ -44,16 +44,18 @@ $uninterrupted="",
 $dataPath = ""
 )
 
+$scriptPath = Get-Location
+$filePath = $scriptPath.Path+ "\"
+
 if ($dataPath -eq "")
 {
 ##########################################################################
 # Script level variables
 ##########################################################################
-$scriptPath = Get-Location
-$filePath = $scriptPath.Path+ "\"
 $parentPath = Split-Path -parent $scriptPath
 $dataPath = $parentPath + "/data/"
 }
+
 ##########################################################################
 # Function wrapper to invoke SQL command
 ##########################################################################
@@ -86,11 +88,19 @@ function GetConnectionString
      $connectionString
 }
 
+$ServerName2="localhost"
+
+function GetConnectionString2
+{
+    $connectionString2 = "Driver=SQL Server;Server=$ServerName2;Database=$DBName;UID=$username;PWD=$password"
+     $connectionString2
+}
 
 ##########################################################################
 # Construct the SQL connection strings
 ##########################################################################
 $connectionString = GetConnectionString
+$connectionString2 = GetConnectionString2
 
 ##########################################################################
 # Check if the SQL server or database exists
@@ -155,7 +165,7 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
 
     # execute the merging
     Write-Host -ForeGroundColor 'Cyan' (" Merging the 4 raw tables...")
-    $query = "EXEC Merging_Raw_Tables"
+    $query = "EXEC merging_raw_tables"
     ExecuteSQLQuery $query
 
     # execute the NA replacement
@@ -164,7 +174,7 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
     ExecuteSQLQuery $query
 
 
-    # create the ultility procedure for feature engineering
+    # create the stored procedure for feature engineering
     $script = $filepath + "step2_feature_engineering.sql"
     ExecuteSQL $script
 
@@ -173,19 +183,24 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
     $query = "EXEC feature_engineering"
     ExecuteSQLQuery $query
 
-    # normalization
+    # create the stored procedure for normalization
     $script = $filepath + "step3_normalization.sql"
-    Write-Host -ForeGroundColor 'Cyan' (" Normalizing the data...")
     ExecuteSQL $script
+
+    # execute the normalization
+    Write-Host -ForeGroundColor 'Cyan' (" Normalizing the data...")
+    $query = "EXEC normalization"
+    ExecuteSQLQuery $query
+
 
     # create the stored procedure for splitting into train and test data sets
     $script = $filepath + "step3a_splitting.sql"
     ExecuteSQL $script
 
     # execute the procedure
-    $splitRatio = 0.7
+    $splitting_percent = 70
     Write-Host -ForeGroundColor 'Cyan' (" Splitting the data set...")
-    $query = "EXEC splitting $splitRatio, '$connectionString'"
+    $query = "EXEC splitting $splitting_percent"
     ExecuteSQLQuery $query
 
     # create the stored procedure for training
@@ -195,26 +210,26 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
     # execute the training
     Write-Host -ForeGroundColor 'Cyan' (" Training Random Forest (RF)...")
     $modelName = 'RF'
-    $query = "EXEC TrainModel $modelName, '$connectionString'"
+    $query = "EXEC train_model $modelName, '$connectionString2'"
     ExecuteSQLQuery $query
 
     Write-Host -ForeGroundColor 'Cyan' (" Training Gradient Boosted Trees (GBT)...")
     $modelName = 'GBT'
-    $query = "EXEC TrainModel $modelName, '$connectionString'"
+    $query = "EXEC train_model $modelName, '$connectionString2'"
     ExecuteSQLQuery $query
 
     # create the stored procedure for predicting
-    $script = $filepath + "step3c_test_model.sql"
+    $script = $filepath + "step3c_test_evaluate_models.sql"
     ExecuteSQL $script
 
     # execute the evaluation
-    Write-Host -ForeGroundColor 'Cyan' (" Testing Random Forest (RF) and Gradient Boosted Trees (GBT)...")
+    Write-Host -ForeGroundColor 'Cyan' (" Testing and Evaluating Random Forest (RF) and Gradient Boosted Trees (GBT)...")
     $models = "'RF', 'GBT'"
-    $query = "EXEC TestModel $models, '$connectionString'"
+    $query = "EXEC test_evaluate_models $models, '$connectionString2'"
     ExecuteSQLQuery $query
 
-    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select best_model from best_model;"
-    $best_model = $best_model.best_model
+    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select Best_Model from Best_Model;"
+    $best_model = $best_model.Best_Model
 
     # create the stored procedure for recommendations
     $script = $filepath + "step4_campaign_recommendations.sql"
@@ -222,7 +237,7 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
 
     # compute campaign recommendations
     Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations using $best_model...")
-    $query = "EXEC campaign_recommendation $best_model, '$connectionString'"
+    $query = "EXEC campaign_recommendation $best_model, '$connectionString2'"
     ExecuteSQLQuery $query
 
     Write-Host -foregroundcolor 'green'("Market Campaign Workflow Finished Successfully!")
@@ -261,7 +276,7 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
             $tableSchema = $dataPath + $dataFile + ".xml"
             bcp $tableName format nul -c -x -f $tableSchema  -U $username -S $ServerName -P $password  -t ','
             Write-Host -ForeGroundColor 'magenta'("    Loading {0} to SQL table..." -f $dataFile)
-            bcp $tableName in $destination -t ',' -S $ServerName -f $tableSchema -F 2 -C "RAW" -b 20000 -U $username -P $password
+            bcp $tableName in $destination -t ',' -S $ServerName -f $tableSchema -F 2 -C "RAW" -b 50000 -U $username -P $password
             Write-Host -ForeGroundColor 'magenta'("    Done...Loading {0} to SQL table..." -f $dataFile)
         }
     }
@@ -290,7 +305,7 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 
     # execute the merging
     Write-Host -ForeGroundColor 'Cyan' (" Merging the 4 raw tables...")
-    $query = "EXEC Merging_Raw_Tables"
+    $query = "EXEC merging_raw_tables"
     ExecuteSQLQuery $query
 
     # execute the NA replacement
@@ -310,7 +325,7 @@ if ($ans -eq 'E' -or $ans -eq 'e')
 } 
 if ($ans -eq 'y' -or $ans -eq 'Y')
 {
-    # create the ultility procedure for feature engineering
+    # create the stored procedure for feature engineering
     $script = $filepath + "step2_feature_engineering.sql"
     ExecuteSQL $script
 
@@ -333,9 +348,14 @@ if ($ans -eq 'E' -or $ans -eq 'e')
 } 
 if ($ans -eq 'y' -or $ans -eq 'Y')
 {   
+    # create the stored procedure for normalization
     $script = $filepath + "step3_normalization.sql"
-    Write-Host -ForeGroundColor 'Cyan' (" Normalizing the data...")
     ExecuteSQL $script
+
+    # execute the normalization
+    Write-Host -ForeGroundColor 'Cyan' (" Normalizing the data...")
+    $query = "EXEC normalization"
+    ExecuteSQLQuery $query
 }
 ##########################################################################
 # Create and execute the stored procedure to split data into train/test
@@ -354,10 +374,10 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
     ExecuteSQL $script
 
     # execute the procedure
-    Write-Host -foregroundcolor 'Cyan' ("Split Ratio ?") 
-    $splitRatio = Read-Host 
+    Write-Host -foregroundcolor 'Cyan' ("Split Percent (e.g. Write 70 for 70% in training set) ?") 
+    $splitting_percent = Read-Host 
     Write-Host -ForeGroundColor 'Cyan' (" Splitting the data set...")
-    $query = "EXEC splitting $splitRatio, '$connectionString'"
+    $query = "EXEC splitting $splitting_percent"
     ExecuteSQLQuery $query
 }
 
@@ -380,12 +400,12 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
     # execute the training
     Write-Host -ForeGroundColor 'Cyan' (" Training Random Forest (RF)...")
     $modelName = 'RF'
-    $query = "EXEC TrainModel $modelName, '$connectionString'"
+    $query = "EXEC train_model $modelName, '$connectionString2'"
     ExecuteSQLQuery $query
 
     Write-Host -ForeGroundColor 'Cyan' (" Training Gradient Boosted Trees (GBT)...")
     $modelName = 'GBT'
-    $query = "EXEC TrainModel $modelName, '$connectionString'"
+    $query = "EXEC train_model $modelName, '$connectionString2'"
     ExecuteSQLQuery $query
 }
 
@@ -402,17 +422,17 @@ if ($ans -eq 'E' -or $ans -eq 'e')
 if ($ans -eq 'y' -or $ans -eq 'Y')
 {
     # create the stored procedure for predicting
-    $script = $filepath + "step3c_test_model.sql"
+    $script = $filepath + "step3c_test_evaluate_models.sql"
     ExecuteSQL $script
 
     # execute the evaluation
-    Write-Host -ForeGroundColor 'Cyan' (" Testing Random Forest (RF) and Gradient Boosted Trees (GBT)...")
+    Write-Host -ForeGroundColor 'Cyan' (" Testing and Evaluating Random Forest (RF) and Gradient Boosted Trees (GBT)...")
     $models = "'RF', 'GBT'"
-    $query = "EXEC TestModel $models, '$connectionString'"
+    $query = "EXEC test_evaluate_models $models, '$connectionString2'"
     ExecuteSQLQuery $query
 
-    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select best_model from best_model;"
-    $best_model = $best_model.best_model
+    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select Best_Model from Best_Model;"
+    $best_model = $best_model.Best_Model
     
     if ($best_model -eq 'RF')
     { 
@@ -449,7 +469,7 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 
     # compute campaign recommendations
     Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations...")
-    $query = "EXEC campaign_recommendation $best_model, '$connectionString'"
+    $query = "EXEC campaign_recommendation $best_model, '$connectionString2'"
     ExecuteSQLQuery $query
 }
 

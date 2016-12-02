@@ -33,7 +33,7 @@ Data scientists who are testing and developing solutions can work from the conve
 
 This template is focused on marketing campaign optimization. In particular, customer-oriented businesses can learn patterns from their data to intelligently design acquisition campaigns and convert the highest possible number of customers. 
 
-Among the key variables to learn from data are the best communication channel (e.g. SMS, Email, Call), the day of the week and the time of the day through which/ during which a given potential customer is targeted by a marketing campaign.
+Among the key variables to learn from data are the best communication channel (e.g. SMS, Email, Call), the day of the week and the time of the day through which/ during which a given potential customer is targeted by a marketing campaign.  
 
 In this template, the final scored database table in SQL Server gives the recommendations for how and when to contact each lead. This data is then visualized in PowerBI. Also in PowerBI is a summary of the success of the recommendations after the new campaign has completed (shown in this template with simulated data).
 
@@ -53,6 +53,7 @@ To run the scripts requires the following:
 - For more information about SQL server 2016 and R service, please visit: [https://msdn.microsoft.com/en-us/library/mt604847.aspx](https://msdn.microsoft.com/en-us/library/mt604847.aspx)
 
 
+
 ##  Analytical Dataset Preprocessing and Feature Engineering
 -----------------------------------------------------------
 
@@ -61,7 +62,7 @@ The **R** code to perform these steps can be run from an R client with the follo
 
 ### step1_data_processing.R
 
-This script exports the 4 input data sets to SQL tables, merges them, and then performs missing value treatment on the raw table in-database.
+This script exports the [4 input data sets](input_data.html) to SQL tables, merges them, and then performs missing value treatment on the raw table in-database.
 
 ### step2_feature_engineering.R
 

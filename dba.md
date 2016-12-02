@@ -46,7 +46,8 @@ To run the scripts requires the following:
 
 ## Workflow Automation
 -------------------
-Follow the [PowerShell instructions](Powershell_Instructions.html) to execute all the scripts described below.  [Click here](Tables_Description.html) to view the full set of tables created in this solution.
+Follow the [PowerShell instructions](Powershell_Instructions.html) to execute all the scripts described below.  [Click here](tables.html) to view the details all tables created in this solution.
+
  
 <a name="step0">
 

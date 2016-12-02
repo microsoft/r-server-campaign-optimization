@@ -51,7 +51,7 @@ She will create two machine learning models and compare them, then use the one s
 
 Debra would work on her own machine, using  [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) to execute these R scripts. In case you want to run the code from the VM, R Client has already been installed.
 
-Debra uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer, you can <a href="https://www.rstudio.com/products/rstudio/download3/" target="_blank">download and install RStudio</a> on your machine instead.
+Debra uses an IDE to run R.  On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer, you can <a href="rstudio.html">download and install RStudio</a> on your machine instead. 
   
 OPTIONAL: You can execute the R code on your local computer if you wish, but you must first  prepare both the VM and your computer <a href="local.html">using these instructions</a>.  Or you can view and execute the R code in a Jupyter Notebook on the VM by <a href="jupyter.html">following these instructions</a>.
 

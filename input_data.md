@@ -7,18 +7,13 @@ title: Input Data
 --------------------------
 
 The tables below describe the contents of each of the input .csv files used in this solution. 
-### Campaign_Detail
+
+<h3>Campaign_Detail.csv</h3>
 			
 This file contains the marketing campaign details for each campaign.
 
 <table class=table table-striped table-condensed>
-   <tr>
-    <th>Index</th>
-    <th>Data Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-
+<tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Campaign_Id</td><td>String</td><td>Unique Id of the campaign </td></tr>
 <tr><td>2</td><td>	Campaign_Name</td><td>String</td><td>Name given to the campaign e.g., Above all in Service</td></tr>
 <tr><td>3</td><td>	Category</td><td>String</td><td>Category of the campaign e.g., Acquisition</td></tr>
@@ -31,17 +26,12 @@ This file contains the marketing campaign details for each campaign.
 <tr><td>10</td><td>	Tenure_Of_Campaign</td><td>String</td><td>Tenure of the campaign e.g., 1,2</td></tr>
 </table>
 
-###  Lead_Demography	
+<h3>Lead_Demography.csv	</h3>
 
 This file contains the demographics data for each lead.
-<table class=table table-striped table-condensed>
-   <tr>
-    <th>Index</th>
-    <th>Data Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
 
+<table class=table table-striped table-condensed>
+<tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Lead_Id</td><td>String</td><td>	Unique Id of the customer </td></tr>
 <tr><td>2</td><td>	Age	</td><td> String</td><td>Age of the customer e.g., Young, Middle Age, Senior Citizen</td></tr>
 <tr><td>3</td><td>	Phone_No</td><td>String</td><td>Phone number of the customer.  Format: 000-000-0000</td></tr>
@@ -59,17 +49,12 @@ This file contains the demographics data for each lead.
 
 </table>
 
-###	Market_Touchdown
+<h3>Market_Touchdown.csv</h3>
 
 This file contains the previous campaign activities received by customers.
 
 <table class=table table-striped table-condensed>
-   <tr>
-    <th>Index</th>
-    <th>Data Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
+<tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>Lead_Id</td><td>String</td><td>Id of the customer</td></tr>
 <tr><td>2</td><td>Channel</td><td>String</td><td>Channel used to contact the customer in a given campaign. Values taken:  SMS, Email, and Cold Calling</td></tr>
 <tr><td>3</td><td>Time_Of_Day</td><td>String</td><td>Time of the day when the customer was contacted  in a given campaign.  Values taken:  Morning, Afternoon, and Evening</td></tr>
@@ -83,17 +68,12 @@ e.g. 05/12/14</td></tr>
 <tr><td>9</td><td>Comm_Id</td><td>Integer</td><td>Rank of communications for each unique customer, from the oldest to the most recent e.g., 1 is the first time a customer was contacted</td></tr>
 </table>
 
-###	Product		
+<h3>	Product.csv		</h3>
 
 This file contains information about each product offering.
 
 <table class=table table-striped table-condensed>
-   <tr>
-    <th>Index</th>
-    <th>Data Field</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
+<tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Product_Id</td><td>	String</td><td>Unique Id of the product</td></tr>
 <tr><td>2</td><td>	Product</td><td>String</td><td>Name of the product e.g., Live Free</td></tr>
 <tr><td>3</td><td>	Category</td><td>String</td><td>Category of the product e.g., Health</td></tr>

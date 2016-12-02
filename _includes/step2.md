@@ -5,7 +5,7 @@
 
     b.  **step0_data_generation.R**:  This file was used to generate data for the current solution - in a real setting it would not be present.  It is left here in case you'd like to generate additional data.  Otherwise simply ignore this file.
 
-    c.	**step1_data_processing.R**:  Uploads data and performs preprocessing steps -- merging of the input data sets and missing value treatment.  
+    c.	**step1_data_processing.R**:  Uploads data and performs preprocessing steps -- merging of the [input data sets](input_data.html) and missing value treatment.  
 
     d.	**step2_feature_engineering.R**:  Performs Feature Engineering and creates the Analytical Dataset. Feature Engineering consists of creating new variables in the cleaned dataset.  `SMS_Count`, `Email_Count` and `Call_Count` are computed: they correspond to the number of times every customer was contacted through these three channels. It also computes `Previous_Channel`: for each communication with the `Lead`, it corresponds to the `Channel` that was used in the communication that preceded it (a NULL value is attributed to the first record of each Lead). Finally, an aggregation is performed at the Lead Level by keeping the latest record for each one. 
     

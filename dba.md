@@ -46,7 +46,7 @@ To run the scripts requires the following:
 
 ## Workflow Automation
 -------------------
-Follow the [PowerShell instructions](Powershell_Instructions.html) to execute all the scripts described below.
+Follow the [PowerShell instructions](Powershell_Instructions.html) to execute all the scripts described below.  [Click here](Tables_Description.html) to view the full set of tables created in this solution.
  
 <a name="step0">
 
@@ -247,6 +247,7 @@ The second one, `[dbo].[campaign_recommendation]`, is the only one called by the
 ### Related files:
 
 * step4_campaign_recommendations.sql 
+
 
 
 

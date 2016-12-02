@@ -86,11 +86,11 @@ Hit `Refresh` if necessary.
 <br/>
 <img src="images/alltables.png" >
 
-[Click here](Tables_Description.html) to view more information about each of these tables.
+[Click here](tables.html) to view more information about each of these tables.
 
 Right click on `dbo.Recommendations` and select `View Top 1000 Rows` to preview the scored data.
 
-For a detailed description of these tables, go to **r-server-campaign-optimization/Resources/Tables_Description.md** or to **r-server-campaign-optimization/Resources/Campaign_Data_Dictionnary.xlsx** ,
+[Click here](tables.html) to view the details all tables created in this solution.
 
 ## Visualizing Results 
 ---------------------

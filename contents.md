@@ -79,7 +79,6 @@ In this template with SQL Server R Services, two versions of the implementation:
 <tr><th> File </th><th> Description </th></tr>
 
 <tr><td> .\Resources\createuser.sql </td><td> Used during initial SQL Server setup to create the user and password and grant permissions. </td></tr>
-<tr><td> .\Resources\Tables_Description.md  </td><td> Description of the tables present in the Campaign Database after the VM deployment. </td></tr>
 <tr><td> .\Resources\Campaign_Data_Dictionnary.xlsx  </td><td> Schema and description of the 4 input tables and variables.</td></tr>
 <tr><td> .\Resources\Images\ </td><td> Directory of images used for the  Readme.md  in this package. </td></tr>
 </table>

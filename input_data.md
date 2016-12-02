@@ -11,7 +11,6 @@ The tables below describe the contents of each of the input .csv files used in t
 <h3>Campaign_Detail.csv</h3>
 			
 This file contains the marketing campaign details for each campaign.
-
 <table class=table table-striped table-condensed>
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Campaign_Id</td><td>String</td><td>Unique Id of the campaign </td></tr>
@@ -29,7 +28,6 @@ This file contains the marketing campaign details for each campaign.
 <h3>Lead_Demography.csv	</h3>
 
 This file contains the demographics data for each lead.
-
 <table class=table table-striped table-condensed>
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Lead_Id</td><td>String</td><td>	Unique Id of the customer </td></tr>
@@ -46,13 +44,11 @@ This file contains the demographics data for each lead.
 <tr><td>12</td><td>	Household_Size</td><td>Integer</td><td>Number of people in the household of the customer</td></tr>
 <tr><td>13</td><td>	Gender</td><td> String</td><td>	Gender of the customer.  Values taken: M or F</td></tr>
 <tr><td>14</td><td>	Marital_Status</td><td>String</td><td>Marital status of the customer.  Values taken:  S, M, D, W (Single, Married, Divorced, Widowed)</td></tr>
-
 </table>
 
 <h3>Market_Touchdown.csv</h3>
 
 This file contains the previous campaign activities received by customers.
-
 <table class=table table-striped table-condensed>
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>Lead_Id</td><td>String</td><td>Id of the customer</td></tr>
@@ -71,7 +67,6 @@ e.g. 05/12/14</td></tr>
 <h3>	Product.csv		</h3>
 
 This file contains information about each product offering.
-
 <table class=table table-striped table-condensed>
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Product_Id</td><td>	String</td><td>Unique Id of the product</td></tr>

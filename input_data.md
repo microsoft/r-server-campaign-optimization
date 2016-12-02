@@ -6,7 +6,7 @@ title: Input Data
 ## CSV File Description
 --------------------------
 
-There are four input .csv files used in this solution. They are:
+There are four input files used in this solution. They are:
 
 * [Campaign_Detail.csv](#campaign-detail)
 * [Lead_Demography.csv](#lead-demography)

@@ -6,9 +6,15 @@ title: Input Data
 ## CSV File Description
 --------------------------
 
-The tables below describe the contents of each of the input .csv files used in this solution. 
+There are four input .csv files used in this solution. They are:
+* [Campaign_Detail.csv](#campaign-detail)
+* [Lead_Demography.csv](#lead-demography)
+* [Market_Touchdown.csv](#market-touchdown)
+* [Product.csv](#product)
 
-<h3>Campaign_Detail.csv</h3>
+See each section below for a description of the data fields for each file.
+
+<h3 id="campaign-detail">Campaign_Detail.csv</h3>
 			
 This file contains the marketing campaign details for each campaign.
 <table class="table table-striped table-condensed">
@@ -25,7 +31,7 @@ This file contains the marketing campaign details for each campaign.
 <tr><td>10</td><td>	Tenure_Of_Campaign</td><td>String</td><td>Tenure of the campaign e.g., 1,2</td></tr>
 </table>
 
-<h3>Lead_Demography.csv	</h3>
+<h3 id="lead-demography">Lead_Demography.csv	</h3>
 
 This file contains the demographics data for each lead.
 <table class="table table-striped table-condensed">
@@ -46,7 +52,7 @@ This file contains the demographics data for each lead.
 <tr><td>14</td><td>	Marital_Status</td><td>String</td><td>Marital status of the customer.  Values taken:  S, M, D, W (Single, Married, Divorced, Widowed)</td></tr>
 </table>
 
-<h3>Market_Touchdown.csv</h3>
+<h3 id="market-touchdown">Market_Touchdown.csv</h3>
 
 This file contains the previous campaign activities received by customers.
 <table class="table table-striped table-condensed">
@@ -64,7 +70,7 @@ e.g. 05/12/14</td></tr>
 <tr><td>9</td><td>Comm_Id</td><td>Integer</td><td>Rank of communications for each unique customer, from the oldest to the most recent e.g., 1 is the first time a customer was contacted</td></tr>
 </table>
 
-<h3>	Product.csv		</h3>
+<h3 id="product">	Product.csv		</h3>
 
 This file contains information about each product offering.
 <table class="table table-striped table-condensed">

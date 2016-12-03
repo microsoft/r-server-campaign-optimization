@@ -165,7 +165,7 @@ rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("DROP TABLE if exists Recommendati
 
 rxExecuteSQLDDL(outOdbcDS, sSQLString = paste("
 SELECT Age, Annual_Income_Bucket, Credit_Score, Product, Campaign_Name, State,  
-       Conversion_Flag, CM_AD.Day_Of_Week, CM_AD.Time_Of_Day,
+       CAST(Conversion_Flag AS int) AS Conversion_Flag, CM_AD.Day_Of_Week, CM_AD.Time_Of_Day,
        CM_AD.Channel, CM_AD.Lead_Id, Recommended_Combinations.Day_Of_Week as [Recommended_Day],
        Recommended_Combinations.Time_Of_Day as [Recommended_Time], Recommended_Combinations.Max_Prob,
        Recommended_Combinations.Channel as [Recommended_Channel]

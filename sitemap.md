@@ -14,7 +14,7 @@ title: Site Map
     * [Typical Workflow for Cortana Intelligence Gallery Deployment](CIG_Workflow.html)
         * [Setup for Local Code Execution](local.html)
         * [Using a Jupyter Notebook](jupyter.html)
-        * [Using RStudio with R Server](rstudio.hml)
+        * [Using RStudio with R Server](rstudio.html)
     * [Typical Workflow for On Premises Deployment](Typical_Workflow.html)
 * [Quick Start](START_HERE.html)
     * [Setup SQL Server 2016 ](SetupSQL.html)

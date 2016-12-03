@@ -22,6 +22,6 @@ title: Site Map
     * [Set up Connection between SQL Server and PowerBI](ODBC.html)
     * [Visualizing Results with PowerBI](Visualize_Results.html)
     * [Input Data](input_data.html)
-    * [Description of Database Tables](Tables_Description.html)
+    * [Description of Database Tables](tables.html)
 
 * [Template Contents](contents.html)

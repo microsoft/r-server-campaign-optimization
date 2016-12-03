@@ -17,7 +17,7 @@ See each section below for a description of the data fields for each file.
 
 <h3 id="campaign-detail">Campaign_Detail.csv</h3>
 			
-This file contains the marketing campaign details for each campaign.
+This file contains  ata about each marketing campaign that occurred.
 <table class="table table-striped table-condensed">
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Campaign_Id</td><td>String</td><td>Unique Id of the campaign </td></tr>
@@ -34,7 +34,7 @@ This file contains the marketing campaign details for each campaign.
 
 <h3 id="lead-demography">Lead_Demography.csv	</h3>
 
-This file contains the demographics data for each lead.
+This file contains demographics and financial data about each customer.
 <table class="table table-striped table-condensed">
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Lead_Id</td><td>String</td><td>	Unique Id of the customer </td></tr>
@@ -55,7 +55,7 @@ This file contains the demographics data for each lead.
 
 <h3 id="market-touchdown">Market_Touchdown.csv</h3>
 
-This file contains the previous campaign activities received by customers.
+This file contains channel-day-time data used for every customer of Lead_Demography in every campaign he was targeted.
 <table class="table table-striped table-condensed">
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>Lead_Id</td><td>String</td><td>Id of the customer</td></tr>
@@ -73,7 +73,7 @@ e.g. 05/12/14</td></tr>
 
 <h3 id="product">	Product.csv		</h3>
 
-This file contains information about each product offering.
+This file contains data about the product marketed in each campaign.
 <table class="table table-striped table-condensed">
 <tr><th>Index</th><th>Data Field</th><th>Type</th><th>Description</th></tr>
 <tr><td>1</td><td>	Product_Id</td><td>	String</td><td>Unique Id of the product</td></tr>

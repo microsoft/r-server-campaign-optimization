@@ -11,4 +11,4 @@ The folder contains following files:
 | Product.csv | Product Metadata |
 | Lead\_Demography.csv | Demographic data of 100,000 leads |
 
-See the [Campaign_Data_Dictionary.xlsx](../Resources/Campaign_Data_Dictionary.xls) file in the Resources directory for metadata of these files.
+See the [Campaign_Data_Dictionary.xlsx](../Resources/Campaign_Data_Dictionary) file in the Resources directory for metadata of these files.

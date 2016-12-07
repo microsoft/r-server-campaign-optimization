@@ -29,7 +29,7 @@ title: Typical Workflow for for On-Premises Deployment
 
 This guide assumes you are using your own SQL Server for this solution.  
 
-*If you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c) you should instead [use this guide](CIG_Workflow.html).*
+*If you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](http://aka.ms/campaignoptimization) you should instead [use this guide](CIG_Workflow.html).*
 
 
 To demonstrate a typical workflow, we'll introduce you to a few personas.  You can follow along by performing the same steps for each persona.  

@@ -15,7 +15,7 @@ RStudio needs to use R Server in order for the code for this solution.  Follow t
 <ol type="a">
 <li>From the <code>Tools</code> menu, choose <code>Global Options</code>.</li>
 <li>In the General tab, update the path to R to point to R Server:</li>
-<ul><li>On the VM deployed from <a href="https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c cdr44rdc">Cortana Intelligence Gallery</a> the path is <code>C:\Program Files\Microsoft SQL Server\130\R_SERVER</code></li>
+<ul><li>On the VM deployed from <a href="http://aka.ms/campaignoptimization">Cortana Intelligence Gallery</a> the path is <code>C:\Program Files\Microsoft SQL Server\130\R_SERVER</code></li>
 <li>If you installed R Server on your own computer, the path is <code>C:\Program Files\Microsoft\R Client\R_SERVER\bin\x6b</code></li></ul>
 </ol>
 <li>Exit RStudio.</li>

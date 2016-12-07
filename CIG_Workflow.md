@@ -26,7 +26,7 @@ title: Typical Workflow for Cortana Intelligence Gallery Deployment
 
  {% include typicalintro1.md %}
 
-This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](https://gallery.cortanaintelligence.com/Solution/e992f8c1b29f4df897301d11796f9e7c).  
+This guide assumes you have deployed the Campaign Optimzation solution from the [Cortana Intelligence Gallery](http://aka.ms/campaignoptimization).  
 
 *If you are using your own SQL Server for this solution, [use this guide instead](Typical_Workflow.html).*
 

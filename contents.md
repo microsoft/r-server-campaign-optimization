@@ -44,9 +44,8 @@ In this template with SQL Server R Services, two versions of the implementation:
 <tr><td>step4_campaign_recommendations.R </td><td>Build final recommendations from scoring 63 combinations per lead and selecting combo with highest conversion probability.  </td></tr>
 </table>
 
-
-* See the [Typical Workflow](Typical.html) documentation to execute these scripts.
-
+* See [For the Data Scientist](data_scientist.html) for more details about these files.
+* See [Typical Workflow](Typical.html)  for more information about executing these scripts.
 
 ### Operationalize in SQL 2016 
 -------------------------------------------------------
@@ -65,11 +64,8 @@ In this template with SQL Server R Services, two versions of the implementation:
 <tr><td>.\SQLR\Readme.md  </td><td> Describes the stored procedures in more detail.  </td></tr>
 </table>
 
-
+* See [ For the Database Analyst](dba.html) for more information about these files.
 * Follow the [PowerShell Instructions](Powershell_Instructions.html) to execute the PowerShell script which automates the running of all these .sql files.
-
-
-
 
 
 ### Resources for the Solution Package

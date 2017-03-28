@@ -2,6 +2,13 @@
 layout: default
 title: Using RStudio with R Server
 ---
+<div class="alert alert-success" role="alert"> This page describes the 
+<strong>
+<span class="cig">{{ site.cig_text }}</span>
+<span class="onp">{{ site.onp_text }}</span>
+</strong>
+solution.
+</div> 
 
 ## Install RStudio
 
@@ -25,4 +32,4 @@ RStudio needs to use R Server in order for the code for this solution.  Follow t
 
  
 
-<a href="CIG_Workflow.html#step2">Return to Typical Workflow for Cortana Intelligence Gallery Deployment<a>
+<a href="Typical.html#step2">Return to Typical Workflow<a>

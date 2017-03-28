@@ -2,6 +2,14 @@
 layout: default
 title: For the Business Manager
 ---
+<div class="alert alert-success" role="alert"> This page describes the 
+<strong>
+<span class="cig">{{ site.cig_text }}</span>
+<span class="onp">{{ site.onp_text }}</span>
+<span class="hdi">{{ site.hdi_text }}</span> 
+</strong>
+solution.
+</div> 
 
 ## For the Business Manager
 ------------------------------
@@ -16,11 +24,7 @@ This solution package shows how to create and refine data, train R models, and p
 ![Visualize](images/visualize.png?raw=true)
 
 
-You can try out this dashboard in either of the following ways:
-
-* Visit the [online version](https://pcsadwebapp.azurewebsites.net/Solutions/Byod?solutionId=campaignoptimization).
-
-*  <a href="https://powerbi.microsoft.com/en-us/desktop/" target="_blank">Install PowerBI Desktop</a> and <a href="https://github.com/Microsoft/r-server-campaign-optimization/Campaign%20Optimization%20Dashboard.pbix" target="_blank">download and open the CampaignManagement Dashboard</a> to see the simulated results.
+{% include pbix.md %}
 
 The Recommendations tab of this dashboard shows the recommendations based on a prediction model. At the top is a table of individual leads for our new deployment. This includes fields for the Lead ID (unique customer ID), campaign and product, populated with leads on which our business rules are to be applied. This is followed by the optimal channel and time to contact each one, and then the estimated probabilities that the leads will buy our product using these recommendations. These probabilities can be used to increase the efficiency of the campaign by limiting the number of leads contacted to the subset most likely to buy.
 

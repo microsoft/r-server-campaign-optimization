@@ -23,7 +23,7 @@ If you would like to continue using the solution, you can delete the cluster whi
 HDInsight Spark cluster billing starts once a cluster is created and stops when the cluster is deleted. Billing is pro-rated per minute, so you should always <strong>delete your cluster</strong> when it is no longer in use.
 
 
-Before you delete the cluster, <a href="Typical.md#rstudio_export?path=hdi">login to RStudio</a> on the cluster edge node and save your files. 
+Before you delete the cluster, <a href="Typical.html#rstudiologin?path=hdi">login to RStudio</a> on the cluster edge node and save your files. 
 <img src="images/rstudio_export.png" width="50%" />
 <ol>
 <li>

@@ -15,7 +15,10 @@ solution.
 ## Visualizing Results with PowerBI
 -----------------------------------
 
-These instructions show you how to replace the cached data in the PowerBI dashboard with data from your <span class="sql">SQL Server</span><span class="hdi">HDInsight</span> solution , by using an ODBC connection to the <span class="sql">SQL Database</span><span class="hdi">Hive</span> table. 
+These instructions show you how to replace the cached data in the PowerBI dashboard with data from your <span class="sql">SQL Server</span>
+<span class="hdi">HDInsight</span> solution , by using an ODBC connection to the 
+<span class="sql">SQL Database</span>
+<span class="hdi">Hive</span> table. 
 
 All but the last step only need to be performed once. After you have performed this once, you can simply <a href="#laststep">
 skip to the last step</a> to see new results after any new model scoring. 

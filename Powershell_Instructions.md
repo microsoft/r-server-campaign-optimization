@@ -40,7 +40,7 @@ First, make sure you have set up your SQL Server by following <a href="SetupSQL.
 ## Execute PowerShell Script
 ----------------------------
 
-Running this PowerShell script will create stored procedures for the the operationalization of this solution.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](dba.html).
+Running this PowerShell script will create stored procedures for the operationalization of this solution.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](dba.html).
 
 
 

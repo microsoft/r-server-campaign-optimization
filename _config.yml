@@ -3,6 +3,9 @@ author:
 
 description: Use SQL Server 2016 + R Services to build and deploy a machine learning model which recommends actions to maximize the purchase rate of leads targeted by a campaign.
 
+gems:
+  - jekyll-redirect-from
+
 cig_text: SQL Server 2016 on Azure
 onp_text: SQL Server 2016 On-Prem 
 hdi_text: HDInsight Spark 

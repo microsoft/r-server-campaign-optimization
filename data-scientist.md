@@ -11,7 +11,7 @@ title: For the Data Scientist
 solution.
 </div> 
 
-## For the Data Scientist
+## For the Data Scientist - Develop with R
 ----------------------------
 
 <div class="row">

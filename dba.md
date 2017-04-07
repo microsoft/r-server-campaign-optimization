@@ -11,7 +11,7 @@ title: For the Database Analyst
 solution.
 </div> 
 
-## For the Database Analyst
+## For the Database Analyst - Operationalize with SQL
 ------------------------------
 
 <div class="row">

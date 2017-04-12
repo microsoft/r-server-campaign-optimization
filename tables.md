@@ -1,7 +1,14 @@
 ---
 layout: default
-title: Description of Database Tables
+title: Description of SQL Database Tables
 ---
+<div class="alert alert-success" role="alert"> This page describes the 
+<strong>
+<span class="cig">{{ site.cig_text }}</span>
+<span class="onp">{{ site.onp_text }}</span>
+</strong>
+solution.
+</div> 
 
 ## SQL Database Tables
 --------------------------

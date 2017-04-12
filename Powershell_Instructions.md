@@ -3,6 +3,13 @@ layout: default
 title: PowerShell Instructions
 ---
 
+<div class="alert alert-success" role="alert"> This page describes the 
+<strong>
+<span class="cig">{{ site.cig_text }}</span>
+<span class="onp">{{ site.onp_text }}</span>
+</strong>
+solution.
+</div> 
 
 ## PowerShell Instructions
 ---------------------------
@@ -19,7 +26,7 @@ title: PowerShell Instructions
     </div>
     <div class="col-md-6">
         If you have deployed a VM through the  
-        <a href="http://aka.ms/campaignoptimization">Cortana Intelligence Gallery</a>, all the steps below have already been performed and your database on that machine has all the resulting tables and stored procedures.  Skip to the <a href="CIG_Workflow.html">Typical Workflow</a> for a description of how these files were first created in R by a Data Scientist and then deployed to SQL stored procedures.
+        <a href="http://aka.ms/campaignoptimization">Cortana Intelligence Gallery</a>, all the steps below have already been performed and your database on that machine has all the resulting tables and stored procedures.  Skip to the <a href="Typical.html?platform=cig">Typical Workflow</a> for a description of how these files were first created in R by a Data Scientist and then deployed to SQL stored procedures.
     </div>
 </div>
 
@@ -28,12 +35,12 @@ If you are configuring your own server, continue with the steps below to run the
 ## Setup
 -----------
 
-First, make sure you have set up your SQL Server by following the instructions in <a href="START_HERE.html">START HERE</a>.  Then proceed with the steps below to run the solution template using the automated PowerShell files. 
+First, make sure you have set up your SQL Server by following <a href="SetupSQL.html?platform=onp">these instructions</a>.  Then proceed with the steps below to run the solution template using the automated PowerShell files. 
 
 ## Execute PowerShell Script
 ----------------------------
 
-Running this PowerShell script will create stored procedures for the the operationalization of this solution.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](dba.html).
+Running this PowerShell script will create stored procedures for the operationalization of this solution.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](dba.html).
 
 
 
@@ -51,10 +58,10 @@ Running this PowerShell script will create stored procedures for the the operati
 3. Create a directory on your computer where you will put this solution.  CD to the directory and then clone the repository into it:
     
     ```
-    git clone https://github.com/Microsoft/r-server-campaign-optimization.git
+    git clone https://github.com/Microsoft/r-server-campaign-optimization Campaign
     ```
 
-4.  Now CD to the **r-server-campaign-optimization/SQLR** directory and run one of the two following commands, inserting your server name (or "." if you are on the same machine as the SQL server), database name, username, and password.
+4.  Now CD to the **Campaign/SQLR** directory and run one of the two following commands, inserting your server name (or "." if you are on the same machine as the SQL server), database name, username, and password.
 
     * Run with no prompts:
     
@@ -104,4 +111,4 @@ Let's look at our current results. Proceed to <a href="Visualize_Results.html">V
 
 You've just completed the fully automated solution that simulates the data, trains and scores the models, and provide recommendations by executing PowerShell scripts.  
 
-See the [Typical Workflow](Typical.html) for a description of how these files were first created in R by a Data Scientist and then incorporated into the SQL stored procedures that you just deployed.
+See the <a href="Typical.html">Typical Workflow</a> for a description of how these files were first created in R by a Data Scientist and then incorporated into the SQL stored procedures that you just deployed.

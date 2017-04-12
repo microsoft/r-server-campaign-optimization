@@ -8,10 +8,16 @@ title: Quick Start
  
  There are multiple ways you can try this solution package out for yourself.
 
-* Visit the [Cortana Intelligence Gallery](http://aka.ms/campaignoptimization) and use the `Deploy` button.  All necessary software will be installed and configured for you as well as the initial deployment of the solution.  You will be all set to follow along with the [Typical Workflow](CIG_Workflow.html) on the deployed virtual machine.
+* For **{{ site.cig_text }}**: Visit the [Cortana Intelligence Gallery](http://aka.ms/campaignoptimization) and use the `Deploy` button.  All necessary software will be installed and configured for you as well as the initial deployment of the solution.  You will be all set to follow along with the [Typical Workflow](Typical.html?platform=cig) on the deployed virtual machine.
 
-* For an On-Prem installation, follow [these instructions](SetupSQL.html) to setup the server.    
 
-    * Once the server is configured, you can use the [PowerShell Instructions](Powershell_Instructions.html) for a quick deployment of all tables to your own machine.
+* For an **On-Prem SQL Server** installation, follow [these instructions](SetupSQL.html?platform=onp) to setup the server.    
 
-    * Or you can run all the R Scripts following the path for Debra the data scientis in the [Typical Workflow](Typical_Workflow.html).  
+    * Once the server is configured, you can use the [PowerShell Instructions](Powershell_Instructions.html?platform=onp) for a quick deployment of all tables to your own machine.
+
+    * Or you can run all the R Scripts following the path for Debra the data scientist in the <a href="Typical.html?platform=onp">Typical Workflow</a>
+
+* For **{{ site.hdi_text }}**: Visit the [Cortana Intelligence Gallery](http://aka.ms/campaignoptimization-hdi) and use the `Deploy` button.  All necessary software will be installed and configured for you.  You will be all set to follow along with the [Typical Workflow](Typical.html?platform=hdi) using the deployed cluster.
+
+    
+

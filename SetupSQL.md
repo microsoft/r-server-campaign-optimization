@@ -2,6 +2,12 @@
 layout: default
 title: On Prem Setup SQL Server 2016
 ---
+<div class="alert alert-success" role="alert"> This page describes the 
+<strong>
+{{ site.onp_text }}
+</strong>
+solution.
+</div> 
 
 ## On Prem: Setup SQL Server 2016 
 --------------------------
@@ -27,6 +33,8 @@ title: On Prem Setup SQL Server 2016
 The rest of this page assumes you are configuring your on premises SQL Server 2016 for this solution.
 
 If you need a trial version of SQL Server 2016, see [What's New in SQL Server 2016](https://msdn.microsoft.com/en-us/library/bb500435.aspx) for download or VM options. 
+
+For more information about SQL server 2016 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.asp</a>
 
 Complete the steps in the Set up SQL Server R Services (In-Database) Instructions. The set up instructions file can found at  <a href="https://msdn.microsoft.com/en-us/library/mt696069.aspx" target="_blank"> https://msdn.microsoft.com/en-us/library/mt696069.aspx</a>
 
@@ -64,7 +72,7 @@ If you are administering your own server and want to add a user to run the code 
 You are now ready to run the code for this solution.  
 
 * Typically a data scientist will create and test a predictive model from their favorite R IDE, at which point the models will be stored in SQL Server and then scored in production using Transact-SQL (T-SQL) stored procedures. 
-You can follow along with this by following the <a href="Typical.html">Typical Workflow Walkthrough.</a>.
+You can follow along with this by following the <a href="Typical.html">Typical Workflow.</a>.
 
-* If you’re just interested in the outcomes of this process, we have created a fully automated solution that loads the data in the database, trains and scores the models and provides recommendations by executing a PowerShell script. This is the fastest way to deploy on your own machine. See <a href="Powershell_Instructions.html">PowerShell Instructions</a> for this deployment.
+* If you’re just interested in the outcomes of this process, we have created a fully automated solution that loads the data in the database, trains and scores the models and provides recommendations by executing a PowerShell script. This is the fastest way to deploy to your on-prem server. See <a href="Powershell_Instructions.html">PowerShell Instructions</a> for this deployment.
 	

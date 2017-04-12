@@ -11,8 +11,8 @@ img {
 }
 .toc li {
     list-style-type:none; 
-    padding:0; 
-    margin-left:0px; 
+    padding: 0; 
+    margin: 0;  
 }
 .btn-info {
     background-color: #227072;
@@ -58,4 +58,7 @@ body {
 }
 .center {
     text-align: center;
+}
+li {
+   margin:0 0 12px 0;   
 }

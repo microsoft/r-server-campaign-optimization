@@ -2,8 +2,16 @@
 layout: default
 title: For the Database Analyst
 ---
+<div class="alert alert-success" role="alert"> This page describes the 
+<strong>
+<span class="cig">{{ site.cig_text }}</span>
+<span class="onp">{{ site.onp_text }}</span>
+<span class="hdi">{{ site.hdi_text }}</span> 
+</strong>
+solution.
+</div> 
 
-## For the Database Analyst
+## For the Database Analyst - Operationalize with SQL
 ------------------------------
 
 <div class="row">
@@ -36,12 +44,14 @@ All the steps can be executed on SQL Server client environment (SQL Server Manag
 ## System Requirements
 -----------------------
 
-To run the scripts requires the following:
-
- * SQL server 2016 with Microsoft R server installed and configured;
- * The SQL user name and password, and the user is configured properly to execute R scripts in-memory;
- * SQL Database for which the user has write permission and can execute stored procedures;
- * For more information about SQL server 2016 and R service, please visit: [What's New in SQL Server R Services](https://msdn.microsoft.com/en-us/library/mt604847.aspx)
+The following are required to run the scripts in this solution:
+<ul>
+<li>SQL Server 2016 with Microsoft R Server  (version 9.0.1) installed and configured.  </li>   
+<li>The SQL user name and password, and the user configured properly to execute R scripts in-memory.</li> 
+<li>SQL Database which the user has write permission and execute stored procedures.</li> 
+<li>For more information about SQL server 2016 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li> 
+</ul>
+</div>
 
 
 ## Workflow Automation
@@ -57,28 +67,7 @@ Follow the [PowerShell instructions](Powershell_Instructions.html) to execute al
 
 The following data are provided in the Data directory:
 
-<table class="table table-compressed table-striped">
-  <tr>
-    <th>File</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>.\Data\Campaign_Detail.csv</td>
-    <td>Raw data about each marketing campaign that occurred</td>
-  </tr>
-  <tr>
-    <td>.\Data\Lead_Demography.csv</td>
-    <td>Raw demographics and financial data about each customer</td>
-  </tr>
-  <tr>
-    <td>.\Data\Market_Touchdown.csv</td>
-    <td>Raw channel-day-time data used for every customer of Lead_Demography in every campaign he was targeted</td>
-  </tr>
-  <tr>
-    <td>.\Data\Product.csv</td>
-    <td>Raw data about the product marketed in each campaign</td>
-  </tr>
-</table>
+ {% include data.md %}
 
 In this step, we create four tables: `Campaign_Detail`, `Lead_Demography`, `Market_Touchdown`, and `Product` in a SQL Server database, and the data is uploaded to these tables using bcp command in the PowerShell script.
 

@@ -10,12 +10,15 @@ SQL Server on the VM has been set up with a user `rdemo` and a default password 
     
         ALTER LOGIN rdemo WITH PASSWORD = 'newpassword';  
        
-### On your local computer:  Install R Client and obtain code
+## On your local computer:  Install R Client and obtain code
 
 If you use your own computer you will also need to have a copy of [R Client](https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows) on your local machine, installed and configured for your IDE. 
 
-Finally, on your own computer you will need a copy of the solution code.  Open a PowerShell window, navigate to the directory of your choice, and execute the following command:  
+Also you will need a copy of the solution code.  Open a PowerShell window, navigate to the directory of your choice, and execute the following command:  
 
     git clone https://github.com/Microsoft/r-server-campaign-optimization.git
 
 This will create a folder **r-server-campaign-optimization** containing the full solution package.
+
+Finally, in the **sql_connection.R file, replace  `localhost` in the connection_string with the DNS of the VM followed by ",1433".
+

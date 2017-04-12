@@ -15,7 +15,7 @@
   
   <li class="hdi">
     <p><a href="https://powerbi.microsoft.com/en-us/desktop/" target="_blank">Install PowerBI Desktop</a> on your computer and 
-    <a href="{{ site.pbix_hdidownload_url }}" target="_blank"> download and open the Campaign Optimization Dashboard</a></p>
+    <a href="{{ site.pbix_hdidownload_url }}" target="_blank"> download and open the Campaign Optimization HDI Dashboard</a></p>
     </li>
     
 </ul>

@@ -9,6 +9,7 @@ title: For the Database Analyst
 <span class="hdi">{{ site.hdi_text }}</span> 
 </strong>
 solution.
+ {% include choices.md %}
 </div> 
 
 ## For the Database Analyst - Operationalize with SQL

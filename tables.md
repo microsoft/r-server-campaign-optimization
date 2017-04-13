@@ -8,6 +8,8 @@ title: Description of SQL Database Tables
 <span class="onp">{{ site.onp_text }}</span>
 </strong>
 solution.
+ {% include sqlchoices.md %}
+
 </div> 
 
 ## SQL Database Tables

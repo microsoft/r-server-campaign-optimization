@@ -9,6 +9,7 @@ title: For the Business Manager
 <span class="hdi">{{ site.hdi_text }}</span> 
 </strong>
 solution.
+ {% include choices.md %}
 </div> 
 
 ## For the Business Manager

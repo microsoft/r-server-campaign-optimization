@@ -5,18 +5,6 @@ $(document).ready( function(){
 // the cookie is updated. The setting can change through the commandline, radiobutton choice, 
 // or dropdown list choice. 
 
-
-// if commandline has a value, set the cookie 
-// note the name of the var is ignored, only the value specified after the "=" is important
-if ( window.location.search.split('=')[1]) {
-    platform = window.location.search.split('=')[1];
-    console.log (" Argument is " + platform )
-    // make sure the argument is a valid value  
-    if ($.inArray( platform, [ "cig","onp", "hdi" ] ) > -1 ) {
-        Cookies.set('platform', platform ); 
-    }
-}
-
 // Get the cookie.  If no cookie, default to CIG and set the cookie.
     if (Cookies.get('platform')) {
         platform = (Cookies.get('platform'));
@@ -29,6 +17,19 @@ if ( window.location.search.split('=')[1]) {
         // if cookies don't work, show the dropdown instead on pages which need it.
         $('.choose').css("display","inline");
     }
+
+// if commandline has a value, set the cookie and use this value
+// note the name of the var is ignored, only the value specified after the "=" is important
+if ( window.location.search.split('=')[1]) {
+    platform = window.location.search.split('=')[1];
+    console.log (" Argument is " + platform )
+    // make sure the argument is a valid value  
+    if ($.inArray( platform, [ "cig","onp", "hdi" ] ) > -1 ) {
+        Cookies.set('platform', platform ); 
+    }
+}
+
+
  
     // initialize page - sets both radiobutton and dropdown whichever the page uses (or both!)
     setRb ( platform )

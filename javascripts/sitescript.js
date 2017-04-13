@@ -20,9 +20,14 @@ if ( window.location.search.split('=')[1]) {
 // Get the cookie.  If no cookie, default to CIG and set the cookie.
     if (Cookies.get('platform')) {
         platform = (Cookies.get('platform'));
+        console.log('got the cookie '+ platform )
     } else {
         platform = 'cig';
         Cookies.set('platform', platform );       
+    }
+    if (Cookies.get('platform') != platform) {
+        // if cookies don't work, show the dropdown instead on pages which need it.
+        $('.choose').css("display","inline");
     }
  
     // initialize page - sets both radiobutton and dropdown whichever the page uses (or both!)
@@ -92,7 +97,6 @@ if ( window.location.search.split('=')[1]) {
 // set the dl
     function setDl ( value ) {
         $(".ch-platform").val( value ).change();
-        console.log ("set to " + value )
     };
 
 

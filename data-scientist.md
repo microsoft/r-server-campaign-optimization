@@ -9,6 +9,7 @@ title: For the Data Scientist
 <span class="hdi">{{ site.hdi_text }}</span> 
 </strong>
 solution.
+ {% include choices.md %}
 </div> 
 
 ## For the Data Scientist - Develop with R

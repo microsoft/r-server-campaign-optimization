@@ -9,6 +9,8 @@ title: PowerShell Instructions
 <span class="onp">{{ site.onp_text }}</span>
 </strong>
 solution.
+ {% include sqlchoices.md %}
+
 </div> 
 
 ## PowerShell Instructions

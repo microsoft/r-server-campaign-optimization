@@ -10,6 +10,8 @@ title: Visualizing Results with PowerBI
 <span class="hdi">{{ site.hdi_text }}</span> 
 </strong>
 solution.
+ {% include choices.md %}
+
 </div> 
 
 ## Visualizing Results with PowerBI

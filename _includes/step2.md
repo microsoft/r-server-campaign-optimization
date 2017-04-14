@@ -44,7 +44,7 @@ You can run these scripts if you wish, but you may also skip them if you want to
 <p/>
 </div>
 <div class=" hdi" >
-To run all the scripts described above as well as those in the next few steps, open and execute the file <strong>campaign_main.R</strong>  You may get a warning message just after starting Step2, complaining about a file or directory missing.  You can safely ignore this warning.
+To run all the scripts described above as well as those in the next few steps, open and execute the file <strong>campaign_main.R.</strong>  You may get a warning message just after starting Step2, complaining about a file or directory missing.  You can safely ignore this warning.
 <p/>
 </div>
 In <span class="sql">both Visual Studio and</span> RStudio, there are multiple ways to execute the code from the R Script window.  The fastest way <span class="sql">for both IDEs</span> is to use Ctrl-Enter on a single line or a selection.  Learn more about  <span class="sql"><a href="http://microsoft.github.io/RTVS-docs/">R Tools for Visual Studio</a> or</span> <a href="https://www.rstudio.com/products/rstudio/features/">RStudio</a>.

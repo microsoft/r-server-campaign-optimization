@@ -32,7 +32,8 @@ The first few steps prepare the data for training.
 
 <li>	<strong>step1_data_processing.R</strong>:  Uploads data and performs preprocessing steps -- merging of the <a href="input_data.html">input data sets</a> and missing value treatment.  </li>
 
-<li>	<strong>step2_feature_engineering.R</strong>:  Performs Feature Engineering and creates the Analytical Dataset. Feature Engineering consists of creating new variables in the cleaned dataset.  <code>SMS_Count</code>, <code>Email_Count</code> and <code>Call_Count</code> are computed: they correspond to the number of times every customer was contacted through these three channels. It also computes <code>Previous_Channel</code>: for each communication with the <code>Lead</code>, it corresponds to the <code>Channel</code> that was used in the communication that preceded it (a NULL value is attributed to the first record of each Lead). Finally, an aggregation is performed at the Lead Level by keeping the latest record for each one. </li>
+<li>	<strong>step2_feature_engineering.R</strong>:  Performs Feature Engineering and creates the Analytical Dataset. Feature Engineering consists of creating new variables in the cleaned dataset.  <code>SMS_Count</code>, <code>Email_Count</code> and <code>Call_Count</code> are computed: they correspond to the number of times every customer was contacted through these three channels. It also computes <code>Previous_Channel</code>: for each communication with the <code>Lead</code>, it corresponds to the <code>Channel</code> that was used in the communication that preceded it (a NULL value is attributed to the first record of each Lead). Finally, an aggregation is performed at the Lead Level by keeping the latest record for each one.
+ </li>
 </ul>
 
 
@@ -44,7 +45,7 @@ You can run these scripts if you wish, but you may also skip them if you want to
 <p/>
 </div>
 <div class=" hdi" >
-To run all the scripts described above as well as those in the next few steps, open and execute the file <strong>campaign_main.R</strong>.
+To run all the scripts described above as well as those in the next few steps, open and execute the file <strong>campaign_main.R</strong>  You may get a warning message just after starting Step2, complaining about a file or directory missing.  You can safely ignore this warning.
 <p/>
 </div>
 In <span class="sql">both Visual Studio and</span> RStudio, there are multiple ways to execute the code from the R Script window.  The fastest way <span class="sql">for both IDEs</span> is to use Ctrl-Enter on a single line or a selection.  Learn more about  <span class="sql"><a href="http://microsoft.github.io/RTVS-docs/">R Tools for Visual Studio</a> or</span> <a href="https://www.rstudio.com/products/rstudio/features/">RStudio</a>.

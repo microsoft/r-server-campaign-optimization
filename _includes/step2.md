@@ -32,8 +32,7 @@ The first few steps prepare the data for training.
 
 <li>	<strong>step1_data_processing.R</strong>:  Uploads data and performs preprocessing steps -- merging of the <a href="input_data.html">input data sets</a> and missing value treatment.  </li>
 
-<li>	<strong>step2_feature_engineering.R</strong>:  Performs Feature Engineering and creates the Analytical Dataset. Feature Engineering consists of creating new variables in the cleaned dataset.  <code>SMS_Count</code>, <code>Email_Count</code> and <code>Call_Count</code> are computed: they correspond to the number of times every customer was contacted through these three channels. It also computes <code>Previous_Channel</code>: for each communication with the <code>Lead</code>, it corresponds to the <code>Channel</code> that was used in the communication that preceded it (a NULL value is attributed to the first record of each Lead). Finally, an aggregation is performed at the Lead Level by keeping the latest record for each one.
- </li>
+<li>	<strong>step2_feature_engineering.R</strong>:  Performs Feature Engineering and creates the Analytical Dataset. Feature Engineering consists of creating new variables in the cleaned dataset.  <code>SMS_Count</code>, <code>Email_Count</code> and <code>Call_Count</code> are computed: they correspond to the number of times every customer was contacted through these three channels. It also computes <code>Previous_Channel</code>: for each communication with the <code>Lead</code>, it corresponds to the <code>Channel</code> that was used in the communication that preceded it (a NULL value is attributed to the first record of each Lead). Finally, an aggregation is performed at the Lead Level by keeping the latest record for each one. </li>
 </ul>
 
 

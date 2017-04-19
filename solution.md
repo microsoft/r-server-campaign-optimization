@@ -4,9 +4,7 @@ title: HDInsight Solution
 ---
 <div class="alert alert-success" role="alert"> This page describes the 
 <strong>
-<span class="cig">{{ site.cig_text }}</span>
-<span class="onp">{{ site.onp_text }}</span>
-<span class="hdi">{{ site.hdi_text }}</span> 
+{{ site.hdi_text }}
 </strong>
 solution.
  {% include choices.md %}

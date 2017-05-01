@@ -41,7 +41,7 @@ These files  in the **R** directory for the SQL solution.
 <tr><td>step4_campaign_recommendations.R </td><td>Builds final recommendations from scoring 63 combinations per lead and selecting combo with highest conversion probability  </td></tr>
 </table>
 
-* See [For the Data Scientist](data_scientist.html?path=cig) for more details about these files.
+* See [For the Data Scientist](data-scientist.html?path=cig) for more details about these files.
 * See [Typical Workflow](Typical.html?path=cig)  for more information about executing these scripts.
 
 ### Operationalize in SQL 2016 
@@ -87,7 +87,7 @@ These files are in the **RSparkCluster** directory.
 <tr><td>step5_create_hive_table.R </td><td>Stores recommendations in a Hive table for use in PowerBI</td></tr>
 </table>
 
-* See [For the Data Scientist](data_scientist.html?path=hdi) for more details about these files.
+* See [For the Data Scientist](data-scientist.html?path=hdi) for more details about these files.
 * See [Typical Workflow](Typical.html?path=hdi)  for more information about executing these scripts.
 
 

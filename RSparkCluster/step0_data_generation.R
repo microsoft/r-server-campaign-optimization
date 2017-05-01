@@ -39,7 +39,6 @@ print(paste("The data size is ",dataSet, sep=""))
 print(paste("The number of splits is ",numSplits, sep=""))
 
 # Compute Contexts
-# rxOptions(hdfsHost = "adl://marinchdls2.azuredatalakestore.net") 
 myHadoopCluster <- RxSpark()
 
 # The directory to export data

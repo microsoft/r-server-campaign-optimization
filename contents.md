@@ -18,7 +18,7 @@ In this template with SQL Server R Services, two versions of the SQL implementat
 
 1. [**Model Development in R IDE**](#model-development-in-r)  . Run the R code in R IDE (e.g., RStudio, R Tools for Visual Studio).
 2. [**Operationalize in SQL**](#operationalize-in-sql-2016). Run the SQL code in SQL Server using SQLR scripts from SSMS or from the PowerShell script.
-3. [**HDInsight Solution on Spark Cluster**](hdinsight-solution-on-spark-cluster).  Run this R code in RStudio on the edge node of the Spark cluster.
+3. [**HDInsight Solution on Spark Cluster**](#hdinsight-solution-on-spark-cluster).  Run this R code in RStudio on the edge node of the Spark cluster.
 
 
 ### Copy of Input Datasets
@@ -41,7 +41,7 @@ These files  in the **R** directory for the SQL solution.
 <tr><td>step4_campaign_recommendations.R </td><td>Builds final recommendations from scoring 63 combinations per lead and selecting combo with highest conversion probability  </td></tr>
 </table>
 
-* See [For the Data Scientist](data_scientist.htm?path=cig) for more details about these files.
+* See [For the Data Scientist](data_scientist.html?path=cig) for more details about these files.
 * See [Typical Workflow](Typical.html?path=cig)  for more information about executing these scripts.
 
 ### Operationalize in SQL 2016 
@@ -65,7 +65,6 @@ These files are in the **SQLR** directory.
 
 * See [ For the Database Analyst](dba.html?path=cig) for more information about these files.
 * Follow the [PowerShell Instructions](Powershell_Instructions.html?path=cig) to execute the PowerShell script which automates the running of all these .sql files.
-
 
 
 ### HDInsight Solution on Spark Cluster

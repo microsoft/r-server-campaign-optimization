@@ -47,7 +47,7 @@ All the steps can be executed on SQL Server client environment (SQL Server Manag
 
 The following are required to run the scripts in this solution:
 <ul>
-<li>SQL Server 2016 with Microsoft R Server  (version 9.0.1) installed and configured.  </li>   
+<li>SQL Server 2016 with Microsoft R Server installed and configured.  </li>   
 <li>The SQL user name and password, and the user configured properly to execute R scripts in-memory.</li> 
 <li>SQL Database which the user has write permission and execute stored procedures.</li> 
 <li>For more information about SQL server 2016 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li> 

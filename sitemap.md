@@ -15,7 +15,6 @@ title: Site Map
     * [SQL: Setup for Local Code Execution](local.html)
     * [SQL: Using a Jupyter Notebook](jupyter.html)
     * [SQL: Using RStudio with R Server](rstudio.html)
-    * [SQL: Using R Tools for Visual Studio with R Server](rtvs.html)
     * [HDI: Using an HDInsight Spark cluster for Campaign Optimization](hdinsight.html)
     * [HDI: Configuring Operationalization with R Server](deployr.html)
 * [Quick Start](START_HERE.html)

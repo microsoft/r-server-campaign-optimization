@@ -17,8 +17,8 @@ solution.
 <div class="onp">
 If you don't have RStudio <a href="https://www.rstudio.com/products/rstudio/download2/" target="_blank">get it here</a>.
 </div>
-<div class="sql">
-RStudio is already installed on your VM and configured for you.  
+<div class="cig">
+RStudio is already installed on the VM and configured for you.  
 </div>
 <div class="hdi">
 RStudio is already installed and configured on the edge node of your cluster.  To install it on your local computer <a href="https://www.rstudio.com/products/rstudio/download2/" target="_blank">get it here</a>.

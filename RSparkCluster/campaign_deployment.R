@@ -65,11 +65,12 @@ campaign_web_scoring <- function(Campaign_Detail,
                                  Product,
                                  LocalWorkDir,
                                  HDFSWorkDir,
+                                 userName,
                                  Stage = "Web")
 {
   
   # step1: data processing
-  source("/home/sshuser/step1_data_processing.R")
+  source(paste("/home/", userName, "/step1_data_processing.R", sep=""))
   step1_res_list <- data_process(Campaign_Detail = Campaign_Detail,
                                  Lead_Demography = Lead_Demography,
                                  Market_Touchdown = Market_Touchdown,
@@ -79,21 +80,21 @@ campaign_web_scoring <- function(Campaign_Detail,
                                  Stage = Stage)
   
   # step2: feature engineering
-  source("/home/sshuser/step2_feature_engineering.R")
+  source(paste("/home/", userName, "/step2_feature_engineering.R", sep=""))
   step2_res_list <- feature_engineer(LocalWorkDir = LocalWorkDir,
                                      HDFSWorkDir = HDFSWorkDir,
                                      numSplits = step1_res_list$numSplits,
                                      CM_AD_Clean_colInfo = step1_res_list$CM_AD_Clean_colInfo)
   
   # step3: campaign recommendations
-  source("/home/sshuser/step4_campaign_recommendations.R")
+  source(paste("/home/", userName, "/step4_campaign_recommendations.R", sep=""))
   score_recommendation(LocalWorkDir = LocalWorkDir,
                        HDFSWorkDir = HDFSWorkDir,
                        numSplits = step1_res_list$numSplits,
                        Stage = Stage)
   
   # step4: create hive table
-  source("/home/sshuser/step5_create_hive_table.R")
+  source(paste("/home/", userName, "/step5_create_hive_table.R", sep=""))
   hive_table_dir <- Convert2HiveTable(LocalWorkDir = LocalWorkDir,
                                       HDFSWorkDir = HDFSWorkDir, 
                                       numSplits = step1_res_list$numSplits,
@@ -123,6 +124,7 @@ api_string <- publishService(
                 Product = "character",
                 LocalWorkDir = "character",
                 HDFSWorkDir = "character",
+                userName = "character",
                 Stage = "character"),
   outputs = list(answer = "character"),
   v = version
@@ -139,6 +141,7 @@ api_frame <- publishService(
                 Product = "data.frame",
                 LocalWorkDir = "character",
                 HDFSWorkDir = "character",
+                userName = "character",
                 Stage = "character"),
   outputs = list(answer = "character"),
   v = version
@@ -177,6 +180,7 @@ result_string <- api_string$campaign_web_scoring(
   Product = product_str,
   LocalWorkDir = LocalProdDir,
   HDFSWorkDir = HDFSProdDir,
+  userName = Sys.info()[["user"]],
   Stage = "Web"
 )
 
@@ -188,5 +192,6 @@ result_frame <- api_frame$campaign_web_scoring(
   Product = product_df,
   LocalWorkDir = LocalProdDir,
   HDFSWorkDir = HDFSProdDir,
+  userName = Sys.info()[["user"]],
   Stage = "Web"
 )

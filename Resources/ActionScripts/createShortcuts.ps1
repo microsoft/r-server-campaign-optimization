@@ -46,6 +46,6 @@ cp -Verbose $down $desktop
 
 #create shortcut to solution folder on desktop
 $WsShell = New-Object -ComObject WScript.Shell
-$shortcut = $WsShell.CreateShortcut($desktop + "Fraud.lnk")
+$shortcut = $WsShell.CreateShortcut($desktop + "Solution Website.lnk")
 $shortcut.TargetPath = $solutionPath
 $shortcut.Save()

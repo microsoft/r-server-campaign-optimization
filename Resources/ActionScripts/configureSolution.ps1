@@ -101,6 +101,6 @@ Write-Host -ForegroundColor 'Cyan' "Done creating database user"
 cp $basedir\R\*.ipynb  c:\dsvm\notebooks
 cp $basedir\Data\*.csv  c:\dsvm\notebooks
 #  substitute real username and password in notebook file
-sed -i "s/XXYOURSQLPW/$sqlPassword/g" c:\dsvm\notebooks\Fraud_Detection_Notebook.ipynb
-sed -i "s/XXYOURSQLUSER/$sqlUsername/g" c:\dsvm\notebooks\Fraud_Detection_Notebook.ipynb
+sed -i "s/XXYOURSQLPW/$sqlPassword/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
+sed -i "s/XXYOURSQLUSER/$sqlUsername/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
 

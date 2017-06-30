@@ -18,7 +18,11 @@ param(
 
 [parameter(Mandatory=$true, Position=2, ParameterSetName = "LCR")]
 [ValidateNotNullOrEmpty()] 
-[string]$solutionPath
+[string]$solutionPath,
+
+[parameter(Mandatory=$true, Position=3, ParameterSetName = "LCR")]
+[ValidateNotNullOrEmpty()] 
+[string]$checkoutDir
 )
 
 # find the desktop 
@@ -46,6 +50,6 @@ cp -Verbose $down $desktop
 
 #create shortcut to solution folder on desktop
 $WsShell = New-Object -ComObject WScript.Shell
-$shortcut = $WsShell.CreateShortcut($desktop + "Solution Website.lnk")
+$shortcut = $WsShell.CreateShortcut($desktop + $checkoutDir + ".lnk")
 $shortcut.TargetPath = $solutionPath
 $shortcut.Save()

@@ -68,7 +68,7 @@ Start-Transcript -Path $setupLog -Append
 
 cd $solutionTemplatePath
 ### DON'T FORGET TO CHANGE TO MASTER LATER...
-git clone  --branch dev --single-branch https://github.com/Microsoft/campaign-optimization $checkoutDir
+git clone --branch dev --single-branch https://github.com/Microsoft/r-server-campaign-optimization.git $checkoutDir
 
 
 $solutionBase = $solutionTemplatePath + "\" + $checkoutDir 

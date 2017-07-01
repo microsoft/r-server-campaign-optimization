@@ -38,6 +38,7 @@ Param(
 [parameter(Mandatory=$false, Position=4, ParameterSetName = "LCR")]
 [ValidateNotNullOrEmpty()] 
 [string]$dbname="Campaign"
+)
 
 # Change SQL Server to mixed mode authentication
 ### Check and see if SQL Service is Running , if not start it 
@@ -91,12 +92,11 @@ Write-Host -ForegroundColor 'Cyan' "Done creating database user"
 
 
 # Run the solution
-.\OnlineFraudDetection.ps1 -ServerName localhost -DBName $dbname -username $sqlUsername -password $sqlPassword 
+.\Campaign_Optimization.ps1 -ServerName $env:COMPUTERNAME -DBName $dbname -username $sqlUsername -password $sqlPassword  -uninterrupted y
 
 # copy Jupyter Notebook files
 cp $basedir\R\*.ipynb  c:\dsvm\notebooks
 cp $basedir\Data\*.csv  c:\dsvm\notebooks
 #  substitute real username and password in notebook file
-sed -i "s/XXYOURSQLPW/$sqlPassword/g" c:\dsvm\notebooks\Fraud_Detection_Notebook.ipynb
-sed -i "s/XXYOURSQLUSER/$sqlUsername/g" c:\dsvm\notebooks\Fraud_Detection_Notebook.ipynb
-
+sed -i "s/XXYOURSQLPW/$sqlPassword/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
+sed -i "s/XXYOURSQLUSER/$sqlUsername/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"

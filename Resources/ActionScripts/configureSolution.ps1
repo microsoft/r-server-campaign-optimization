@@ -10,7 +10,7 @@ It creates the SQL Server user and uses it to create the database.
 This script should only be run once through the template deployment process. It is
 not meant to be run by users as it assumes database and users don't already exist.
 
-.PARAMETER scriptdir
+.PARAMETER basedir
 directory where scripts are checked out from github
 
 .PARAMETER sqlUsername
@@ -41,7 +41,7 @@ Param(
 [string]$dbname="Campaign"
 )
 
-$scriptdir = $basedir + '/SQLR'
+
 # Change SQL Server to mixed mode authentication
 ### Check and see if SQL Service is Running , if not start it 
 
@@ -65,7 +65,7 @@ Start-Service MSSQLLaunchpad
 Start-Service SQLSERVERAGENT
 Write-Host -ForegroundColor 'Cyan' "Done switching SQL Server to Mixed Mode"
 
-cd $scriptdir
+
 # create the database user
 Write-Host -ForegroundColor 'Cyan' "Creating database user"
 
@@ -92,8 +92,11 @@ try {
     }
 }
 Write-Host -ForegroundColor 'Cyan' "Done creating database user"
+cd $basedir\R
+# install R Scripts 
+Rscript install.R
 
-
+cd $basedir\SQLR
 # Run the solution
 .\Campaign_Optimization.ps1 -ServerName $env:COMPUTERNAME -DBName $dbname -username $sqlUsername -password $sqlPassword  -uninterrupted y
 
@@ -103,4 +106,6 @@ cp $basedir\Data\*.csv  c:\dsvm\notebooks
 #  substitute real username and password in notebook file
 sed -i "s/XXYOURSQLPW/$sqlPassword/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
 sed -i "s/XXYOURSQLUSER/$sqlUsername/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
+
+
 

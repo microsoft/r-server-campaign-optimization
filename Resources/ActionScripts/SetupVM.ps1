@@ -79,7 +79,7 @@ cd $solutionResourcePath
 # install R Scripts
 Rscript install.R
 
-$passwords = $password | ConvertTo-SecureString -AsPlainText -Force
+$passwords = "$password" | ConvertTo-SecureString -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential("$serverName\$username", $passwords)
 $configure = "configureSolution.ps1"
 $shortcuts ="createShortcuts.ps1"

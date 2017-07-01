@@ -96,7 +96,7 @@ cd $basedir\R
 # install R Scripts 
 Rscript install.R
 
-cd $basedir\SQLR
+cd $basedir\Resources\ActionScripts
 # Run the solution
 .\Campaign_Optimization.ps1 -ServerName $env:COMPUTERNAME -DBName $dbname -username $sqlUsername -password $sqlPassword  -uninterrupted y
 

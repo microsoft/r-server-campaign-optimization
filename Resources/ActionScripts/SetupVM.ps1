@@ -67,17 +67,24 @@ $setupLog = $solutionTemplatePath + "\setup_log.txt"
 Start-Transcript -Path $setupLog -Append
 
 cd $solutionTemplatePath
-### DON'T FORGET TO CHANGE TO MASTER LATER...
+### DON'T FORGET TO CHANGE TO MASTER BEFORE PUBLISHING...
 git clone --branch dev --single-branch https://github.com/Microsoft/r-server-campaign-optimization.git $checkoutDir
+# remove files we don't need
+ rm .gitignore
+ rm *HDI.pbix
+ rm -r RSparkCluster
 
 
 $solutionBase = $solutionTemplatePath + "\" + $checkoutDir 
 $solutionResourcePath = $solutionBase + "\Resources\ActionScripts"
 $helpShortCutFilePath = $solutionResourcePath + "\CampaignHelp.url"
 
+Write-Host -ForeGroundColor magenta "Installing R Packages"
 cd $solutionResourcePath
-# install R Scripts
+# install R Packages
 Rscript install.R
+
+
 
 $passwords = "$password" | ConvertTo-SecureString -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential("$serverName\$username", $passwords)

@@ -1,10 +1,9 @@
 <#
 .SYNOPSIS 
-Script to invoke the LoanChargeOff data science workflow
+Script to invoke the solution workflow
 
 .DESCRIPTION
-This script by default uses a smaller dataset of 10,000 loans for the first time. 
-It creates the SQL Server user and uses it to create the database.
+is script creates the SQL Server user and uses it to create the database.
 
 .WARNING
 This script should only be run once through the template deployment process. It is
@@ -39,8 +38,6 @@ Param(
 [parameter(Mandatory=$false, Position=4, ParameterSetName = "LCR")]
 [ValidateNotNullOrEmpty()] 
 [string]$dbname="Campaign"
-)
-
 
 # Change SQL Server to mixed mode authentication
 ### Check and see if SQL Service is Running , if not start it 
@@ -65,8 +62,7 @@ Start-Service MSSQLLaunchpad
 Start-Service SQLSERVERAGENT
 Write-Host -ForegroundColor 'Cyan' "Done switching SQL Server to Mixed Mode"
 
-
-# create the database user
+cd $basedir\SQLR
 Write-Host -ForegroundColor 'Cyan' "Creating database user"
 
 # Variables to pass to createuser.sql script
@@ -92,20 +88,15 @@ try {
     }
 }
 Write-Host -ForegroundColor 'Cyan' "Done creating database user"
-cd $basedir\R
-# install R Scripts 
-Rscript install.R
 
-cd $basedir\Resources\ActionScripts
+
 # Run the solution
-.\Campaign_Optimization.ps1 -ServerName $env:COMPUTERNAME -DBName $dbname -username $sqlUsername -password $sqlPassword  -uninterrupted y
+.\OnlineFraudDetection.ps1 -ServerName localhost -DBName $dbname -username $sqlUsername -password $sqlPassword 
 
 # copy Jupyter Notebook files
 cp $basedir\R\*.ipynb  c:\dsvm\notebooks
 cp $basedir\Data\*.csv  c:\dsvm\notebooks
 #  substitute real username and password in notebook file
-sed -i "s/XXYOURSQLPW/$sqlPassword/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
-sed -i "s/XXYOURSQLUSER/$sqlUsername/g" "c:\dsvm\notebooks\Campaign Optimization R Notebook.ipynb"
-
-
+sed -i "s/XXYOURSQLPW/$sqlPassword/g" c:\dsvm\notebooks\Fraud_Detection_Notebook.ipynb
+sed -i "s/XXYOURSQLUSER/$sqlUsername/g" c:\dsvm\notebooks\Fraud_Detection_Notebook.ipynb
 

@@ -76,6 +76,8 @@ $solutionResourcePath = $solutionBase + "\Resources\ActionScripts"
 $helpShortCutFilePath = $solutionResourcePath + "\CampaignHelp.url"
 
 cd $solutionResourcePath
+# install R Scripts
+Rscript install.R
 
 $passwords = $password | ConvertTo-SecureString -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential("$serverName\$username", $passwords)

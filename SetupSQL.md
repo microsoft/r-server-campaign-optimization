@@ -53,7 +53,7 @@ If you are administering your own server and want to add a user to run the code 
     <br/>
     <img src="images/sqluser.png"  >
  
-4. Create the "rdemo" user  by double clicking on the <code>Resources/createuser.sql</code> file and executing it. (This user login will be used to install data and procedures).  NOTE: the user is set up with a default password of "D@tascience" in this file - you may want to change that to your own password before executing the commands.
+4. Double click on <code>Resources/exampleuser.sql</code> file to see how to create a user with all the correct settings to execute R code. (This user login will be used to install data and procedures).  Change the username and password to the one you wish before executing this query.
 
 5. 	Check to make sure you have set your Server Authentication mode to SQL Server and Windows Authentication mode. 
     *	In SQL Server Management Studio Object Explorer, right-click the server, and then click <code>Properties</code>.

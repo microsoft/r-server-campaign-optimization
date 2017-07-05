@@ -22,7 +22,7 @@ You must open the Windows firewall on the VM to allow a connection to the SQL Se
 
     netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
 
-SQL Server on the VM has been set up with a user `rdemo` and a default password of `D@tascience`.  Once you open the firewall, you may also want to also change the password, as anyone who knows the IP address can now access the server.  To do so, log into SSMS with Windows Authentication and execute the following query:
+SQL Server on the VM has been set up with the username and password you specified when you deployed the VM.  If you would like to change the password, log into SSMS with Windows Authentication and execute the following query:
     
         ALTER LOGIN rdemo WITH PASSWORD = 'newpassword';  
        
@@ -41,4 +41,4 @@ This will create a folder **campaign** containing the full solution package.
 Finally, in the **sql_connection.R** file, replace  `localhost` in the connection_string with the DNS of the VM followed by ",1433".
 
 
-<a href="CIG_Workflow.html#step2">Return to Typical Workflow for Cortana Intelligence Gallery Deployment<a>
+<a href="Typical.html#step2">Return to Typical Workflow for Cortana Intelligence Gallery Deployment<a>

@@ -1,1 +1,0 @@
-This page has moved to [the new website](https://microsoft.github.io/r-server-campaign-optimization/CIG_Workflow.html).

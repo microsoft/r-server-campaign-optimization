@@ -9,9 +9,7 @@ While this task is complete for the current set of leads, our company will want 
 <div class="sql">
 Debra hands over her scripts to Danny who adds the code to the database as stored procedures, using embedded R code, or SQL queries.  You can see these procedures by logging into SSMS and opening the <code>Programmability>Stored Procedures</code> section of the <code>Campaign</code> database.
 <img src="images/storedproc.png">
-<p/>
-Log into SSMS using the <code>rdemo</code> user with SQL Server Authentication - the default password upon creating the solution was <code>D@tascience</code>, unless you changed this password.
-<p/>
+
 You can find this script in the <strong>SQLR</strong> directory, and execute it yourself by following the <a href="Powershell_Instructions.html">PowerShell Instructions</a>.  <span class="cig">
  As noted earlier, this was already executed when your VM was first created.</span><span class="onp"> As noted earlier, this is the fastest way to execute all the code included in this solution.  (This will re-create the same set of tables and models as the above R scripts.)
 </span>

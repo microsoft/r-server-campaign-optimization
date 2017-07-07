@@ -85,7 +85,7 @@ Debra will work on her own machine, using  <a href = "https://msdn.microsoft.com
 
 <div class="cig">
 <p/>
-On your VM, R Tools for Visual Studio is installed.  You will however have to either log in or create a new account for using this tool.  If you prefer, you can <a href="rstudio.html">download and install RStudio</a> on your VM instead. 
+On your VM, R Tools for Visual Studio is installed, as well as RStudio. 
 <p/>
 </div>
 

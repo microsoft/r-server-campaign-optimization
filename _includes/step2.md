@@ -22,8 +22,8 @@ The input to this script defaults to 30,000 leads to be scored with the model in
 Below is a summary of the individual steps used for this solution. 
 <ol>
 <li class="sql">  <strong>SQLR_connection.R</strong>: configures the compute context used in all the rest of the scripts. The connection string is pre-poplulated with the a connection based on your windows credentials. 
-<span class="onp">If you wish to instead use SQL Authentication, use <code>UID=username;PWD=password</code> in place of <code>Trusted_Connection=Yes</code>.  (Make sure not to add spaces between the "=" in this string.)</span>  
-<span class="cig">If you wish to the Azure VM from a different machine, modify the connection string to use <code>UID=username;PWD=password</code> in place of <code>Trusted_Connection=Yes</code>.   The server name can be found in the Azure Portal under the "Network interfaces" section - use the Public IP Address as the server name. (Make sure not to add spaces between the "=" in this string.) </span> </li>
+<span class="onp">If you wish to instead use SQL Authentication, use <code>UID=username;PWD=password</code> in place of <code>Trusted_Connection=Yes</code>.</span>  
+<span class="cig">If you wish to the Azure VM from a different machine, modify the connection string to use <code>UID=username;PWD=password</code> in place of <code>Trusted_Connection=Yes</code>.   The server name can be found in the Azure Portal under the "Network interfaces" section - use the Public IP Address as the server name.  </span>(Make sure not to add spaces between the "=" in the connection string.) </li>
 
 <li>
 The first few steps prepare the data for training.
@@ -54,9 +54,9 @@ In <span class="sql">both Visual Studio and</span> RStudio, there are multiple w
 </div>
 
 <li class="sql"> 
-    If you are creating a new database by using these scripts, you must first create the database name in SSMS.  Once it exists it can be referenced in the connection string.  <span class="cig">Use the SQL username and password you selected when you created the VM to log into SSMS.  (If you don't remember these, you can find them on your VM in the connection string in the file <strong>Campaign/R/Campaign Optimization Notebook.ipynb)</strong>
-    </p>
-    </div>
+    If you are creating a new database by using these scripts, you must first create the database name in SSMS.  Once it exists it can be referenced in the connection string.  
+    <span class="cig">Use the SQL username and password you selected when you created the VM to log into SSMS.  (If you don't remember these, you can find them on your VM in the connection string in the file <strong>Campaign/R/Campaign Optimization Notebook.ipynb)</strong></span>
+    <p></p>
 
     This connection string contains all the information necessary to connect to the SQL Server from inside the R session. As you can see in the script, this information is then used in the <code>RxInSqlServer()</code> command to setup a <code>sql</code> string.  The <code>sql</code> string is in turn used in the <code>rxSetComputeContext()</code> to execute code directly in-database.  
 

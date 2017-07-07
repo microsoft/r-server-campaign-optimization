@@ -76,7 +76,7 @@ Running this PowerShell script will create stored procedures for the operational
         .\Campaign_Optimization.ps1 -ServerName "Server Name" -DBName "Database Name" -username "" -password "" -uninterrupted "N"  
         ```
 
-    * For example, uninterrupted mode for user "rdemo" with password "D@tascience" would be: 
+    * For example, uninterrupted mode for a user "rdemo" with password "D@tascience" would be: 
 
         ```
         .\Campaign_Optimization.ps1 -ServerName "." -DBName "Campaign" -username "rdemo" -password "D@tascience" -uninterrupted "Y"  

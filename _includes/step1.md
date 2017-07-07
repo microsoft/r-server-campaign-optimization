@@ -8,7 +8,7 @@
 <div class="sql">
 Let me introduce you to  Danny, the Database Analyst. Danny is the main contact for anything regarding the SQL Server database that stores all the historical data about campaigns at our company.  
 
-Danny was responsible for installing and configuring the SQL Server.  He has added a user named 'rdemo' with all the necessary permissions to execute R scripts on the server and modify the <code>Campaign</code> database. This was done through the <strong>createuser.sql</strong> file.  
+Danny was responsible for installing and configuring the SQL Server.  He has added Debra as a user with all the necessary permissions to execute R scripts on the server and modify the <code>Campaign</code> database. You can see an example of creating a user in the **Campaign/Resources/exampleuser.sql** query.
 </div>
 
 <div class="hdi">

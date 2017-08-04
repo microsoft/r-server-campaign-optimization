@@ -6,9 +6,9 @@
 # put R code in users home directory
 # XXX SWITCH to master branch when ready to publish!! XXX
 git clone  --branch dev --single-branch  https://github.com/Microsoft/r-server-campaign-optimization.git  campaign
-cp fraud/RSparkCluster/* /home/$1
+cp campaign/RSparkCluster/* /home/$1
 chmod 777 /home/$1/*.R
-rm -rf fraud
+rm -rf campaign
 sed -i "s/XXYOURPW/$2/g" /home/$1/*.R
 
 # Configure edge node as one-box setup for R Server Operationalization

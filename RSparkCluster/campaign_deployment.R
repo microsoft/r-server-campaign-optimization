@@ -30,7 +30,7 @@ library(mrsdeploy)
 remoteLogin(
   "http://localhost:12800",
   username = "admin",
-  password = "D@tascience2017",
+  password = "XXYOURPW",
   session = FALSE
 )
 

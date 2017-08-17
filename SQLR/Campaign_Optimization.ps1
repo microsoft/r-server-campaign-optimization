@@ -79,28 +79,6 @@ $sqlquery
     Invoke-Sqlcmd -ServerInstance $ServerName  -Database $DBName -Username $username -Password $password -Query $sqlquery -QueryTimeout 200000
 }
 
-##########################################################################
-# Get connection string
-##########################################################################
-function GetConnectionString
-{
-    $connectionString = "Driver=SQL Server;Server=$ServerName;Database=$DBName;UID=$username;PWD=$password"
-     $connectionString
-}
-
-$ServerName2="localhost"
-
-function GetConnectionString2
-{
-    $connectionString2 = "Driver=SQL Server;Server=$ServerName2;Database=$DBName;UID=$username;PWD=$password"
-     $connectionString2
-}
-
-##########################################################################
-# Construct the SQL connection strings
-##########################################################################
-$connectionString = GetConnectionString
-$connectionString2 = GetConnectionString2
 
 ##########################################################################
 # Check if the SQL server or database exists
@@ -210,12 +188,12 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
     # execute the training
     Write-Host -ForeGroundColor 'Cyan' (" Training Random Forest (RF)...")
     $modelName = 'RF'
-    $query = "EXEC train_model $modelName, '$connectionString2'"
+    $query = "EXEC train_model $modelName"
     ExecuteSQLQuery $query
 
     Write-Host -ForeGroundColor 'Cyan' (" Training Gradient Boosted Trees (GBT)...")
     $modelName = 'GBT'
-    $query = "EXEC train_model $modelName, '$connectionString2'"
+    $query = "EXEC train_model $modelName"
     ExecuteSQLQuery $query
 
     # create the stored procedure for predicting
@@ -224,20 +202,19 @@ if ($uninterrupted -eq 'y' -or $uninterrupted -eq 'Y')
 
     # execute the evaluation
     Write-Host -ForeGroundColor 'Cyan' (" Testing and Evaluating Random Forest (RF) and Gradient Boosted Trees (GBT)...")
-    $models = "'RF', 'GBT'"
-    $query = "EXEC test_evaluate_models $models, '$connectionString2'"
+    $query = "EXEC test_evaluate_models"
     ExecuteSQLQuery $query
 
-    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select Best_Model from Best_Model;"
-    $best_model = $best_model.Best_Model
+    $bestModel = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select Best_Model from Best_Model;"
+    $bestModel = $bestModel.Best_Model
 
     # create the stored procedure for recommendations
     $script = $filepath + "step4_campaign_recommendations.sql"
     ExecuteSQL $script 
 
     # compute campaign recommendations
-    Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations using $best_model...")
-    $query = "EXEC campaign_recommendation $best_model, '$connectionString2'"
+    Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations using $bestModel...")
+    $query = "EXEC campaign_recommendation $bestModel"
     ExecuteSQLQuery $query
 
     Write-Host -foregroundcolor 'green'("Market Campaign Workflow Finished Successfully!")
@@ -400,12 +377,12 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
     # execute the training
     Write-Host -ForeGroundColor 'Cyan' (" Training Random Forest (RF)...")
     $modelName = 'RF'
-    $query = "EXEC train_model $modelName, '$connectionString2'"
+    $query = "EXEC train_model $modelName"
     ExecuteSQLQuery $query
 
     Write-Host -ForeGroundColor 'Cyan' (" Training Gradient Boosted Trees (GBT)...")
     $modelName = 'GBT'
-    $query = "EXEC train_model $modelName, '$connectionString2'"
+    $query = "EXEC train_model $modelName"
     ExecuteSQLQuery $query
 }
 
@@ -427,14 +404,13 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 
     # execute the evaluation
     Write-Host -ForeGroundColor 'Cyan' (" Testing and Evaluating Random Forest (RF) and Gradient Boosted Trees (GBT)...")
-    $models = "'RF', 'GBT'"
-    $query = "EXEC test_evaluate_models $models, '$connectionString2'"
+    $query = "EXEC test_evaluate_models"
     ExecuteSQLQuery $query
 
-    $best_model = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select Best_Model from Best_Model;"
-    $best_model = $best_model.Best_Model
+    $bestModel = Invoke-sqlcmd -ServerInstance $ServerName -Database $DBName -Username $username -Password $password -Query "select Best_Model from Best_Model;"
+    $bestModel = $bestModel.Best_Model
     
-    if ($best_model -eq 'RF')
+    if ($bestModel -eq 'RF')
     { 
         $not_selected = 'GBT'
     } 
@@ -456,11 +432,11 @@ if ($ans -eq 'E' -or $ans -eq 'e')
 } 
 if ($ans -eq 'y' -or $ans -eq 'Y')
 {
-    Write-Host -foregroundcolor 'Cyan' ("Best Model based on AUC is $best_model. Would you like to try $not_selected instead? ")
+    Write-Host -foregroundcolor 'Cyan' ("Best Model based on AUC is $bestModel. Would you like to try $not_selected instead? ")
     $ans = Read-Host 'Yes use the best model based on AUC [y|Y], No use the alternative model [n|N]?'
     if($ans -eq 'n' -or $ans -eq 'N')
     { 
-        $best_model = $not_selected
+        $bestModel = $not_selected
     }
 
     # create the stored procedure for recommendations
@@ -469,7 +445,7 @@ if ($ans -eq 'y' -or $ans -eq 'Y')
 
     # compute campaign recommendations
     Write-Host -ForeGroundColor 'Cyan' (" Computing channel-day-time recommendations...")
-    $query = "EXEC campaign_recommendation $best_model, '$connectionString2'"
+    $query = "EXEC campaign_recommendation $bestModel"
     ExecuteSQLQuery $query
 }
 

@@ -7,21 +7,36 @@ GO
 DROP PROCEDURE IF EXISTS [dbo].[test_evaluate_models]
 GO
 
-CREATE PROCEDURE [test_evaluate_models] @modelrf varchar(20),
-		             @modelbtree varchar(20),
-		             @connectionString varchar(300)
+CREATE PROCEDURE [test_evaluate_models] 
 AS 
 BEGIN
 
 	DROP TABLE IF EXISTS Best_Model
 	CREATE TABLE Best_Model (Best_Model varchar(10))
 
+/*	Get the current database name. */
+	DECLARE @database_name varchar(max) = db_name();
+
 /* 	Test the models on CM_AD_Test.  */
-	DECLARE @model_rf varbinary(max) = (select model from Campaign_Models where model_name = @modelrf);
-	DECLARE @model_btree varbinary(max) = (select model from Campaign_Models where model_name = @modelbtree);
 	INSERT INTO Best_Model
 	EXECUTE sp_execute_external_script @language = N'R',
-     					   @script = N' 
+     									@script = N' 
+
+##########################################################################################################################################
+##	Connection String
+##########################################################################################################################################
+# Define the connection string. 
+connection_string <- paste("Driver=SQL Server;Server=localhost;Database=", database_name, ";Trusted_Connection=true;", sep="")
+
+##########################################################################################################################################
+##	Read the 2 models.
+##########################################################################################################################################
+# Create an Odbc connection with SQL Server using the name of the table storing the models. 
+OdbcModel <- RxOdbcData(table = "Model", connectionString = connection_string) 
+
+# Read the models from SQL. 
+forest_model <- rxReadObject(OdbcModel, "RF") 
+boosted_model <- rxReadObject(OdbcModel, "GBT")
 
 ##########################################################################################################################################
 ##	Specify the types of the features before the testing
@@ -82,7 +97,6 @@ evaluate_model <- function(observed, predicted_probability, threshold) {
 ## Random forest scoring
 ##########################################################################################################################################
 # Prediction on the testing set.
-forest_model <- unserialize(forest_model)
 forest_prediction  <-  RxSqlServerData(table = "Forest_Prediction ", connectionString = connection_string, stringsAsFactors = T,
 				       colInfo = column_info)
 rxPredict(modelObject = forest_model,
@@ -103,7 +117,6 @@ forest_metrics <- evaluate_model(observed = forest_prediction$Conversion_Flag,
 ## Boosted tree scoring
 ##########################################################################################################################################
 # Prediction on the testing set.
-boosted_model <- unserialize(boosted_model)
 boosted_prediction <-  RxSqlServerData(table = "Boosted_Prediction ", connectionString = connection_string, stringsAsFactors = T,
 				       colInfo = column_info)
 rxPredict(modelObject = boosted_model,
@@ -140,10 +153,8 @@ rxDataStep(inData = metrics_df,
 ##########################################################################################################################################
 OutputDataSet <- data.frame(ifelse(forest_metrics[5] >= boosted_metrics[5], "RF", "GBT"))		 		   	   	   
 	   '
-, @params = N'@forest_model varbinary(max), @boosted_model varbinary(max), @connection_string varchar(300)'
-, @forest_model = @model_rf
-, @boosted_model = @model_btree
-, @connection_string = @connectionString
+, @params = N' @database_name varchar(max)'
+, @database_name =  @database_name 
 
 ;
 END

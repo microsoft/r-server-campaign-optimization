@@ -9,10 +9,13 @@ GO
 DROP PROCEDURE IF EXISTS [dbo].[scoring]
 GO
 
-CREATE PROCEDURE [scoring] @best_model varchar(300), @connectionString varchar(300)
+CREATE PROCEDURE [scoring] @bestModel varchar(300)
 
 AS
 BEGIN
+
+/*	Get the current database name. */
+	DECLARE @database_name varchar(max) = db_name();
 
 /* Create a table containing all the unique combinations of Day_of_Week. Channel and Time_Of_Day were created before normalization. */
 	DROP TABLE IF EXISTS Day_Of_Week
@@ -27,11 +30,21 @@ BEGIN
 
 /* Scoring on a table created on the fly. */
 /* It has, for each Lead_Id and its corresponding variables, One row for each possible combination of Day_of_Week, Channel and Time_Of_Day. */
-    DECLARE @bestmodel varbinary(max) = (SELECT model FROM Campaign_Models WHERE model_name = @best_model);
+    
     EXEC sp_execute_external_script @language = N'R',
 				    @script = N'								  
-# Get best_model.
-best_model <- unserialize(best_model)
+
+##########################################################################################################################################
+##	Get the model.
+##########################################################################################################################################
+# Define the connection string. 
+connection_string <- paste("Driver=SQL Server;Server=localhost;Database=", database_name, ";Trusted_Connection=true;", sep="")
+
+# Create an Odbc connection with SQL Server using the name of the table storing the models. 
+OdbcModel <- RxOdbcData(table = "Model", connectionString = connection_string) 
+
+# Read the model from SQL. 
+best_model <- rxReadObject(OdbcModel, bestModel)
 
 ##########################################################################################################################################
 ##	Specify the types of the features before the scoring
@@ -71,9 +84,10 @@ Prob_Id <- RxSqlServerData(table = "Prob_Id", connectionString = connection_stri
 rxPredict(best_model, data = AD_full_merged_sql, outData = Prob_Id, type = "prob", overwrite = T,
 		  extraVarsToWrite = c("Lead_Id", "Day_Of_Week", "Time_Of_Day", "Channel"))
 '
-, @params = N' @best_model varbinary(max), @connection_string varchar(300)' 
-, @best_model = @bestmodel 
-, @connection_string = @connectionString    
+, @params = N' @bestModel varchar(300), @database_name varchar(max)' 
+, @bestModel = @bestModel 
+, @database_name = @database_name 
+   
 ;
 END
 GO
@@ -83,8 +97,7 @@ GO
 DROP PROCEDURE IF EXISTS [dbo].[campaign_recommendation]
 GO
 
-CREATE PROCEDURE [campaign_recommendation] @best_model varchar(300),
-					   @connectionString varchar(300)
+CREATE PROCEDURE [campaign_recommendation] @bestModel varchar(300)
 																						  
 AS
 BEGIN
@@ -92,7 +105,7 @@ BEGIN
 	DROP TABLE IF EXISTS Recommended_Combinations
 	DROP TABLE IF EXISTS Recommendations
 
-	EXEC [scoring] @best_model = @best_model, @connectionString = @connectionString 
+	EXEC [scoring] @bestModel = @bestModel
 
 /* For each Lead_Id, get one of the combinations of Day_of_Week, Channel, and Time_Of_Day giving highest conversion probability */ 
 	

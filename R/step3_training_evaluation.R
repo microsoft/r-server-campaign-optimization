@@ -136,11 +136,26 @@ forest_model <- rxDForest(formula = formula,
 
 # Save the Random Forest in SQL. The compute context is set to Local in order to export the model. 
 rxSetComputeContext(local)
-saveRDS(forest_model, file = "forest_model.rds")
-forest_model_raw <- readBin("forest_model.rds", "raw", n = file.size("forest_model.rds"))
-forest_model_char <- as.character(forest_model_raw)
-forest_model_sql <- RxSqlServerData(table = "forest_model_sql", connectionString = connection_string) 
-rxDataStep(inData = data.frame(x = forest_model_char ), outFile = forest_model_sql, overwrite = TRUE)
+## Open an Odbc connection with SQL Server.
+OdbcModel <- RxOdbcData(table = "Model", connectionString = connection_string)
+rxOpen(OdbcModel, "w")
+
+## Drop the Model table if it exists. 
+if(rxSqlServerTableExists(OdbcModel@table, OdbcModel@connectionString)) {
+  rxSqlServerDropTable(OdbcModel@table, OdbcModel@connectionString)
+}
+
+## Create an empty Model table. 
+rxExecuteSQLDDL(OdbcModel, 
+                sSQLString = paste(" CREATE TABLE [", OdbcModel@table, "] (",
+                                   "     [id] varchar(200) not null, ",
+                                   "     [value] varbinary(max), ",
+                                   "     constraint unique_id3 unique (id))",
+                                   sep = "")
+)
+
+## Write the model to SQL. 
+rxWriteObject(OdbcModel, "RF", forest_model)
 
 # Set back the compute context to SQL.
 rxSetComputeContext(sql)
@@ -165,12 +180,12 @@ btree_model <- rxBTrees(formula = formula,
 
 # Save the GBT in SQL. The Compute Context is set to Local in order to export the model. 
 rxSetComputeContext(local)
-saveRDS(btree_model, file = "btree_model.rds")
-btree_model_raw <- readBin("btree_model.rds", "raw", n = file.size("btree_model.rds"))
-btree_model_char <- as.character(btree_model_raw)
-btree_model_sql <- RxSqlServerData(table = "btree_model_sql", connectionString = connection_string) 
-rxDataStep(inData = data.frame(x = btree_model_char ), outFile = btree_model_sql, overwrite = TRUE)
 
+## Write the model to SQL. 
+rxWriteObject(OdbcModel, "GBT", btree_model)
+
+# Close the Obdc connection used. 
+rxClose(OdbcModel)
 
 ##########################################################################################################################################
 

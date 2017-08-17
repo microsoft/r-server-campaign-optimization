@@ -57,21 +57,14 @@ display_head <- function(table_name, n_rows){
 # Point to the SQL table holding the whole data set.
 CM_AD <- RxSqlServerData(table = "CM_AD", connectionString = connection_string, colInfo = column_info)
 
+# Create an Odbc connection with SQL Server using the name of the table storing the model. 
+OdbcModel <- RxOdbcData(table = "Model", connectionString = connection_string) 
+
 # Import the fitted best model
-if(best == "RF"){
-  forest_model_char <- rxImport(forest_model_sql)
-  forest_model_raw <- as.raw(strtoi(forest_model_char$x, 16))
-  writeBin(forest_model_raw,con="forest_model.rds")
-  best_model <- readRDS(file="forest_model.rds")
-}
+best_model <- rxReadObject(OdbcModel, best)
 
-if(best == "GBT"){
-  btree_model_char <- rxImport(btree_model_sql)
-  btree_model_raw <- as.raw(strtoi(btree_model_char$x, 16))
-  writeBin(btree_model_raw,con="btree_model.rds")
-  best_model <- readRDS(file="btree_model.rds")
-}
-
+# Close the Obdc connection used. 
+rxClose(OdbcModel)
 
 ##########################################################################################################################################
 

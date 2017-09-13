@@ -4,30 +4,37 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Campaign_Models' AND xtype='U')
-    CREATE TABLE Campaign_Models
-    (
-	model_name varchar(30) not null default('default model') primary key,
-	model varbinary(max) not null
-    )
-GO
+-- Create an empty table to be filled with the trained models.
+DROP TABLE if exists  [dbo].[Model];
+CREATE TABLE [dbo].[Model](
+	[id] [varchar](200) NOT NULL, 
+	[value] [varbinary](max), 
+	CONSTRAINT unique_id UNIQUE(id)
+	) 
 
 DROP PROCEDURE IF EXISTS [dbo].[train_model];
 GO
 
-CREATE PROCEDURE [train_model] @modelName varchar(20), @connectionString varchar(300)
+CREATE PROCEDURE [train_model] @modelName varchar(20)
 AS 
 BEGIN
 
-/* 	Train the model on CM_AD_Train.  */	
-	DELETE FROM Campaign_Models WHERE model_name = @modelName;
-	INSERT INTO Campaign_Models (model)
+--	Get the current database name.
+	DECLARE @database_name varchar(max) = db_name();
+
+--	Train the model on CM_AD_Train.  
+	DELETE FROM Model WHERE id = @modelName;
+
 	EXECUTE sp_execute_external_script @language = N'R',
 					   @script = N' 
 
 ##########################################################################################################################################
 ##	Set the compute context to SQL for faster training
 ##########################################################################################################################################
+# Define the connection string. 
+connection_string <- paste("Driver=SQL Server;Server=localhost;Database=", database_name, ";Trusted_Connection=true;", sep="")
+
+# Set the Compute Context to SQL.
 sql <- RxInSqlServer(connectionString = connection_string)
 rxSetComputeContext(sql)
 
@@ -87,14 +94,22 @@ if (model_name == "RF") {
 				    lossFunction = "multinomial")
 }
 
-OutputDataSet <- data.frame(payload = as.raw(serialize(model, connection=NULL)))'
-, @params = N'@model_name varchar(20), @connection_string varchar(300)'
+########################################################################################################################################## 
+## Save the model in SQL Server 
+########################################################################################################################################## 
+# Set the compute context to local for tables exportation to SQL.  
+rxSetComputeContext("local") 
+
+# Open an Odbc connection with SQL Server. 
+OdbcModel <- RxOdbcData(table = "Model", connectionString = connection_string) 
+rxOpen(OdbcModel, "w") 
+
+# Write the model to SQL.  
+rxWriteObject(OdbcModel, model_name, model) 
+'
+, @params = N'@model_name varchar(20), @database_name varchar(max)'
 , @model_name = @modelName
-, @connection_string = @connectionString 
-
-UPDATE Campaign_models set model_name = @modelName 
-WHERE model_name = 'default model'
-
+, @database_name = @database_name  
 ;
 END
 GO

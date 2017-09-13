@@ -18,10 +18,9 @@ exec [dbo].[feature_engineering]
 /* Step 3 */ 
 exec [dbo].[normalization]
 exec [dbo].[splitting] @splitting_percent = 70
-exec [dbo].[train_model] @modelName ="RF", @connectionString ="Driver=SQL Server;Server=localhost;Database=Campaign;UID=rdemo;PWD=D@tascience"
-exec [dbo].[train_model] @modelName ="GBT", @connectionString ="Driver=SQL Server;Server=localhost;Database=Campaign;UID=rdemo;PWD=D@tascience"
-exec [dbo].[test_evaluate_models] @modelrf ="RF", @modelbtree ="GBT", @connectionString ="Driver=SQL Server;Server=localhost;Database=Campaign;UID=rdemo;PWD=D@tascience"
-
+exec [dbo].[train_model] @modelName ='RF'
+exec [dbo].[train_model] @modelName ='GBT'
+exec [dbo].[test_evaluate_models] 
 /* Step 4 */
-exec [dbo].[campaign_recommendation] @best_model ="RF", @connectionString ="Driver=SQL Server;Server=localhost;Database=Campaign;UID=rdemo;PWD=D@tascience"
+exec [dbo].[campaign_recommendation] @bestModel = 'RF'
 					

@@ -3,6 +3,8 @@
 # Campaign Optimization - Predicting How and When to Contact Leads
 ## Implemented on SQL Server 2016 R Services
 
+Deploy this solution on [SQL](https://aka.ms/campaignoptimization) or [HDInsight Spark Cluster](https://aka.ms/campaign-hdi).
+
 For all documentation, visit the [Campaign Optimization website](https://microsoft.github.io/r-server-campaign-optimization).
 
 **NOTE:** Please don't use "Download ZIP" to get this repository, as it will change the line endings in the data files. Use "git clone" to get a local copy of this repository. 

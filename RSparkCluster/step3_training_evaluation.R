@@ -21,11 +21,8 @@ training_evaluation <- function(LocalWorkDir,
                                 HDFSWorkDir,
                                 CM_AD_Features_names)
 { 
+  
   print("Start Step3: training and evaluation...")
-  # load library
-  library(RevoScaleR)
-  # spark cc object
-  myHadoopCluster <- RxSpark()
   
   # make folders storing intermediate results
   LocalIntermediateDir <- file.path(LocalWorkDir, "temp")
@@ -88,13 +85,10 @@ training_evaluation <- function(LocalWorkDir,
   
   CM_AD_factorized <-  RxXdfData(file = paste(HDFSIntermediateDir, "/CMADfactorsXdf", sep=""),fileSystem = RxHdfsFileSystem())
   
-  # under spark cc, all rx-function can take txt directory containing bunch of txt files as input and execute them parallely
-  rxSetComputeContext(myHadoopCluster)
   t3.1 <- system.time(
     rxDataStep(inData = CM_AD_Features, outFile = CM_AD_factorized, overwrite = T)
   )
   
-  rxSetComputeContext("local")
   colInfoFull <- rxCreateColInfo(CM_AD_factorized)
   
   # save the factorized column information before splitting
@@ -125,7 +119,7 @@ training_evaluation <- function(LocalWorkDir,
   # create "Split_Vector" for indicating training and testing
   print("Splitting into training and testing set...")
   CM_AD2 <- RxXdfData(file = paste(HDFSIntermediateDir, "/CMAD2Xdf", sep=""),fileSystem = RxHdfsFileSystem())
-  rxSetComputeContext(myHadoopCluster)
+  
   t3.2 <- system.time(
     rxDataStep(inData = CM_AD1, 
                outFile = CM_AD2, overwrite = TRUE,
@@ -175,8 +169,6 @@ training_evaluation <- function(LocalWorkDir,
   ## 3. Save the trained RF model on local edge node
   
   ##########################################################################################################################################
-  # set compute context to spark
-  rxSetComputeContext(myHadoopCluster)
   
   # Train the Random Forest.
   # If number of rows >= 1Mn, scheduleOnce=FALSE, nTree = 40 and commnent out timesToRun
@@ -205,11 +197,7 @@ training_evaluation <- function(LocalWorkDir,
   )
   
   # save the fitted model to local edge node.
-  rxSetComputeContext('local')
   saveRDS(forest_model, file = paste(LocalIntermediateDir,"/forest_model.rds",sep=""))
-  
-  # Set back the compute context to Spark.
-  rxSetComputeContext(myHadoopCluster)
   
   ##########################################################################################################################################
   
@@ -242,12 +230,7 @@ training_evaluation <- function(LocalWorkDir,
                             lossFunction = "multinomial")
   }
   
-  # save the fitted model to local edge node.
-  rxSetComputeContext('local')
   saveRDS(logistic_model, file = paste(LocalIntermediateDir,"/logistic_model.rds",sep=""))
-  
-  # Set back the compute context to Spark.
-  rxSetComputeContext(myHadoopCluster)
   
   ##########################################################################################################################################
   
@@ -273,8 +256,10 @@ training_evaluation <- function(LocalWorkDir,
                overwrite = TRUE,
                transforms = list(observed = as.numeric(as.character(Conversion_Flag))))
   )
+  
   # evaluate
-  rxSetComputeContext("local")
+  # set compute context to local as rxRoc doesn't work under spark cc
+  rxSetComputeContext('local')
   t3.9 <- system.time(
     ROC_RF <- rxRoc(actualVarName = "observed", predVarNames = "1_prob", data = Prediction_Table_RF_New, numBreaks = 1000)
   )
@@ -293,7 +278,6 @@ training_evaluation <- function(LocalWorkDir,
   ##########################################################################################################################################
   # Make Predictions. The observed Conversion_Flag is kept through the argument extraVarsToWrite.
   print("Predicting on Logistic model...")
-  rxSetComputeContext(myHadoopCluster)
   Prediction_Table_Logit <- RxXdfData(file = paste(HDFSIntermediateDir, "/PredictionTableLogitXdf", sep=""),fileSystem = RxHdfsFileSystem())
   t3.10 <- system.time(
     rxPredict(logistic_model,data = CM_AD_Test, outData = Prediction_Table_Logit, overwrite = T, type="response",
@@ -307,8 +291,8 @@ training_evaluation <- function(LocalWorkDir,
                overwrite = TRUE,
                transforms = list(observed = as.numeric(as.character(Conversion_Flag))))
   )
+  
   # evaluate
-  rxSetComputeContext("local")
   t3.12 <- system.time(
     ROC_Logit <- rxRoc(actualVarName = "observed", predVarNames = "Conversion_Flag_Pred", data = Prediction_Table_Logit_New, numBreaks = 1000)
   )
@@ -337,6 +321,9 @@ training_evaluation <- function(LocalWorkDir,
   
   # copy trained model and model info to the folder above. These info will be used for scoring in step4
   system(paste("cp ", LocalIntermediateDir, "/*.rds ", myLocalTrainDir, sep = ""))
+  
+  # set compute context back to spark
+  rxSparkConnect(reset = F)
   
   #rbind(t3.1, t3.2, t3.3, t3.4, t3.5, t3.6, t3.7, t3.8, t3.9, t3.10, t3.11, t3.12)
   

@@ -68,6 +68,11 @@ campaign_web_scoring <- function(Campaign_Detail,
                                  userName,
                                  Stage = "Web")
 {
+  # load RevoScaleR package
+  library(RevoScaleR)
+  
+  # connect to spark session
+  rxSparkConnect(reset = TRUE)
   
   # step1: data processing
   source(paste("/home/", userName, "/step1_data_processing.R", sep=""))
@@ -102,6 +107,9 @@ campaign_web_scoring <- function(Campaign_Detail,
   
   
   return(hive_table_dir)
+  
+  # disconnect spark session
+  rxSparkDisconnect()
 }
 
 ##################################################################################################################################
@@ -111,7 +119,7 @@ campaign_web_scoring <- function(Campaign_Detail,
 ##################################################################################################################################
 
 # Specify the version of the web service
-version <- "v1.2.42"
+version <- "v1.2.47"
 
 # Publish the api for character input
 api_string <- publishService(
@@ -158,13 +166,6 @@ campaign_detail_str <- "/Campaign/Data/Campaign_Detail1000.csv"
 lead_demography_str <- "/Campaign/Data/Lead_Demography1000.csv"
 market_touchdown_str <- "/Campaign/Data/Market_Touchdown1000.csv"
 product_str <- "/Campaign/Data/Product1000.csv"
-
-# Import the .csv files as data frame 
-campaign_detail_df <- rxImport(RxTextData(file = campaign_detail_str, fileSystem = RxHdfsFileSystem()))
-lead_demography_df <- rxImport(RxTextData(file = lead_demography_str, fileSystem = RxHdfsFileSystem()))
-market_touchdown_df <- rxImport(RxTextData(file = market_touchdown_str, fileSystem = RxHdfsFileSystem()))
-product_df <- rxImport(RxTextData(file = product_str, fileSystem = RxHdfsFileSystem()))
-
 
 # Import the .csv files as data frame 
 campaign_detail_df <- rxImport(RxTextData(file = campaign_detail_str, fileSystem = RxHdfsFileSystem()))

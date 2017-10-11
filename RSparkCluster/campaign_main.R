@@ -44,6 +44,12 @@ campaign_main <- function(Campaign_Detail,
                           HDFSWorkDir,
                           Stage = "Dev"){
   
+  # load RevoScaleR package
+  library(RevoScaleR)
+  
+  # connect to spark session
+  rxSparkConnect(reset = TRUE)
+  
   # step1: data processing
   source("step1_data_processing.R")
   step1_res_list <- data_process(Campaign_Detail = Campaign_Detail,
@@ -80,6 +86,9 @@ campaign_main <- function(Campaign_Detail,
                     HDFSWorkDir = HDFSWorkDir, 
                     numSplits = step1_res_list$numSplits,
                     Stage = Stage)
+  
+  # disconnect spark session
+  rxSparkDisconnect()
 }
 
 ##############################################################################################################################

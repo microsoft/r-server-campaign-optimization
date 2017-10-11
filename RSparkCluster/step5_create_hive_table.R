@@ -15,9 +15,7 @@ Convert2HiveTable <- function(LocalWorkDir,
                               Stage)
 { 
   print("Starting Step5: Create Hive tables...")
-  # load library
-  library(RevoScaleR)
-  
+
   # the folder stores the .csv files of final recommendation
   HDFSIntermediateDir <- file.path(HDFSWorkDir,"temp")
   
@@ -98,7 +96,7 @@ Convert2HiveTable <- function(LocalWorkDir,
   
   # load all .csv files into the hive table
   for(partNum in (0:(numSplits - 1))){
-    upload_table_command <- paste0("hive -e \"LOAD DATA INPATH '",file.path(HDFSIntermediateDir, paste0("recomergefinal", partNum, ".csv")),"' INTO TABLE ",table_name, ";\"")
+    upload_table_command <- paste0("hive -e \"LOAD DATA INPATH 'wasb://adscluster2@adsparkstorage.blob.core.windows.net",file.path(HDFSIntermediateDir, paste0("recomergefinal", partNum, ".csv")),"' INTO TABLE ",table_name, ";\"")
     cat(upload_table_command)
     system(upload_table_command)
   }

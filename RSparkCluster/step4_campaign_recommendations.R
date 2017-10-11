@@ -30,10 +30,6 @@ score_recommendation <- function(LocalWorkDir,
                                  Stage)
 { 
   print("Start step4: recommendations....")
-  # load library
-  library(RevoScaleR)
-  # spark cc object
-  myHadoopCluster <- RxSpark()
   
   # specify folders storing intermediate results
   LocalIntermediateDir <- file.path(LocalWorkDir, "temp")
@@ -47,7 +43,6 @@ score_recommendation <- function(LocalWorkDir,
   # 2. Import the best model based on the best model name
   # 3. Import factor column info
   print("Importing the best model and info of factor columns...")
-  rxSetComputeContext('local')
   
   if(Stage == "Web"){
     # "model_obj" is defined in script "campaign_deployment" when publishing web servie
@@ -350,13 +345,9 @@ score_recommendation <- function(LocalWorkDir,
     
   } # end of maxConversion function
   
-  # set compute context to spark
-  rxSetComputeContext(myHadoopCluster)
   ## Invoke the scoring in parallel by rxExec function
   t4.9 <- system.time(
     returnList4 <- rxExec(maxConversion, partNum = rxElemArg(0:(numSplits-1)), HDFSIntermediateDir, best_model, best_model_name, colInfoFull, colInfoFull0)
   )
-  
-  rxSetComputeContext("local")
   
 }

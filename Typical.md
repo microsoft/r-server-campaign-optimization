@@ -100,36 +100,6 @@ When you first visit the url to access RStudio, you will see two different login
 
 </div>
 
-<p></p>
-After logging in to RStudio, you will need to upload the files that are used in this solution, if you have not already done so during your deployment.  To obtain the files, execute the following code in RStudio:
-<pre class="highlight">
-
-library(RevoScaleR)
-# spark cc object
-myHadoopCluster <- RxSpark()
-# set compute context to local
-rxSetComputeContext('local')
-
-LocalDir <- "~/"
-RemoteFiles <- "/Campaign/RSparkCluster/*.R"
-
-rxHadoopCopyToLocal(source = RemoteFiles, dest = LocalDir)
-
-LocalDir <- paste("/var/RevoShare/", Sys.info()[["user"]], "/Campaign/dev/model/", sep="" )
-if(!dir.exists(LocalDir)){
-system(paste("mkdir -p -m 777 ", LocalDir, sep="")) # create a new directory
-}
-RemoteFiles <- "/Campaign/model/*.rds"
-rxHadoopCopyToLocal(source = RemoteFiles, dest = LocalDir)
-
-# set up Web Server for Deployment
-source("SetUpWebServer.R")
-
-# clean up 
-rm(list = ls())
-
-</pre>
-<p></p>
 
 </div>
 

@@ -21,19 +21,13 @@ feature_engineer <- function(LocalWorkDir,
                              HDFSWorkDir,
                              numSplits,
                              CM_AD_Clean_colInfo)
-{   
+{ 
+  
   print("Start step2: feature engineering...")
-  # load library
-  library(RevoScaleR)
-  # spark cc object
-  myHadoopCluster <- RxSpark()
   
   # make the folder storing intermediate results
   LocalIntermediateDir <- file.path(LocalWorkDir, "temp")
   HDFSIntermediateDir <- file.path(HDFSWorkDir,"temp")
-  
-  # set compute context to local
-  rxSetComputeContext('local')
   
   # function perform feature engineer to each subeset. It will be applied to each subeset by rxExec function.
   featureEngrg <- function(partNum, HDFSIntermediateDir, colInfo) {
@@ -172,16 +166,13 @@ feature_engineer <- function(LocalWorkDir,
   
   colInfo <- CM_AD_Clean_colInfo
   
-  # set compute context to spark
-  rxSetComputeContext(myHadoopCluster)
+  print("start execute feature Engrg")
   
   # invoke featureEngrg function parallelly by rxExec function
   t2.9 <- system.time(
     returnList2 <- rxExec(featureEngrg, partNum = rxElemArg(0:(numSplits-1)), HDFSIntermediateDir, colInfo)
   )
   
-  # set compute context back to local
-  rxSetComputeContext("local")
   
   CM_AD1_names <- returnList2$rxElem1
   CM_AD_Features_names <- CM_AD1_names[!CM_AD1_names %in% c("max_comm_id")]

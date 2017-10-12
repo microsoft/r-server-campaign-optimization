@@ -29,14 +29,11 @@ data_process <- function(Campaign_Detail,
                          HDFSWorkDir,
                          Stage)
 { 
+  
+  rxSetComputeContext('local')
   print("Start Step1: data processing...")
   
-  # load library
-  library(RevoScaleR)
-  # spark cc object
-  myHadoopCluster <- RxSpark()
-  # set compute context to local
-  rxSetComputeContext('local')
+  
   
   ##############################################################################################################################
   
@@ -275,7 +272,7 @@ data_process <- function(Campaign_Detail,
   t1.1 <- system.time(
     mergeTablesResults <- rxExec(mergeTables, rxElemArg(0:(numSplits-1)), LocalIntermediateDir, HDFSIntermediateDir, Campaign_Product_xdf)
   )
-  rxSetComputeContext('local')
+  
   
   ############################################################################################################################################
   
@@ -303,7 +300,7 @@ data_process <- function(Campaign_Detail,
   
   
   # use rxSummary function to get missing information
-  # rxSetComputeContext(myHadoopCluster) if large data
+  # rxSparkConnect(reset = F) if large data
   summary <- rxSummary(formula, Campaign_Product_Market_Lead_txt, byTerm = TRUE)
   var_with_NA <- summary$sDataFrame[summary$sDataFrame$MissingObs > 0, 1]
   
@@ -376,7 +373,7 @@ data_process <- function(Campaign_Detail,
     t1.2 <- system.time(
       replaceMissingResults <- rxExec(replaceMissing, partNum = rxElemArg(0:(numSplits-1)), colInfo, Mean_Replace, var_with_NA, var_with_NA_mean, HDFSIntermediateDir)
     )
-    rxSetComputeContext('local')
+    rxSparkConnect(reset = F)
   }
   
   # return the number of splits for later use

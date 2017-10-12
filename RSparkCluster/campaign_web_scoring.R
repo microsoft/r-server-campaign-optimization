@@ -31,7 +31,7 @@ library(mrsdeploy)
 remoteLogin(
   "http://localhost:12800",
   username = "admin",
-  password = "D@tascience2017",
+  password = "XXYOURPW",
   session = FALSE
 )
 
@@ -43,7 +43,7 @@ remoteLogin(
 
 # Specify the name and version of the web service
 name_string <- "campaign_scoring_string_input"
-version <- "v1.2.42" 
+version <- "v1.2.47" 
 
 # Get the API for string input
 api_string <- getService(name_string, version)
@@ -80,7 +80,7 @@ result_string <- api_string$campaign_web_scoring(
 
 # Specify the name and version of the web service
 name_frame <- "campaign_scoring_frame_input"
-version <- "v1.2.42" 
+version <- "v1.2.47" 
 
 # Get the API for data frame input
 api_frame <- getService(name_frame, version)

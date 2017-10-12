@@ -5,7 +5,7 @@
 
 # put R code in users home directory
 # XXX SWITCH to master branch when ready to publish!! XXX
-git clone  --branch dev --single-branch  https://github.com/Microsoft/r-server-campaign-optimization.git  campaign
+git clone  --branch master --single-branch  https://github.com/Microsoft/r-server-campaign-optimization.git  campaign
 cp campaign/RSparkCluster/* /home/$1
 chmod 777 /home/$1/*.R
 rm -rf campaign

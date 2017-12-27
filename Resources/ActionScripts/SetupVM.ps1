@@ -1,115 +1,224 @@
-<#
-.SYNOPSIS
-Powershell script for setting up the solution template. 
 
-.DESCRIPTION
-This script checks out the solution from github and deploys it to SQL Server on the local Data Science VM (DSVM).
 
-.WARNING: This script is only meant to be run from the solution template deployment process.
-
-.PARAMETER serverName
-Name of the server with SQL Server with R Services (this is the DSVM server)
-
-.PARAMETER baseurl
-url from which to download data files (if any)
-
-.PARAMETER username
-login username for the server
-
-.PARAMETER password
-login password for the server
-
-.PARAMETER sqlUsername
-User to create in SQL Server
-
-.PARAMETER sqlPassword
-Password for the SQL User
-
-#>
 [CmdletBinding()]
 param(
-[parameter(Mandatory=$true, Position=1, ParameterSetName = "LCR")]
+[parameter(Mandatory=$True, Position=1)]
 [ValidateNotNullOrEmpty()] 
 [string]$serverName,
 
-[parameter(Mandatory=$true, Position=2, ParameterSetName = "LCR")]
-[ValidateNotNullOrEmpty()] 
-[string]$baseurl,
-
-[parameter(Mandatory=$true, Position=3, ParameterSetName = "LCR")]
+[parameter(Mandatory=$True, Position=2)]
 [ValidateNotNullOrEmpty()] 
 [string]$username,
 
-[parameter(Mandatory=$true, Position=4, ParameterSetName = "LCR")]
+[parameter(Mandatory=$True, Position=3)]
 [ValidateNotNullOrEmpty()] 
 [string]$password,
 
-[parameter(Mandatory=$true, Position=5, ParameterSetName = "LCR")]
+[parameter(Mandatory=$false, Position=4)]
 [ValidateNotNullOrEmpty()] 
-[string]$sqlUsername,
-
-[parameter(Mandatory=$true, Position=6, ParameterSetName = "LCR")]
-[ValidateNotNullOrEmpty()] 
-[string]$sqlPassword
+[string]$Prompt
 )
+$startTime = Get-Date
 
-$startTime= Get-Date
-Write-Host "Start time for setup is:" $startTime
-$originalLocation = Get-Location
-# This is the directory for the data/code download
+
+
+#$Prompt= if ($Prompt -match '^y(es)?$') {'Y'} else {'N'}
+$Prompt = 'N'
+
+
+##Change Values here for Different Solutions 
+$SolutionName = "Campaign"
+$SolutionFullName = "r-server-campaign-optimization" 
+$JupyterNotebook = "Campaign Optimization R Notebook.ipynb"
+$Shortcut = "CampaignHelp.url"
+
+
+### DON'T FORGET TO CHANGE TO MASTER LATER...
+$Branch = "dev" 
+$InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
+$SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No'  
+
+
+$setupLog = "c:\tmp\setup_log.txt"
+Start-Transcript -Path $setupLog -Append
+$startTime = Get-Date
+Write-Host -ForegroundColor 'Green'  "  Start time:" $startTime 
+
+
+###These probably don't need to change , but make sure files are placed in the correct directory structure 
 $solutionTemplateName = "Solutions"
 $solutionTemplatePath = "C:\" + $solutionTemplateName
-$checkoutDir = "Campaign"
+$checkoutDir = $SolutionName
+$SolutionPath = $solutionTemplatePath + '\' + $checkoutDir
+$desktop = "C:\Users\Public\Desktop\"
+$scriptPath = $SolutionPath + "\Resources\ActionScripts\"
+$SolutionData = $SolutionPath + "\Data\"
 
-New-Item -Path "C:\" -Name $solutionTemplateName -ItemType directory -force
 
-$setupLog = $solutionTemplatePath + "\setup_log.txt"
-Start-Transcript -Path $setupLog -Append
 
-cd $solutionTemplatePath
-### DON'T FORGET TO CHANGE TO MASTER BEFORE PUBLISHING...
-git clone --branch master --single-branch https://github.com/Microsoft/r-server-campaign-optimization.git $checkoutDir
+####$Query = "SELECT SERVERPROPERTY('ServerName')"
+##$si = invoke-sqlcmd -Query $Query
+##$si = $si.Item(0)
 
-$solutionBase = $solutionTemplatePath + "\" + $checkoutDir 
-cd $solutionBase
-# remove files we don't need
- rm .gitignore
- rm *HDI.pbix
- rm -r RSparkCluster
 
-$solutionResourcePath = $solutionBase + "\Resources\ActionScripts"
-$helpShortCutFilePath = $solutionResourcePath + "\CampaignHelp.url"
+###$serverName = if($serverName -eq $null) {$si}
+
+##WRITE-HOST " ServerName set to $ServerName"
+
+
+
+##########################################################################
+#Clone Data from GIT
+##########################################################################
+
+
+$clone = "git clone --branch $Branch --single-branch https://github.com/Microsoft/$SolutionFullName $solutionPath"
+
+if (Test-Path $SolutionPath) { Write-Host " Solution has already been cloned"}
+ELSE {Invoke-Expression $clone}
+
 
 Write-Host -ForeGroundColor magenta "Installing R Packages"
-cd $solutionResourcePath
+cd "C:\Solutions\$SolutionName\Resources\ActionScripts\"
 # install R Packages
-Rscript install.R
+Rscript install.R 
 
-$passwords = "$password" | ConvertTo-SecureString -AsPlainText -Force
-$credential = New-Object System.Management.Automation.PSCredential("$serverName\$username", $passwords)
-$configure = "configureSolution.ps1"
-$shortcuts ="createShortcuts.ps1"
 
-Enable-PSRemoting -Force
-Invoke-Command  -Credential $credential -ComputerName $serverName -FilePath $configure -ArgumentList $solutionBase, $sqlUsername, $sqlPassword, $checkoutDir
-Invoke-Command  -Credential $credential -ComputerName $serverName -FilePath $shortcuts -ArgumentList $helpShortCutFilePath, $solutionBase, $checkoutDir
-Disable-PSRemoting -Force
 
-Write-Host -ForeGroundColor magenta "Installing latest Power BI..."
+#################################################################
+##DSVM Does not have SQLServer Powershell Module Install or Update 
+#################################################################
+
+
+
+Write-Host " Installing SQLServer Power Shell Module or Updating to latest "
+
+if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
+ else 
+    {
+    Install-Module -Name SQLServer -Scope AllUsers -AllowClobber -Force
+    Import-Module -Name SQLServer
+    }
+
+
+
+############################################################################################
+#Configure SQL to Run our Solutions 
+############################################################################################
+
+#Write-Host -ForegroundColor 'Cyan' " Switching SQL Server to Mixed Mode"
+
+
+### Change Authentication From Windows Auth to Mixed Mode 
+Invoke-Sqlcmd -Query "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2;" -ServerInstance "LocalHost" 
+
+Write-Host -ForeGroundColor 'cyan' " Configuring SQL to allow running of External Scripts "
+### Allow Running of External Scripts , this is to allow R Services to Connect to SQL
+Invoke-Sqlcmd -Query "EXEC sp_configure  'external scripts enabled', 1"
+
+### Force Change in SQL Policy on External Scripts 
+Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
+Write-Host -ForeGroundColor 'cyan' " SQL Server Configured to allow running of External Scripts "
+
+Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
+### Changes Above Require Services to be cycled to take effect 
+### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
+Stop-Service -Name "MSSQ*" -Force
+
+### Start the SQL Service 
+Start-Service -Name "MSSQ*"
+Write-Host -ForegroundColor 'Cyan' " SQL Services Restarted"
+
+
+$Query = "CREATE LOGIN $username WITH PASSWORD=N'$password', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
+Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
+
+$Query = "ALTER SERVER ROLE [sysadmin] ADD MEMBER $username"
+Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
+
+
+
+Write-Host -ForegroundColor 'Cyan' " Done with configuration changes to SQL Server"
+
+Write-Host -ForeGroundColor cyan " Installing latest Power BI..."
 # Download PowerBI Desktop installer
 Start-BitsTransfer -Source "https://go.microsoft.com/fwlink/?LinkId=521662&clcid=0x409" -Destination powerbi-desktop.msi
 
 # Silently install PowerBI Desktop
 msiexec.exe /i powerbi-desktop.msi /qn /norestart  ACCEPT_EULA=1
 
-if (!$?)
-{
-    Write-Host -ForeGroundColor Red "Error installing Power BI Desktop. Please install latest Power BI manually."
+if (!$?) {
+    Write-Host -ForeGroundColor Red " Error installing Power BI Desktop. Please install latest Power BI manually."
 }
-cd $originalLocation.Path
-$endTime= Get-Date
-$totalTime = $endTime - $startTime
-Write-Host "Finished running setup at " $endTime
-Write-Host "Total time for setup:" $totalTime
+
+
+##Create Shortcuts and Autostart Help File 
+Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
+Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
+Write-Host -ForeGroundColor cyan " Help Files Copied to Desktop"
+
+
+
+
+$WsShell = New-Object -ComObject WScript.Shell
+$shortcut = $WsShell.CreateShortcut($desktop + $checkoutDir + ".lnk")
+$shortcut.TargetPath = $solutionPath
+$shortcut.Save()
+
+$ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $Prompt"
+Invoke-Expression $ConfigureSQL 
+
+
+
+
+
+## copy Jupyter Notebook files
+Move-Item $SolutionPath\R\$JupyterNotebook  c:\tmp\
+sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
+sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
+Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\R\
+
+
+
+
+#cp $SolutionData*.csv  c:\dsvm\notebooks
+ # substitute real username and password in notebook file
+#XXXXXXXXXXChange to NEw NotebookNameXXXXXXXXXXXXXXXXXX# 
+
+if ($InstallPy -eq "Yes")
+{
+    Move-Item $SolutionPath\Python\$JupyterNotebook  c:\tmp\
+    sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
+    sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
+    Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\Python\
+}
+
+# install modules for sample website
+if($SampleWeb  -eq "Yes")
+{
+cd $SolutionPath\Website\
+npm install
+Move-Item $SolutionPath\Website\server.js  c:\tmp\
+sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\server.js
+sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\server.js
+Move-Item  c:\tmp\server.js $SolutionPath\Website
+}
+
+$endTime = Get-Date
+
+Write-Host -foregroundcolor 'green'(" $SolutionFullName Workflow Finished Successfully!")
+$Duration = New-TimeSpan -Start $StartTime -End $EndTime 
+Write-Host -ForegroundColor 'green'(" Total Deployment Time = $Duration") 
+
 Stop-Transcript
 
+
+##Launch HelpURL 
+Start-Process "https://microsoft.github.io/$SolutionFullName/Typical.html"
+
+
+
+
+## Close Powershell 
+Exit-PSHostProcess
+EXIT 

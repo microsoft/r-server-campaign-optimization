@@ -9,6 +9,9 @@ param(
 [parameter(Mandatory=$true, Position=3)]
 [string]$InstallPy,
 
+[parameter(Mandatory=$true, Position=3)]
+[string]$InstallR,
+
 [parameter(Mandatory=$true, Position=4)]
 [string]$Prompt
 )
@@ -103,8 +106,8 @@ else
  
 
 
-
-
+If ($InstallR -eq 'Yes')
+{
 Write-Host "  Creating SQL Database for R "
 
 
@@ -145,6 +148,7 @@ $OdbcName = "obdc" + $dbname
 ## Create ODBC Connection for PowerBI to Use 
 Add-OdbcDsn -Name $OdbcName -DriverName "ODBC Driver 13 for SQL Server" -DsnType 'System' -Platform '64-bit' -SetPropertyValue @("Server=$ServerName", "Trusted_Connection=Yes", "Database=$dbName") -ErrorAction SilentlyContinue -PassThru
 
+
 ##########################################################################
 # Deployment Pipeline
 ##########################################################################
@@ -153,7 +157,7 @@ $RStart = Get-Date
 try
 {
 
-Write-Host -ForeGroundColor 'cyan' (" Import CSV File(s).")
+Write-Host -ForeGroundColor 'cyan' (" Import CSV File(s). This Should take about 30 Seconds Per File")
  ##Move this to top 
 
 
@@ -164,7 +168,7 @@ $destination = $SolutionData + $dataFile + ".csv"
 $tableName = $DBName + ".dbo." + $dataFile
 $tableSchema = $dataPath + "\" + $dataFile + ".xml"
 $dataSet = Import-Csv $destination
-Write-Host -ForegroundColor 'cyan' ("         Loading $dataFile.csv into SQL Table, this will take about 30 seconds per file....") 
+Write-Host -ForegroundColor 'cyan' ("         Loading $dataFile.csv into SQL Table") 
 Write-SqlTableData -InputData $dataSet  -DatabaseName $dbName -Force -Passthru -SchemaName dbo -ServerInstance $ServerName -TableName $dataFile
 
 
@@ -191,7 +195,9 @@ $Rend = Get-Date
 
 $Duration = New-TimeSpan -Start $RStart -End $Rend 
 Write-Host -ForegroundColor 'green'(" R Server Configured in $Duration")
-
+}
+ELSE 
+{Write-Host -ForegroundColor 'Green' "There is not a R Version for this Solution so R will not be Installed"}
 
 
 ###Conifgure Database for Py 
@@ -211,7 +217,7 @@ $dbname = $db + "_Py"
 try
 {
 
-Write-Host -ForeGroundColor 'cyan' (" Import CSV File(s).")
+Write-Host -ForeGroundColor 'cyan' (" Import CSV File(s). This Should take about 30 Seconds Per File")
 #$dataList = "LengthOfStay"
 
 
@@ -222,7 +228,7 @@ foreach ($dataFile in $dataList)
     $tableName = $DBName + ".dbo." + $dataFile
     $tableSchema = $dataPath + "\" + $dataFile + ".xml"
     $dataSet = Import-Csv $destination
- Write-Host -ForegroundColor 'cyan' ("         Loading $dataFile.csv into SQL Table, this will take about 30 seconds per file....") 
+ Write-Host -ForegroundColor 'cyan' ("         Loading $dataFile.csv into SQL Table") 
     Write-SqlTableData -InputData $dataSet  -DatabaseName $dbName -Force -Passthru -SchemaName dbo -ServerInstance $ServerName -TableName $dataFile
 
     

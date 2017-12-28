@@ -35,6 +35,7 @@ $Shortcut = "CampaignHelp.url"
 
 ### DON'T FORGET TO CHANGE TO MASTER LATER...
 $Branch = "dev2" 
+$InstalR = "Yes"  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
 $SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
 $EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
@@ -78,12 +79,13 @@ $clone = "git clone --branch $Branch --single-branch https://github.com/Microsof
 if (Test-Path $SolutionPath) { Write-Host " Solution has already been cloned"}
 ELSE {Invoke-Expression $clone}
 
-
+If ($InstalR -eq 'Yes')
+{
 Write-Host -ForeGroundColor magenta "Installing R Packages"
-cd "C:\Solutions\$SolutionName\Resources\ActionScripts\"
+Set-Location "C:\Solutions\$SolutionName\Resources\ActionScripts\"
 # install R Packages
 Rscript install.R 
-
+}
 
 
 #################################################################
@@ -195,7 +197,7 @@ $shortcut = $WsShell.CreateShortcut($desktop + $checkoutDir + ".lnk")
 $shortcut.TargetPath = $solutionPath
 $shortcut.Save()
 
-$ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $Prompt"
+$ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $InstallR $Prompt"
 Invoke-Expression $ConfigureSQL 
 
 

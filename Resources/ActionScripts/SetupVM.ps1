@@ -36,7 +36,8 @@ $Shortcut = "CampaignHelp.url"
 ### DON'T FORGET TO CHANGE TO MASTER LATER...
 $Branch = "dev2" 
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
-$SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No'  
+$SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
+$EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
 
 
 $setupLog = "c:\tmp\setup_log.txt"
@@ -120,14 +121,34 @@ Invoke-Sqlcmd -Query "EXEC sp_configure  'external scripts enabled', 1"
 Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
 Write-Host -ForeGroundColor 'cyan' " SQL Server Configured to allow running of External Scripts "
 
+### Enable FileStreamDB if Required by Solution 
+if ($EnableFileStream -eq 'Yes') 
+    {
+    ##Change Regkey to allow Filestream 3 = full 0 = no access 
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQLServer\Filestream" -Name EnableLevel -Value 3 
+    ##Cycle SQL Service to Enable FileStream
+    Stop-Service "MSSQ*"
+    Start-Service "MSSQ*"
+    
+    Invoke-Sqlcmd -Query "EXEC sys.sp_configure N'filestream access level', N'2'"
+
+    ### Force Change to allow FileStreamDB 
+    Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
+    Write-Host -ForeGroundColor 'cyan' " SQL Server Configured to allow FileStreamAccess "
+    Stop-Service "MSSQ*"
+    Start-Service "MSSQ*"
+
+    Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
+    }
+
 Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
 ### Changes Above Require Services to be cycled to take effect 
 ### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
-Stop-Service -Name "MSSQ*" -Force
+Restart-Service -Name "MSSQ*" -Force
 
 ### Start the SQL Service 
-Start-Service -Name "MSSQ*"
-Write-Host -ForegroundColor 'Cyan' " SQL Services Restarted"
+#Start-Service -Name "MSSQ*"
+#Write-Host -ForegroundColor 'Cyan' " SQL Services Restarted"
 
 
 $Query = "CREATE LOGIN $username WITH PASSWORD=N'$password', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
@@ -150,6 +171,15 @@ msiexec.exe /i powerbi-desktop.msi /qn /norestart  ACCEPT_EULA=1
 if (!$?) {
     Write-Host -ForeGroundColor Red " Error installing Power BI Desktop. Please install latest Power BI manually."
 }
+
+## if FileStreamDB is Required Alter Firewall ports for 139 and 445
+if ($EnableFileStream -eq 'Yes')
+    {
+    netsh advfirewall firewall add rule name="Open Port 139" dir=in action=allow protocol=TCP localport=139
+    netsh advfirewall firewall add rule name="Open Port 445" dir=in action=allow protocol=TCP localport=445
+    Write-Host -ForeGroundColor cyan " Firewall as been opened for filestream access..."
+    }
+
 
 
 ##Create Shortcuts and Autostart Help File 

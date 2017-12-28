@@ -204,7 +204,7 @@ Configuring $SolutionName Solution for Py
 $dbname = $db + "_Py"
 
 ##########################################################################
-# Deployment Pipeline Py not
+# Deployment Pipeline Py
 ##########################################################################
 
 

@@ -38,7 +38,7 @@ $Branch = "dev2"
 $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
 $SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
-$EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
+$EnableFileStream = 'Yes' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
 $Prompt = 'N'
 
 

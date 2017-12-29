@@ -135,21 +135,19 @@ Write-Host -ForeGroundColor 'cyan' " SQL Server Configured to allow running of E
 ### Enable FileStreamDB if Required by Solution 
 if ($EnableFileStream -eq 'Yes') 
     {
-    ##Change Regkey to allow Filestream 3 = full 0 = no access 
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQLServer\Filestream" -Name EnableLevel -Value 3 
-    ##Cycle SQL Service to Enable FileStream
-    Stop-Service "MSSQ*"
-    Start-Service "MSSQ*"
-    
-    Invoke-Sqlcmd -Query "EXEC sys.sp_configure N'filestream access level', N'2'"
-
-    ### Force Change to allow FileStreamDB 
-    Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
-    Write-Host -ForeGroundColor 'cyan' " SQL Server Configured to allow FileStreamAccess "
-    Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services........"
-    Stop-Service "MSSQ*"
-    Start-Service "MSSQ*"
+# Enable FILESTREAM
+        $instance = "MSSQLSERVER"
+        $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where {$_.InstanceName -eq $instance}
+        $wmi.EnableFilestream(3, $instance)
+        Stop-Service "MSSQ*" -Force
+        Start-Service "MSSQ*"
  
+        Set-ExecutionPolicy Unrestricted
+        #Import-Module "sqlps" -DisableNameChecking
+        Invoke-Sqlcmd "EXEC sp_configure filestream_access_level, 2"
+        Invoke-Sqlcmd "RECONFIGURE WITH OVERRIDE"
+        Stop-Service "MSSQ*"
+        Start-Service "MSSQ*"
     }
 ELSE
     { 

@@ -105,6 +105,14 @@ if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
     }
 
 
+## if FileStreamDB is Required Alter Firewall ports for 139 and 445
+if ($EnableFileStream -eq 'Yes')
+    {
+    netsh advfirewall firewall add rule name="Open Port 139" dir=in action=allow protocol=TCP localport=139
+    netsh advfirewall firewall add rule name="Open Port 445" dir=in action=allow protocol=TCP localport=445
+    Write-Host -ForeGroundColor cyan " Firewall as been opened for filestream access..."
+    }
+
 
 ############################################################################################
 #Configure SQL to Run our Solutions 
@@ -138,17 +146,18 @@ if ($EnableFileStream -eq 'Yes')
     ### Force Change to allow FileStreamDB 
     Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
     Write-Host -ForeGroundColor 'cyan' " SQL Server Configured to allow FileStreamAccess "
+    Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services........"
     Stop-Service "MSSQ*"
     Start-Service "MSSQ*"
-
-    Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
+ 
     }
-
-Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
-### Changes Above Require Services to be cycled to take effect 
-### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
-Restart-Service -Name "MSSQ*" -Force
-
+ELSE
+    { 
+    Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
+    ### Changes Above Require Services to be cycled to take effect 
+    ### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
+    Restart-Service -Name "MSSQ*" -Force
+}
 ### Start the SQL Service 
 #Start-Service -Name "MSSQ*"
 #Write-Host -ForegroundColor 'Cyan' " SQL Services Restarted"
@@ -161,8 +170,14 @@ $Query = "ALTER SERVER ROLE [sysadmin] ADD MEMBER $username"
 Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
 
 
+####Run Configure SQL to Create Databases and Populate with needed Data
+$ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $InstallR $Prompt"
+Invoke-Expression $ConfigureSQL 
 
 Write-Host -ForegroundColor 'Cyan' " Done with configuration changes to SQL Server"
+
+
+
 
 Write-Host -ForeGroundColor cyan " Installing latest Power BI..."
 # Download PowerBI Desktop installer
@@ -175,15 +190,6 @@ if (!$?) {
     Write-Host -ForeGroundColor Red " Error installing Power BI Desktop. Please install latest Power BI manually."
 }
 
-## if FileStreamDB is Required Alter Firewall ports for 139 and 445
-if ($EnableFileStream -eq 'Yes')
-    {
-    netsh advfirewall firewall add rule name="Open Port 139" dir=in action=allow protocol=TCP localport=139
-    netsh advfirewall firewall add rule name="Open Port 445" dir=in action=allow protocol=TCP localport=445
-    Write-Host -ForeGroundColor cyan " Firewall as been opened for filestream access..."
-    }
-
-
 
 ##Create Shortcuts and Autostart Help File 
 Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
@@ -191,17 +197,10 @@ Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\P
 Write-Host -ForeGroundColor cyan " Help Files Copied to Desktop"
 
 
-
-
 $WsShell = New-Object -ComObject WScript.Shell
 $shortcut = $WsShell.CreateShortcut($desktop + $checkoutDir + ".lnk")
 $shortcut.TargetPath = $solutionPath
 $shortcut.Save()
-
-$ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $InstallR $Prompt"
-Invoke-Expression $ConfigureSQL 
-
-
 
 
 

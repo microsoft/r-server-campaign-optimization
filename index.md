@@ -29,7 +29,7 @@ This solution predicts the probability of a lead conversion from each channel, a
 </div>
 <p></p>
 <div class="cig">
-On the VM created for you from the <a href="https://aka.ms/campaignoptimization">Cortana Intelligence Gallery</a>, the SQL Server 2016 database <code>Campaign</code> contains all the data and results of the end-to-end modeling process.  
+On the VM created for you from the <a href="https://aka.ms/campaignoptimization">Cortana Intelligence Gallery</a>, the SQL Server 2017 database <code>Campaign</code> contains all the data and results of the end-to-end modeling process.  
 </div>
 
 <div class="onp">

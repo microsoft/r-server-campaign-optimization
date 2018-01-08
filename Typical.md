@@ -75,7 +75,7 @@ The cluster has been created and data loaded for you when you used the <code>Dep
 ## Step 2: Data Prep and Modeling with Debra the Data Scientist
 -----------------------------------------------------------------
 
-Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. <span class="sql">Debra's preferred language for developing the models is using R and SQL. She uses Microsoft R Services with SQL Server 2016 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open Source R.</span><span class="hdi">Debra will develop these models using <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight</a>, the managed cloud Hadoop solution with integration to Microsoft R Server.</span>  
+Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. <span class="sql">Debra's preferred language for developing the models is using R and SQL. She uses Microsoft R Services with SQL Server 2017 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open Source R.</span><span class="hdi">Debra will develop these models using <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight</a>, the managed cloud Hadoop solution with integration to Microsoft R Server.</span>  
 
 After analyzing the data she opted to create multiple models and choose the best one.  She will create two machine learning models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
 
@@ -100,6 +100,36 @@ When you first visit the url to access RStudio, you will see two different login
 
 </div>
 
+<p></p>
+After logging in to RStudio, you will need to upload the files that are used in this solution, if you have not already done so during your deployment.  To obtain the files, execute the following code in RStudio:
+<pre class="highlight">
+
+library(RevoScaleR)
+# spark cc object
+myHadoopCluster <- RxSpark()
+# set compute context to local
+rxSetComputeContext('local')
+
+LocalDir <- "~/"
+RemoteFiles <- "/Campaign/RSparkCluster/*.R"
+
+rxHadoopCopyToLocal(source = RemoteFiles, dest = LocalDir)
+
+LocalDir <- paste("/var/RevoShare/", Sys.info()[["user"]], "/Campaign/dev/model/", sep="" )
+if(!dir.exists(LocalDir)){
+system(paste("mkdir -p -m 777 ", LocalDir, sep="")) # create a new directory
+}
+RemoteFiles <- "/Campaign/model/*.rds"
+rxHadoopCopyToLocal(source = RemoteFiles, dest = LocalDir)
+
+# set up Web Server for Deployment
+source("SetUpWebServer.R")
+
+# clean up 
+rm(list = ls())
+
+</pre>
+<p></p>
 
 </div>
 

@@ -11,13 +11,13 @@ The following is the directory structure for this template:
 - [**Data**](#copy-of-input-datasets)  This contains the copy of the simulated input data with 100K unique customers. 
 - [**R**](#model-development-in-r)  This contains the R code to simulate the input datasets, pre-process them, create the analytical datasets, train the models, identify the champion model and provide recommendations.
 - [**Resources**](#resources-for-the-solution-packet) This directory contains other resources for the solution package.
-- [**SQLR**](#operationalize-in-sql-2016) This contains T-SQL code to pre-process the datasets, train the models, identify the champion model and provide recommendations. It also contains a PowerShell script to automate the entire process, including loading the data into the database (not included in the T-SQL code).
+- [**SQLR**](#operationalize-in-sql-2017) This contains T-SQL code to pre-process the datasets, train the models, identify the champion model and provide recommendations. It also contains a PowerShell script to automate the entire process, including loading the data into the database (not included in the T-SQL code).
 - [**RSparkCluster**](#hdinsight-solution-on-spark-cluster) This contains the R code to pre-process the datasets, train the models, identify the champion model and provide recommendations on a Spark cluster. 
 
 In this template with SQL Server R Services, two versions of the SQL implementation and another version for HDInsight implementation:
 
 1. [**Model Development in R IDE**](#model-development-in-r)  . Run the R code in R IDE (e.g., RStudio, R Tools for Visual Studio).
-2. [**Operationalize in SQL**](#operationalize-in-sql-2016). Run the SQL code in SQL Server using SQLR scripts from SSMS or from the PowerShell script.
+2. [**Operationalize in SQL**](#operationalize-in-sql-2017). Run the SQL code in SQL Server using SQLR scripts from SSMS or from the PowerShell script.
 3. [**HDInsight Solution on Spark Cluster**](#hdinsight-solution-on-spark-cluster).  Run this R code in RStudio on the edge node of the Spark cluster.
 
 
@@ -44,7 +44,7 @@ These files  in the **R** directory for the SQL solution.
 * See [For the Data Scientist](data-scientist.html?path=cig) for more details about these files.
 * See [Typical Workflow](Typical.html?path=cig)  for more information about executing these scripts.
 
-### Operationalize in SQL 2016 
+### Operationalize in SQL 2017 
 -------------------------------------------------------
 
 These files are in the **SQLR** directory.

@@ -12,7 +12,7 @@ param(
 
 [parameter(Mandatory=$True, Position=3)]
 [ValidateNotNullOrEmpty()] 
-[string]$password,
+[securestring]$password,
 
 [parameter(Mandatory=$false, Position=4)]
 [ValidateNotNullOrEmpty()] 
@@ -38,7 +38,7 @@ $Branch = "dev2"
 $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
 $SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
-$EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
+$EnableFileStream = 'Yes' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
 $Prompt = 'N'
 
 
@@ -112,6 +112,12 @@ if ($EnableFileStream -eq 'Yes')
     netsh advfirewall firewall add rule name="Open Port 445" dir=in action=allow protocol=TCP localport=445
     Write-Host -ForeGroundColor cyan " Firewall as been opened for filestream access..."
     }
+If ($EnableFileStream -eq 'Yes')
+    {
+    Set-Location "C:\Program Files\Microsoft\ML Server\PYTHON_SERVER\python.exe" 
+    .\setup.py install
+    Write-Host -ForeGroundColor cyan " Py Instal has been updated to latest version..."
+    }
 
 
 ############################################################################################
@@ -137,7 +143,7 @@ if ($EnableFileStream -eq 'Yes')
     {
 # Enable FILESTREAM
         $instance = "MSSQLSERVER"
-        $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where {$_.InstanceName -eq $instance}
+        $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where-object {$_.InstanceName -eq $instance}
         $wmi.EnableFilestream(3, $instance)
         Stop-Service "MSSQ*" -Force
         Start-Service "MSSQ*"

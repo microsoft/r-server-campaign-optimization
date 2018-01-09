@@ -28,64 +28,41 @@ solution.
     </div>
     <div class="col-md-6">
         If you have deployed a VM through the  
-        <a href="http://aka.ms/campaignoptimization">Cortana Intelligence Gallery</a>, all the steps below have already been performed and your database on that machine has all the resulting tables and stored procedures.  Skip to the <a href="Typical.html?platform=cig">Typical Workflow</a> for a description of how these files were first created in R by a Data Scientist and then deployed to SQL stored procedures.
+        <a href="http://aka.ms/campaignoptimization">Azure AI Gallery</a>, all the steps below have already been performed and your database on that machine has all the resulting tables and stored procedures.  Skip to the <a href="Typical.html?platform=cig">Typical Workflow</a> for a description of how these files were first created in R by a Data Scientist and then deployed to SQL stored procedures.
     </div>
 </div>
 
-If you are configuring your own server, continue with the steps below to run the PowerShell script.
+If you are configuring your own server, or if you want to reset your VM to its initial state, continue with the steps below to run the PowerShell script.
 
-## Setup
+## Setup 
 -----------
 
-First, make sure you have set up your SQL Server by following <a href="SetupSQL.html?platform=onp">these instructions</a>.  Then proceed with the steps below to run the solution template using the automated PowerShell files. 
+First, make sure you have set up your SQL Server by  <a href="SetupSQL.html">following these instructions</a>.  Then proceed with the steps below to run the solution template using the automated PowerShell file. 
 
 ## Execute PowerShell Script
 ----------------------------
 
-Running this PowerShell script will create stored procedures for the operationalization of this solution.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](dba.html).
+Running this PowerShell script will create the data tables and stored procedures for the the operationalization of this solution in R in the `{{ site.db_name }}_R` database.  It will also execute these procedures to create full database with results of the steps  – dataset creation, modeling, and scoring as described  [here](dba.html).
 
 
+1. Log onto the machine that contains the SQL Server you wish to use.
 
-1.	Click on the windows key on your keyboard. Type the words `PowerShell`.  Right click on Windows Powershell to and select `Run as administrator` to open the PowerShell window.
+2. Download  <a href="https://raw.githubusercontent.com/Microsoft/r-server-campaign-optimization/master/Resources/ActionScripts/SetupVM.ps1" download>SetupVM.ps1</a> to your computer.
 
+1.  Right click on SetupVM.ps1 and select `Run with PowerShell`.
 
-2.	In the Powershell command window, type the following command:
-  
-    ```
-    Set-ExecutionPolicy Unrestricted -Scope Process
-    ```
+1.  Answer `Y` if asked if it is ok to execute this script.
 
-    Answer `y` to the prompt to allow the following scripts to execute.
+1.  When prompted, enter the servername, username, and password for your SQL 2016 or SQL 2017 server. Use the username and password of the user who will be creating the solution. 
 
-3. Create a directory on your computer where you will put this solution.  CD to the directory and then clone the repository into it:
-    
-    ```
-    git clone https://github.com/Microsoft/r-server-campaign-optimization Campaign
-    ```
-
-4.  Now CD to the **Campaign/SQLR** directory and run one of the two following commands, inserting your server name (or "." if you are on the same machine as the SQL server), database name, username, and password.
-
-    * Run with no prompts:
-    
-        ```
-        .\Campaign_Optimization.ps1 -ServerName "Server Name" -DBName "Database Name" -username "" -password "" -uninterrupted "Y"  
-        ```
-    * Run with prompts:
-
-        ```
-        .\Campaign_Optimization.ps1 -ServerName "Server Name" -DBName "Database Name" -username "" -password "" -uninterrupted "N"  
-        ```
-
-    * For example, uninterrupted mode for a user "rdemo" with password "D@tascience" would be: 
-
-        ```
-        .\Campaign_Optimization.ps1 -ServerName "." -DBName "Campaign" -username "rdemo" -password "D@tascience" -uninterrupted "Y"  
-        ```
-
-5.  If running with prompts (`-uninterrupted "N"`), you cannot complete a step until the previous step has been completed, so only skip steps that have previously been executed.
-
-6.  You can also optionally add the parameter -dataPath "your path\to\csv files".  If you omit this, it defaults to the Data folder in the current directory.
-
+1. This will make the following modification to your SQL Server:
+    * Installs the SQL Server PowerShell module. If this is already installed, it will update it if necessary.
+    * Changes Authentication Method to Mixed Mode, which is needed in this version of the solution.
+    * Creates the SLQRUserGroup for running R and Python code.
+    * Elevates the login user's credentials to SA.
+    * Reconfigures SQL Server to allow running of external scripts.
+    * Clones the solution code and data into the c:\Solutions\{{ site.folder_name }} directory
+    * Creates the solution database `{{ site.db_name }}_R` and configures an ODBC connection to the database.
 
 ## Review Data
 --------------

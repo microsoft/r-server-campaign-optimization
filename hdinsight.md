@@ -12,9 +12,9 @@ solution.
 ## HDInsight Cluster 
 --------------------------------
 
-An initial cluster was created when you used the `Deploy` button from [Cortana Intelligence Gallery](https://aka.ms/campaign-hdi). Along with the cluster, a storage account was created.  This is where all data is stored.  
+An initial cluster was created when you used the `Deploy` button from [Azure AI Gallery](https://aka.ms/campaign-hdi). Along with the cluster, a storage account was created.  This is where all data is stored.  
 
-When you are finished using the entire solution, you can delete all your resources on the [Cortana Intelligence Gallery Deployments](https://start.cortanaintelligence.com/Deployments?type=campaignhdi)  page. On this page, hover over a line to reveal the trash can icon on the far right.  Then click the trash can to delete the deployment.
+When you are finished using the entire solution, you can delete all your resources on the [Azure AI Gallery Deployments](https://start.cortanaintelligence.com/Deployments?type=campaignhdi)  page. On this page, hover over a line to reveal the trash can icon on the far right.  Then click the trash can to delete the deployment.
 
 If you would like to continue using the solution, you can delete the cluster while  keeping the storage account. You can then re-use the storage account later on a new cluster. 
 

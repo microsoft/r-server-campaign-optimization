@@ -18,7 +18,7 @@ solution.
 This solution template uses (simulated) historical data to predict **how** and **when** to contact leads for your campaign. The recommendations include the **best channel** to contact a lead (in our example, Email, SMS, or Cold Call), the **best day of the week** and the **best time of day** during which to make the contact.  
 
 <div class="sql"> 
-SQL Server R Services takes advantage of the power of SQL Server 2016 and ScaleR (Microsoft R Server package) by allowing R to run on the same server as the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
+SQL Server R Services takes advantage of the power of SQL Server 2017 and ScaleR (Microsoft R Server package) by allowing R to run on the same server as the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
 
 This solution package shows how to create and refine data, train R models, and perform predictions in-database. The final table in the SQL Server database provides recommendations for **how** and **when** to contact each lead. This data is then visualized in Power BI. 
 

@@ -53,7 +53,7 @@ If you want to follow along and have *not* run the PowerShell script, you must t
 
 <div class="cig">
 <p/><p>
-This step has already been done on your deployed Cortana Intelligence Gallery VM.
+This step has already been done on your deployed Azure AI Gallery VM.
 </p>
 </div>
 
@@ -65,7 +65,7 @@ You can perform these steps in your environment by using the instructions  <a hr
 
 <div class="hdi">
 <p/><p>
-The cluster has been created and data loaded for you when you used the <code>Deploy</code> button in the <a href="https://aka.ms/campaign-hdi">Cortana Intelligence Gallery</a>. <strong>Once you complete the walkthrough, you will want to delete this cluster as it incurs expense whether it is in use or not - see <a href="hdinsight">HDInsight Cluster Maintenance</a> for more details.</strong>
+The cluster has been created and data loaded for you when you used the <code>Deploy</code> button in the <a href="https://aka.ms/campaign-hdi">Azure AI Gallery</a>. <strong>Once you complete the walkthrough, you will want to delete this cluster as it incurs expense whether it is in use or not - see <a href="hdinsight">HDInsight Cluster Maintenance</a> for more details.</strong>
 </p>
 </div>
 
@@ -75,7 +75,7 @@ The cluster has been created and data loaded for you when you used the <code>Dep
 ## Step 2: Data Prep and Modeling with Debra the Data Scientist
 -----------------------------------------------------------------
 
-Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. <span class="sql">Debra's preferred language for developing the models is using R and SQL. She uses Microsoft R Services with SQL Server 2016 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open Source R.</span><span class="hdi">Debra will develop these models using <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight</a>, the managed cloud Hadoop solution with integration to Microsoft R Server.</span>  
+Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. <span class="sql">Debra's preferred language for developing the models is using R and SQL. She uses Microsoft R Services with SQL Server 2017 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open Source R.</span><span class="hdi">Debra will develop these models using <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight</a>, the managed cloud Hadoop solution with integration to Microsoft R Server.</span>  
 
 After analyzing the data she opted to create multiple models and choose the best one.  She will create two machine learning models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
 
@@ -100,6 +100,7 @@ When you first visit the url to access RStudio, you will see two different login
 
 </div>
 
+<p></p>
 
 </div>
 

@@ -12,7 +12,7 @@ param(
 
 [parameter(Mandatory=$True, Position=3)]
 [ValidateNotNullOrEmpty()] 
-[securestring]$password,
+[string]$password,
 
 [parameter(Mandatory=$false, Position=4)]
 [ValidateNotNullOrEmpty()] 

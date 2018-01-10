@@ -1,6 +1,6 @@
 ---
 layout: default
-title: On Prem Setup SQL Server 2016
+title: On Prem Setup SQL Server
 ---
 <div class="alert alert-success" role="alert"> This page describes the 
 <strong>
@@ -9,7 +9,7 @@ title: On Prem Setup SQL Server 2016
 solution.
 </div> 
 
-## On Prem: Setup SQL Server 2016 
+## On Prem: Setup SQL Server
 --------------------------
 
 <div class="row">

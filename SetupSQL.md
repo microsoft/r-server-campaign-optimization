@@ -15,7 +15,7 @@ solution.
 <div class="row">
     <div class="col-md-6">
         <div class="toc">
-            <li><a href="#prepare-your-sql-server-2016-installation">Prepare your SQL Server Installation</a></li>
+            <li><a href="#prepare-your-sql-server-installation">Prepare your SQL Server Installation</a></li>
             <li><a href="#ready-to-run-code">Ready to Run Code</a></li>
         </div>
     </div>

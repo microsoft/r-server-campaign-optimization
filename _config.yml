@@ -10,7 +10,7 @@ cig_text: SQL Server 2017 on Azure
 onp_text: SQL Server 2016/2017 On-Prem 
 hdi_text: HDInsight Spark 
 
-db_name: Campaign
+db_name: Campaign_R
 folder_name: Campaign
 
 pbix_hdidownload_url: "https://github.com/Microsoft/r-server-campaign-optimization/blob/master/Campaign%20Optimization%20Dashboard%20HDI.pbix"

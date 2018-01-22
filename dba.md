@@ -47,12 +47,12 @@ All the steps can be executed on SQL Server client environment (SQL Server Manag
 
 The following are required to run the scripts in this solution:
 <ul>
-<li>SQL Server 2016 with Microsoft R Server installed and configured.  </li>   
+<li>SQL Server 2016 or higher with Microsoft R Server installed and configured.  </li>   
 <li>The SQL user name and password, and the user configured properly to execute R scripts in-memory.</li> 
 <li>SQL Database which the user has write permission and execute stored procedures.</li> 
-<li>For more information about SQL server 2016 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li> 
+<li>For more information about SQL server 2017 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li> 
 </ul>
-</div>
+
 
 
 ## Workflow Automation
@@ -109,6 +109,11 @@ Then, the raw data in Merged is cleaned through a SQL stored procedure calling `
 ### Related files:
 * step1_data_processing.sql
 
+### Example:
+
+    exec [dbo].[merging_raw_tables]
+    exec [dbo].[fill_NA_all]    
+
 <a name="step2">
 
 ## Step 2: Feature Engineering
@@ -132,6 +137,10 @@ In this step, we create a stored procedure `[dbo].[feature_engineering]` that de
 
 * step2_feature_engineering.sql
 
+### Example:
+
+    exec [dbo].[feature_engineering] 
+
 <a name="step3">
 
 ## Step 3: Normalization
@@ -150,6 +159,10 @@ In this step, we normalize the data by converting the factor variables with char
 ### Related files:
 
 * step3_normalization.sql
+
+### Example:
+
+    exec [dbo].[normalization]
 
 <a name="step3a">
 
@@ -171,6 +184,10 @@ In this step, we create a stored procedure `[dbo].[splitting]` that splits the d
 
 * step3a_splitting.sql
 
+### Example:
+
+    exec [dbo].[splitting] @splitting_percent = 70
+
 <a name="step3b">
 
 ## Step 3b: Training
@@ -190,6 +207,11 @@ In this step, we create a stored procedure `[dbo].[train_model]` that trains a R
 ### Related files:
 
 * step3b_train_model.sql
+
+### Example:
+
+    exec [dbo].[train_model] @modelName ='RF'
+    exec [dbo].[train_model] @modelName ='GBT'
 
 <a name="step3c">
 
@@ -215,6 +237,10 @@ Before proceeding to the next step, the user might want to inspect the metrics_t
 
 * step3c_test_evaluate_models.sql
 
+### Example:
+
+    exec [dbo].[test_evaluate_models] 
+
 <a name="step4">
 
 ## Step 4: Channel-day-time Recommendations
@@ -239,6 +265,9 @@ The second one, `[dbo].[campaign_recommendation]`, is the only one called by the
 
 * step4_campaign_recommendations.sql 
 
+### Example:
+
+    exec [dbo].[campaign_recommendation] @bestModel = 'RF'
 
 
 

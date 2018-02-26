@@ -1,8 +1,7 @@
 
-
 [CmdletBinding()]
 param(
-[parameter(Mandatory=$True, Position=1)]
+[parameter(Mandatory=$false, Position=1)]
 [ValidateNotNullOrEmpty()] 
 [string]$serverName,
 
@@ -19,6 +18,14 @@ param(
 [string]$Prompt
 )
 $startTime = Get-Date
+
+$Query = "SELECT SERVERPROPERTY('ServerName')"
+$si = invoke-sqlcmd -Query $Query
+$si = $si.Item(0)
+
+
+$serverName = if([string]::IsNullOrEmpty($servername)) {$si}
+
 
 
 
@@ -45,7 +52,9 @@ $Prompt = 'N'
 $setupLog = "c:\tmp\setup_log.txt"
 Start-Transcript -Path $setupLog -Append
 $startTime = Get-Date
-Write-Host -ForegroundColor 'Green'  "  Start time:" $startTime 
+Write-Host "Start time:" $startTime 
+
+Write-Host "ServerName set to $ServerName"
 
 
 ###These probably don't need to change , but make sure files are placed in the correct directory structure 
@@ -82,7 +91,7 @@ ELSE {Invoke-Expression $clone}
 
 If ($InstalR -eq 'Yes')
 {
-Write-Host -ForeGroundColor magenta "Installing R Packages"
+Write-Host "Installing R Packages"
 Set-Location "C:\Solutions\$SolutionName\Resources\ActionScripts\"
 # install R Packages
 Rscript install.R 
@@ -95,7 +104,7 @@ Rscript install.R
 
 
 
-Write-Host " Installing SQLServer Power Shell Module or Updating to latest "
+Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
 
 if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
  else 
@@ -116,7 +125,7 @@ If ($EnableFileStream -eq 'Yes')
     {
     Set-Location "C:\Program Files\Microsoft\ML Server\PYTHON_SERVER\python.exe" 
     .\setup.py install
-    Write-Host -ForeGroundColor cyan " Py Instal has been updated to latest version..."
+    Write-Host "Py Instal has been updated to latest version..."
     }
 
 
@@ -157,7 +166,7 @@ if ($EnableFileStream -eq 'Yes')
     }
 ELSE
     { 
-    Write-Host -ForeGroundColor 'cyan' " Restarting SQL Services "
+    Write-Host "Restarting SQL Services "
     ### Changes Above Require Services to be cycled to take effect 
     ### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
     Restart-Service -Name "MSSQ*" -Force
@@ -183,7 +192,7 @@ Write-Host -ForegroundColor 'Cyan' " Done with configuration changes to SQL Serv
 
 
 
-Write-Host -ForeGroundColor cyan " Installing latest Power BI..."
+Write-Host "Installing latest Power BI..."
 # Download PowerBI Desktop installer
 Start-BitsTransfer -Source "https://go.microsoft.com/fwlink/?LinkId=521662&clcid=0x409" -Destination powerbi-desktop.msi
 
@@ -198,7 +207,7 @@ if (!$?) {
 ##Create Shortcuts and Autostart Help File 
 Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
 Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
-Write-Host -ForeGroundColor cyan " Help Files Copied to Desktop"
+Write-Host  "Help Files Copied to Desktop"
 
 
 $WsShell = New-Object -ComObject WScript.Shell
@@ -242,9 +251,9 @@ Move-Item  c:\tmp\server.js $SolutionPath\Website
 
 $endTime = Get-Date
 
-Write-Host -foregroundcolor 'green'(" $SolutionFullName Workflow Finished Successfully!")
+Write-Host "$SolutionFullName Workflow Finished Successfully!"
 $Duration = New-TimeSpan -Start $StartTime -End $EndTime 
-Write-Host -ForegroundColor 'green'(" Total Deployment Time = $Duration") 
+Write-Host "Total Deployment Time = $Duration" 
 
 Stop-Transcript
 

@@ -32,8 +32,9 @@ $Shortcut = "CampaignHelp.url"
 $Branch = "master" 
 $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
-$SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
-$EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No' 
+$SampleWeb = 'Yes' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
+$EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No'
+$IsMixedMode = 'Yes' ##If solution needs mixed mode this should be 'Yes' Else 'No'
 $Prompt = 'N'
 
 
@@ -42,7 +43,7 @@ Start-Transcript -Path $setupLog -Append
 $startTime = Get-Date
 Write-Host "Start time:" $startTime 
 
-Write-Host "ServerName set to $ServerName"
+
 
 
 ###These probably don't need to change , but make sure files are placed in the correct directory structure 
@@ -79,7 +80,7 @@ $si = $si.Item(0)
 
 $serverName = if([string]::IsNullOrEmpty($servername)) {$si}
 
-
+Write-Host "ServerName set to $ServerName"
 
 ##########################################################################
 #Clone Data from GIT
@@ -91,22 +92,12 @@ $clone = "git clone --branch $Branch --single-branch https://github.com/Microsof
 if (Test-Path $SolutionPath) { Write-Host " Solution has already been cloned"}
 ELSE {Invoke-Expression $clone}
 
-If ($InstalR -eq 'Yes')
-{
-Write-Host "Installing R Packages"
-Set-Location "C:\Solutions\$SolutionName\Resources\ActionScripts\"
-# install R Packages
-Rscript install.R 
+If ($InstalR -eq 'Yes') {
+    Write-Host "Installing R Packages"
+    Set-Location "C:\Solutions\$SolutionName\Resources\ActionScripts\"
+    # install R Packages
+    Rscript install.R 
 }
-
-
-
-
-
-
-
-
-
 
 
 ## if FileStreamDB is Required Alter Firewall ports for 139 and 445
@@ -132,7 +123,18 @@ If ($EnableFileStream -eq 'Yes')
 
 
 ### Change Authentication From Windows Auth to Mixed Mode 
-Invoke-Sqlcmd -Query "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2;" -ServerInstance "LocalHost" 
+
+
+if ($IsMixedMode = 'Yes') {
+    Invoke-Sqlcmd -Query "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2;" -ServerInstance "LocalHost" 
+
+    $Query = "CREATE LOGIN $username WITH PASSWORD=N'$password', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
+    Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
+
+    $Query = "ALTER SERVER ROLE [sysadmin] ADD MEMBER $username"
+    Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
+}
+
 
 Write-Host -ForeGroundColor 'cyan' " Configuring SQL to allow running of External Scripts "
 ### Allow Running of External Scripts , this is to allow R Services to Connect to SQL
@@ -166,16 +168,7 @@ ELSE
     ### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
     Restart-Service -Name "MSSQ*" -Force
 }
-### Start the SQL Service 
-#Start-Service -Name "MSSQ*"
-#Write-Host -ForegroundColor 'Cyan' " SQL Services Restarted"
 
-
-$Query = "CREATE LOGIN $username WITH PASSWORD=N'$password', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
-Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
-
-$Query = "ALTER SERVER ROLE [sysadmin] ADD MEMBER $username"
-Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
 
 
 ####Run Configure SQL to Create Databases and Populate with needed Data

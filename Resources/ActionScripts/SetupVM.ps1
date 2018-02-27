@@ -108,12 +108,19 @@ Rscript install.R
 
 Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
 
-if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
- else 
-    {
-        Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force
-        Import-Module -Name SqlServer -RequiredVersion 21.0.17199
-    }
+# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
+#  else 
+
+if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
+Else 
+{Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+
+Import-Module -Name SqlServer -MaximumVersion 21.0.17199 
+
+
+
+
+
 
 
 ## if FileStreamDB is Required Alter Firewall ports for 139 and 445

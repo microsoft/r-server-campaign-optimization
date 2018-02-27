@@ -25,7 +25,9 @@ $si = $si.Item(0)
 
 
 $serverName = if([string]::IsNullOrEmpty($servername)) {$si}
+# if($ServerName) {Write-Host "$ServerName"}
 
+# else {$Servername = $si}
 
 
 
@@ -109,8 +111,8 @@ Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
 if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
  else 
     {
-    Install-Module -Name SQLServer -Scope AllUsers -AllowClobber -Force
-    Import-Module -Name SQLServer
+    Install-Module -Name SqlServer -Scope AllUsers -AllowClobber -Force
+    Import-Module -Name SqlServer -Version 21.0.17178
     }
 
 
@@ -218,10 +220,10 @@ $shortcut.Save()
 
 
 ## copy Jupyter Notebook files
-Move-Item $SolutionPath\R\$JupyterNotebook  c:\tmp\
-sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
-sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
-Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\R\
+# Move-Item $SolutionPath\R\$JupyterNotebook  c:\tmp\
+# sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
+# sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
+# Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\R\
 
 
 
@@ -230,13 +232,13 @@ Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\R\
  # substitute real username and password in notebook file
 #XXXXXXXXXXChange to NEw NotebookNameXXXXXXXXXXXXXXXXXX# 
 
-if ($InstallPy -eq "Yes")
-{
-    Move-Item $SolutionPath\Python\$JupyterNotebook  c:\tmp\
-    sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
-    sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
-    Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\Python\
-}
+# if ($InstallPy -eq "Yes")
+# {
+#     Move-Item $SolutionPath\Python\$JupyterNotebook  c:\tmp\
+#     sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
+#     sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
+#     Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\Python\
+# }
 
 # install modules for sample website
 if($SampleWeb  -eq "Yes")
@@ -247,6 +249,9 @@ Move-Item $SolutionPath\Website\server.js  c:\tmp\
 sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\server.js
 sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\server.js
 Move-Item  c:\tmp\server.js $SolutionPath\Website
+
+
+
 }
 
 $endTime = Get-Date

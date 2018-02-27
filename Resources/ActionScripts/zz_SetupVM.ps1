@@ -114,6 +114,25 @@ Rscript install.R
 
 
 
+<<<<<<< HEAD
+=======
+Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
+
+# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
+#  else 
+
+# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
+# Else 
+# {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+
+# #Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
+# Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
+
+Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force
+#Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
+Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
+
+>>>>>>> 00dc726d708431f66ba5360f5235f3b50c6fbe8a
 
 
 

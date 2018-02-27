@@ -111,10 +111,14 @@ Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
 # if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
 #  else 
 
-if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
-Else 
-{Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
+# Else 
+# {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
 
+# #Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
+# Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
+
+Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force
 #Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
 Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 

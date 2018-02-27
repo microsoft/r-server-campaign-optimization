@@ -154,38 +154,35 @@ Add-OdbcDsn -Name $OdbcName -DriverName "ODBC Driver 13 for SQL Server" -DsnType
 ##########################################################################
 
 $RStart = Get-Date
-try
-{
+    try {
 
-Write-Host -ForeGroundColor 'cyan' (" Import CSV File(s). This Should take about 30 Seconds Per File")
- ##Move this to top 
-
-
-# upload csv files into SQL tables
-foreach ($dataFile in $dataList)
-{
-$destination = $SolutionData + $dataFile + ".csv" 
-$tableName = $DBName + ".dbo." + $dataFile
-$tableSchema = $dataPath + "\" + $dataFile + ".xml"
-$dataSet = Import-Csv $destination
-Write-Host -ForegroundColor 'cyan' ("         Loading $dataFile.csv into SQL Table") 
-Write-SqlTableData -InputData $dataSet  -DatabaseName $dbName -Force -Passthru -SchemaName dbo -ServerInstance $ServerName -TableName $dataFile
+        Write-Host (" Import CSV File(s). This Should take about 30 Seconds Per File")
+        ##Move this to top 
 
 
-Write-Host -ForeGroundColor 'cyan' (" $datafile table loaded from CSV File(s).")
-}
-}
-catch
-{
-Write-Host -ForegroundColor DarkYellow "Exception in populating database tables:"
-Write-Host -ForegroundColor Red $Error[0].Exception 
-throw
-}
-Write-Host -ForeGroundColor 'cyan' (" Finished loading .csv File(s).")
-
-Write-Host -ForeGroundColor 'Cyan' (" Training Model and Scoring Data...")
+        # upload csv files into SQL tables
+        foreach ($dataFile in $dataList) {
+            $destination = $SolutionData + $dataFile + ".csv" 
+            $tableName = $DBName + ".dbo." + $dataFile
+            $tableSchema = $dataPath + "\" + $dataFile + ".xml"
+            $dataSet = Import-Csv $destination
+            Write-Host ("         Loading $dataFile.csv into SQL Table") 
+            Write-SqlTableData -InputData $dataSet  -DatabaseName $dbName -Force -Passthru -SchemaName dbo -ServerInstance $ServerName -TableName $dataFile
 
 
+            Write-Host(" $datafile table loaded from CSV File(s).")
+        }
+    }
+    catch {
+        Write-Host -ForegroundColor DarkYellow "Exception in populating database tables:"
+        Write-Host -ForegroundColor Red $Error[0].Exception 
+        throw
+    }
+    Write-Host (" Finished loading .csv File(s).")
+
+
+
+Write-Host (" Training Model and Scoring Data...")
 
 $query = "EXEC Initial_Run_Once_R"
 #SqlServer\Invoke-Sqlcmd -ServerInstance $ServerName -Database $dbName -Query $query -ConnectionTimeout  0 -QueryTimeout 0
@@ -194,10 +191,10 @@ SqlServer\Invoke-Sqlcmd -ServerInstance LocalHost -Database $dbName -Query $quer
 $Rend = Get-Date
 
 $Duration = New-TimeSpan -Start $RStart -End $Rend 
-Write-Host -ForegroundColor 'green'(" R Server Configured in $Duration")
+Write-Host (" R Server Configured in $Duration")
 }
 ELSE 
-{Write-Host -ForegroundColor 'Green' "There is not a R Version for this Solution so R will not be Installed"}
+{Write-Host  ("There is not a R Version for this Solution so R will not be Installed")}
 
 
 ###Conifgure Database for Py 
@@ -217,7 +214,7 @@ $dbname = $db + "_Py"
 try
 {
 
-Write-Host -ForeGroundColor 'cyan' (" Import CSV File(s). This Should take about 30 Seconds Per File")
+Write-Host (" Import CSV File(s). This Should take about 30 Seconds Per File")
 #$dataList = "LengthOfStay"
 
 
@@ -228,11 +225,11 @@ foreach ($dataFile in $dataList)
     $tableName = $DBName + ".dbo." + $dataFile
     $tableSchema = $dataPath + "\" + $dataFile + ".xml"
     $dataSet = Import-Csv $destination
- Write-Host -ForegroundColor 'cyan' ("         Loading $dataFile.csv into SQL Table") 
+ Write-Host ("         Loading $dataFile.csv into SQL Table") 
     Write-SqlTableData -InputData $dataSet  -DatabaseName $dbName -Force -Passthru -SchemaName dbo -ServerInstance $ServerName -TableName $dataFile
 
     
- Write-Host -ForeGroundColor 'cyan' (" $datafile table loaded from CSV File(s).")
+ Write-Host (" $datafile table loaded from CSV File(s).")
 }
 }
 catch
@@ -241,15 +238,15 @@ Write-Host -ForegroundColor DarkYellow "Exception in populating database tables:
 Write-Host -ForegroundColor Red $Error[0].Exception 
 throw
 }
-Write-Host -ForeGroundColor 'cyan' (" Finished loading .csv File(s).")
+Write-Host (" Finished loading .csv File(s).")
 
-Write-Host -ForeGroundColor 'Cyan' (" Training Model and Scoring Data...")
+Write-Host (" Training Model and Scoring Data...")
 $query = "EXEC Inital_Run_Once_Py"
 SqlServer\Invoke-Sqlcmd -ServerInstance LocalHost -Database $dbName -Query $query -ConnectionTimeout  0 -QueryTimeout 0
 
 $Pyend = Get-Date
 
 $Duration = New-TimeSpan -Start $PyStart -End $Pyend 
-Write-Host -ForegroundColor 'green'(" Py Server Configured in $Duration")
+Write-Host (" Py Server Configured in $Duration")
 
 }

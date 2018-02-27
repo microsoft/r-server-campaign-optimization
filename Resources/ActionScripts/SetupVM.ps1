@@ -19,12 +19,7 @@ param(
 )
 $startTime = Get-Date
 
-$Query = "SELECT SERVERPROPERTY('ServerName')"
-$si = invoke-sqlcmd -Query $Query
-$si = $si.Item(0)
 
-
-$serverName = if([string]::IsNullOrEmpty($servername)) {$si}
 # if($ServerName) {Write-Host "$ServerName"}
 
 # else {$Servername = $si}
@@ -68,16 +63,32 @@ $desktop = "C:\Users\Public\Desktop\"
 $scriptPath = $SolutionPath + "\Resources\ActionScripts\"
 $SolutionData = $SolutionPath + "\Data\"
 
+#################################################################
+##DSVM Does not have SQLServer Powershell Module Install or Update 
+#################################################################
 
 
-####$Query = "SELECT SERVERPROPERTY('ServerName')"
-##$si = invoke-sqlcmd -Query $Query
-##$si = $si.Item(0)
+Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
+
+# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
+#  else 
+
+if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
+Else 
+{Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+
+#Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
+Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 
 
-###$serverName = if($serverName -eq $null) {$si}
+##Get SErver name if none was provided during setup
 
-##WRITE-HOST " ServerName set to $ServerName"
+$Query = "SELECT SERVERPROPERTY('ServerName')"
+$si = invoke-sqlcmd -Query $Query
+$si = $si.Item(0)
+
+
+$serverName = if([string]::IsNullOrEmpty($servername)) {$si}
 
 
 
@@ -100,22 +111,8 @@ Rscript install.R
 }
 
 
-#################################################################
-##DSVM Does not have SQLServer Powershell Module Install or Update 
-#################################################################
 
 
-
-Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
-
-# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
-#  else 
-
-if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
-Else 
-{Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
-
-Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 
 
 

@@ -20,15 +20,6 @@ param(
 $startTime = Get-Date
 
 
-# if($ServerName) {Write-Host "$ServerName"}
-
-# else {$Servername = $si}
-
-
-
-#$Prompt= if ($Prompt -match '^y(es)?$') {'Y'} else {'N'}
-$Prompt = 'N'
-
 
 ##Change Values here for Different Solutions 
 $SolutionName = "Campaign"
@@ -70,8 +61,6 @@ $SolutionData = $SolutionPath + "\Data\"
 
 Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
 
-# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
-#  else 
 
 if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
 Else 
@@ -81,7 +70,7 @@ Else
 Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 
 
-##Get SErver name if none was provided during setup
+##Get Server name if none was provided during setup
 
 $Query = "SELECT SERVERPROPERTY('ServerName')"
 $si = invoke-sqlcmd -Query $Query
@@ -114,25 +103,6 @@ Rscript install.R
 
 
 
-<<<<<<< HEAD
-=======
-Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
-
-# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer"}
-#  else 
-
-# if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
-# Else 
-# {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
-
-# #Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
-# Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
-
-Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force
-#Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
-Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
-
->>>>>>> 00dc726d708431f66ba5360f5235f3b50c6fbe8a
 
 
 

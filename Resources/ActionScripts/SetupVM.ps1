@@ -115,7 +115,7 @@ if (Get-Module -ListAvailable -Name SQLServer) {Update-Module -Name "SQLServer" 
 Else 
 {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
 
-Import-Module -Name SqlServer -MaximumVersion 21.0.17199 
+Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 
 
 

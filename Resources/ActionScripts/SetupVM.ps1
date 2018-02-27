@@ -71,16 +71,7 @@ Else
 Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 
 
-##Get Server name if none was provided during setup
 
-$Query = "SELECT SERVERPROPERTY('ServerName')"
-$si = invoke-sqlcmd -Query $Query
-$si = $si.Item(0)
-
-
-$serverName = if([string]::IsNullOrEmpty($servername)) {$si}
-
-Write-Host "ServerName set to $ServerName"
 
 ##########################################################################
 #Clone Data from GIT
@@ -119,8 +110,16 @@ If ($EnableFileStream -eq 'Yes')
 #Configure SQL to Run our Solutions 
 ############################################################################################
 
-#Write-Host -ForegroundColor 'Cyan' " Switching SQL Server to Mixed Mode"
+##Get Server name if none was provided during setup
 
+$Query = "SELECT SERVERPROPERTY('ServerName')"
+$si = invoke-sqlcmd -Query $Query
+$si = $si.Item(0)
+
+
+$serverName = if([string]::IsNullOrEmpty($servername)) {$si}
+
+Write-Host "ServerName set to $ServerName"
 
 ### Change Authentication From Windows Auth to Mixed Mode 
 

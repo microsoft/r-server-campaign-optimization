@@ -48,9 +48,7 @@ Running this PowerShell script will create the data tables and stored procedures
 
 1. Log onto the computer that contains the SQL Server you wish to use.
 
-1. Install the following if it is not already present:
-
-    *  [Git](https://gitforwindows.org/)  Accept most default prompts, but Check the box for LFS.
+1. Install [Git](https://gitforwindows.org/) if it is not already present.  During the install, check the box to add LFS support.
 
 1. Download  <a href="https://raw.githubusercontent.com/Microsoft/r-server-campaign-optimization/master/Resources/ActionScripts/SetupVM.ps1" download>SetupVM.ps1</a> to your computer.
 

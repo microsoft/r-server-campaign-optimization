@@ -5,11 +5,11 @@ param(
 [ValidateNotNullOrEmpty()] 
 [string]$serverName,
 
-[parameter(Mandatory=$false, Position=2)]
+[parameter(Mandatory=$true, Position=2)]
 [ValidateNotNullOrEmpty()] 
 [string]$username,
 
-[parameter(Mandatory=$false, Position=3)]
+[parameter(Mandatory=$true, Position=3)]
 [ValidateNotNullOrEmpty()] 
 [string]$password,
 
@@ -56,7 +56,7 @@ $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
 $SampleWeb = 'Yes' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
 $EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No'
-$IsMixedMode = 'No' ##If solution needs mixed mode this should be 'Yes' Else 'No'
+$IsMixedMode = 'Yes' ##If solution needs mixed mode this should be 'Yes' Else 'No'
 $Prompt = 'N'
 
 
@@ -239,9 +239,6 @@ Start-Process "https://microsoft.github.io/$SolutionFullName/Typical.html"
    EXIT
 
 }
-
-
-
 
 ELSE 
 { 

@@ -5,11 +5,11 @@ param(
 [ValidateNotNullOrEmpty()] 
 [string]$serverName,
 
-[parameter(Mandatory=$True, Position=2)]
+[parameter(Mandatory=$false, Position=2)]
 [ValidateNotNullOrEmpty()] 
 [string]$username,
 
-[parameter(Mandatory=$True, Position=3)]
+[parameter(Mandatory=$false, Position=3)]
 [ValidateNotNullOrEmpty()] 
 [string]$password,
 
@@ -18,7 +18,30 @@ param(
 [string]$Prompt
 )
 
+###Check to see if user is Admin
 
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`
+        [Security.Principal.WindowsBuiltInRole] "Administrator")
+        
+if ($isAdmin -eq 'True') {
+
+
+
+ #################################################################
+##DSVM Does not have SQLServer Powershell Module Install or Update 
+#################################################################
+
+
+Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
+
+
+if (Get-Module -ListAvailable -Name SQLServer) 
+    {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
+Else 
+    {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+
+#Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
+    Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force   
 
 ##Change Values here for Different Solutions 
 $SolutionName = "Campaign"
@@ -33,7 +56,7 @@ $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
 $SampleWeb = 'Yes' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
 $EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No'
-$IsMixedMode = 'Yes' ##If solution needs mixed mode this should be 'Yes' Else 'No'
+$IsMixedMode = 'No' ##If solution needs mixed mode this should be 'Yes' Else 'No'
 $Prompt = 'N'
 
 
@@ -53,22 +76,6 @@ $SolutionPath = $solutionTemplatePath + '\' + $checkoutDir
 $desktop = "C:\Users\Public\Desktop\"
 $scriptPath = $SolutionPath + "\Resources\ActionScripts\"
 $SolutionData = $SolutionPath + "\Data\"
-
-#################################################################
-##DSVM Does not have SQLServer Powershell Module Install or Update 
-#################################################################
-
-
-Write-Host "Installing SQLServer Power Shell Module or Updating to latest "
-
-
-if (Get-Module -ListAvailable -Name SQLServer) 
-    {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
-Else 
-    {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
-
-#Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
-    Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
 
 
 
@@ -203,39 +210,13 @@ $shortcut.TargetPath = $solutionPath
 $shortcut.Save()
 
 
-
-## copy Jupyter Notebook files
-# Move-Item $SolutionPath\R\$JupyterNotebook  c:\tmp\
-# sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
-# sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
-# Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\R\
-
-
-
-
-#cp $SolutionData*.csv  c:\dsvm\notebooks
- # substitute real username and password in notebook file
-#XXXXXXXXXXChange to NEw NotebookNameXXXXXXXXXXXXXXXXXX# 
-
-# if ($InstallPy -eq "Yes")
-# {
-#     Move-Item $SolutionPath\Python\$JupyterNotebook  c:\tmp\
-#     sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
-#     sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
-#     Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\Python\
-# }
-
 # install modules for sample website
 if($SampleWeb  -eq "Yes")
 {
 cd $SolutionPath\Website\
 npm install
-Move-Item $SolutionPath\Website\server.js  c:\tmp\
-sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\server.js
-sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\server.js
-Move-Item  c:\tmp\server.js $SolutionPath\Website
-
-
+(Get-Content $SolutionPath\Website\server.js).replace('XXYOURSQLPW', $password) | Set-Content $SolutionPath\Website\server.js
+(Get-Content $SolutionPath\Website\server.js).replace('XXYOURSQLUSER', $username) | Set-Content $SolutionPath\Website\server.js
 
 }
 
@@ -252,8 +233,23 @@ Stop-Transcript
 Start-Process "https://microsoft.github.io/$SolutionFullName/Typical.html"
 
 
+    ## Close Powershell if not run on 
+   ## if ($baseurl)
+   Exit-PSHostProcess
+   EXIT
+
+}
+
+
+
+
+ELSE 
+{ 
+   
+   Write-Host "To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds"
+   Start-Sleep -s 20
 
 
 ## Close Powershell 
 Exit-PSHostProcess
-EXIT 
+EXIT }

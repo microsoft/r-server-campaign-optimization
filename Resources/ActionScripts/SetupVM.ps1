@@ -119,14 +119,15 @@ If ($EnableFileStream -eq 'Yes')
 
 ##Get Server name if none was provided during setup
 
-$Query = "SELECT SERVERPROPERTY('ServerName')"
-$si = invoke-sqlcmd -Query $Query
-$si = $si.Item(0)
+    if([string]::IsNullOrEmpty($serverName))   
+    {$Query = "SELECT SERVERPROPERTY('ServerName')"
+    $si = Invoke-Sqlcmd  -Query $Query
+    $si = $si.Item(0)}
+    else 
+    {$si = $serverName}
+    $serverName = $si
 
-
-$serverName = if([string]::IsNullOrEmpty($servername)) {$si}
-
-Write-Host "ServerName set to $ServerName"
+    Write-Host "Servername set to $serverName"
 
 ### Change Authentication From Windows Auth to Mixed Mode 
 

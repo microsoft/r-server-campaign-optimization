@@ -18,12 +18,15 @@ solution.
 -----------------------------------
 
 These instructions show you how to replace the cached data in the PowerBI dashboard with data from your <span class="sql">SQL Server</span>
-<span class="hdi">HDInsight</span> solution , by using an ODBC connection to the 
+<span class="hdi">HDInsight</span> solution , by using an ODBC connection to the
 <span class="sql">SQL Database</span>
-<span class="hdi">Hive</span> table. 
+<span class="hdi">Hive</span> table.
 
-All but the last step only need to be performed once. After you have performed this once, you can simply <a href="#laststep">
-skip to the last step</a> to see new results after any new model scoring. 
+First, try refreshing the data using the <code>Refresh</code> button on the toolbar.
+Use your Windows credentials if prompted.
+
+If this does not work, you may need to modify the connection information by using the steps below.
+
 <ol>
 <li class="sql"> Set up Connection between SQL Server and PowerBI  using <a href="ODBC.html">these instructions</a>.
 </li>
@@ -47,14 +50,14 @@ The PowerBI dashboard will show charts built from cached data. We need to set it
  <img src="images/vis3.png" width="60%" >
 </li>
 
-<li class="sql">	Navigate to Campaign >  dbo and check Recommendations. Click <code>Load</code>.
+<li class="sql">Navigate to Campaign >  dbo and check Recommendations. Click <code>Load</code>.
  <br/>
  <img src="images/vis4.png"  >
 </li>
 <li class="hdi">Navigate to Spark > default and check recommendations.  Click <code>Load</code>.
 </li>
 
-<li> 	Once the data is loaded. Click on <code>Edit Queries</code>. You will see this new window
+<li> Once the data is loaded. Click on <code>Edit Queries</code>. You will see this new window
  <br/>
  <img src="images/vis5.png"  >
     Notice that on the left hand side you have 2 datasets: <code>Lead_Scored_Dataset</code> and <code class="sql">Recommendations</code><code class="hdi">recommendations</code>. 

@@ -54,9 +54,9 @@ $Shortcut = "CampaignHelp.url"
 $Branch = "master" 
 $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'No' ## If Solution has a Py Version this should be 'Yes' Else 'No'
-$SampleWeb = 'Yes' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
+$SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
 $EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No'
-$IsMixedMode = 'Yes' ##If solution needs mixed mode this should be 'Yes' Else 'No'
+$IsMixedMode = 'No' ##If solution needs mixed mode this should be 'Yes' Else 'No'
 $Prompt = 'N'
 
 

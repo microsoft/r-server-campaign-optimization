@@ -5,11 +5,11 @@ param(
 [ValidateNotNullOrEmpty()] 
 [string]$serverName,
 
-[parameter(Mandatory=$true, Position=2)]
+[parameter(Mandatory=$false, Position=2)]
 [ValidateNotNullOrEmpty()] 
 [string]$username,
 
-[parameter(Mandatory=$true, Position=3)]
+[parameter(Mandatory=$false, Position=3)]
 [ValidateNotNullOrEmpty()] 
 [string]$password,
 
@@ -58,6 +58,18 @@ $SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else
 $EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Yes' Else 'No'
 $IsMixedMode = 'No' ##If solution needs mixed mode this should be 'Yes' Else 'No'
 $Prompt = 'N'
+
+
+if ($SampleWeb -eq "Yes") 
+{
+    $Credential = if([string]::IsNullOrEmpty($username)) 
+    {
+        Get-Credential -Message "Enter a UserName and Password for SQL to use"
+        $username = $credential.Username
+        $password = $credential.GetNetworkCredential().password
+    }   
+
+}
 
 
 $setupLog = "c:\tmp\campaign_setup_log.txt"

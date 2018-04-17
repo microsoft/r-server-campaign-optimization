@@ -53,14 +53,6 @@ In <span class="sql">both Visual Studio and</span> RStudio, there are multiple w
 
 </div>
 
-<li class="sql"> 
-    If you are creating a new database by using these scripts, you must first create the database name in SSMS.  Once it exists it can be referenced in the connection string.  
-    <span class="cig">Use the SQL username and password you selected when you created the VM to log into SSMS.  (If you don't remember these, you can find them on your VM in the connection string in the file <strong>Campaign/R/Campaign Optimization Notebook.ipynb)</strong></span>
-    <p></p>
-
-    This connection string contains all the information necessary to connect to the SQL Server from inside the R session. As you can see in the script, this information is then used in the <code>RxInSqlServer()</code> command to setup a <code>sql</code> string.  The <code>sql</code> string is in turn used in the <code>rxSetComputeContext()</code> to execute code directly in-database.  
-
- </li>   
  <li class="sql">  After running the step1 and step2 scripts, Debra goes to SQL Server Management Studio to log in and view the results of feature engineering by running the following query:
         
 <pre class="highlight">

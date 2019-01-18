@@ -6,6 +6,6 @@ This directory contains the following files:
 | --- | --- |
 | .\Resources\contents.md | This document |
 | .\Resources\exampleuser.sql | example shows creating a new user, `rdemo`.   |
-| .\Resources\ActionScripts | contains scripts used to deploy solution in Cortana Intelligence Gallery.   |
+| .\Resources\ActionScripts | contains scripts used to deploy solution using the `Deploy to Azure` button.   |
 
 For all documentation, visit the [Campaign Optimization website](https://microsoft.github.io/r-server-campaign-optimization).

@@ -55,7 +55,7 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "vmName": "[toLower(concat('hs', uniqueString(resourceGroup().id)))]"
+    "vmName": "[toLower(concat('co', uniqueString(resourceGroup().id)))]"
   },
   "resources": [
         {

@@ -5,7 +5,7 @@
 
 > Discover more examples at [Microsoft Machine Learning Server](https://github.com/Microsoft/ML-Server)
 
-Deploy this solution from Cortana Intelligence Gallery with [SQL Server](https://aka.ms/campaignoptimization) or [HDInsight Spark Cluster](https://aka.ms/campaign-hdi).
+Deploy this solution from the Azure AI Gallery with [SQL Server](https://aka.ms/campaignoptimization) or [HDInsight Spark Cluster](https://aka.ms/campaign-hdi).
 
 For all documentation, visit the [Campaign Optimization website](https://microsoft.github.io/r-server-campaign-optimization).
 

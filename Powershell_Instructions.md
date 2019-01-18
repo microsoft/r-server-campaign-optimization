@@ -50,7 +50,7 @@ Running this PowerShell script will create the data tables and stored procedures
 
 1. Install [Git](https://gitforwindows.org/) if it is not already present.  During the install, check the box to add LFS support.
 
-1. Download  <a href="https://raw.githubusercontent.com/Microsoft/r-server-campaign-optimization/master/Resources/ActionScripts/CampaignSetup.ps1" download>CampaignSetup.ps1</a> to your computer.
+1. Download  <a href="https://raw.githubusercontent.com/Microsoft/r-server-campaign-optimization/master/Resources/ActionScripts/CampaignSetup.ps1" download>CampaignSetup.ps1</a> to your computer. The best way of downloading the file is to clone the <a href="https://github.com/Microsoft/r-server-campaign-optimization">repository</a> using `git clone https://github.com/Microsoft/r-server-campaign-optimization-of-stay`. You will find `CampaignSetup.ps1` in the `Resources/ActionScripts` folder.
 
 1. Open a command or PowerShell window as Administrator.
 

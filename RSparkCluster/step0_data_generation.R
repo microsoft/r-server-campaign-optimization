@@ -90,7 +90,7 @@ info1 <- rxExec(Create_LeadDemo_MarketTouch, id_num_part, partNum = rxElemArg(0:
 # combine data
 Lead_Demography <- RxTextData(file.path(dataDir, "Lead_Demography"), 
                               fileSystem = RxHdfsFileSystem())
-Lead_Demography_Combine <- RxTextData(paste(dataDir, "/Lead_Demography", no_of_unique_leads, ".csv",sep=""), 
+Lead_Demography_Combine <- RxTextData(paste(dataDir, "/Lead_Demography", ".csv",sep=""), 
                                       fileSystem = RxHdfsFileSystem())
 rxDataStep(inData = Lead_Demography, 
            outFile = Lead_Demography_Combine,
@@ -99,7 +99,7 @@ rxDataStep(inData = Lead_Demography,
 
 Market_Touchdown <- RxTextData(file.path(dataDir, "Market_Touchdown"), 
                                fileSystem = RxHdfsFileSystem())
-Market_Touchdown_Combine <- RxTextData(paste(dataDir, "/Market_Touchdown", no_of_unique_leads, ".csv",sep=""), 
+Market_Touchdown_Combine <- RxTextData(paste(dataDir, "/Market_Touchdown", ".csv",sep=""), 
                                        fileSystem = RxHdfsFileSystem())
 rxDataStep(inData = Market_Touchdown, 
            outFile = Market_Touchdown_Combine,
@@ -134,7 +134,7 @@ Campaign_Detail$Focused_Geography <- rep("Nation Wide", 6)
 Campaign_Detail$Tenure_Of_Campaign <-  as.character(c(rep(1, 4), rep(2, 2)))
 
 
-Campaign_Detail_Txt <- RxTextData(paste(dataDir, "/Campaign_Detail", no_of_unique_leads, ".csv",sep=""), 
+Campaign_Detail_Txt <- RxTextData(paste(dataDir, "/Campaign_Detail", ".csv",sep=""), 
                                   fileSystem = RxHdfsFileSystem())
 rxDataStep(inData = Campaign_Detail, 
            outFile = Campaign_Detail_Txt,
@@ -177,7 +177,7 @@ Product$Amt_on_Maturity_Bin <-
                               ifelse((Product$Amt_on_Maturity >= 350000) & (Product$Amt_on_Maturity < 400000), "350000-400000",
                                      "<400000")))))
 
-Product_Txt <- RxTextData(paste(dataDir, "/Product", no_of_unique_leads, ".csv",sep=""), 
+Product_Txt <- RxTextData(paste(dataDir, "/Product", ".csv",sep=""), 
                           fileSystem = RxHdfsFileSystem())
 Product$Term <- as.factor(as.character(Product$Term))
 rxDataStep(inData = Product, 

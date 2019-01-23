@@ -5,7 +5,11 @@
 ##    2) Full path of the four input tables on HDFS
 ## 2. Define the main function for development 
 ## 3. Invoke the main function for development
-
+## 
+## Prerequisites:
+## 1. step0_data_generation.R has been run
+## 2. install.R has been run
+##
 ## Input : 1. Working directories on edge node and HDFS
 ##         2. Full path of the four input tables on HDFS
 ##         3. Stage: "Dev" for development; "Prod" for batch scoring; "Web" for scoring remotely with web service
@@ -21,13 +25,13 @@
 
 # Specify working directories on edge node and HDFS
 LocalWorkDir <- paste("/var/RevoShare/", Sys.info()[["user"]], "/Campaign/dev", sep="" ) 
-HDFSWorkDir <- "/Campaign/dev"
+HDFSWorkDir <- "/CampaignManagement/dev"
 
 # Specify the full path of input .csv files on HDFS
-Campaign_Detail <-  "/Campaign/Data/Campaign_Detail.csv"
-Lead_Demography <-  "/Campaign/Data/Lead_Demography.csv"
-Market_Touchdown <-  "/Campaign/Data/Market_Touchdown.csv"
-Product <-  "/Campaign/Data/Product.csv"
+Campaign_Detail <-  "/CampaignManagement/data/Campaign_Detail.csv"
+Lead_Demography <-  "/CampaignManagement/data/Lead_Demography.csv"
+Market_Touchdown <-  "/CampaignManagement/data/Market_Touchdown.csv"
+Product <-  "/CampaignManagement/data/Product.csv"
 
 ##############################################################################################################################
 #

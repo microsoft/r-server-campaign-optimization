@@ -144,7 +144,7 @@ data_process <- function(Campaign_Detail,
   # numSplits: the number of splits.
   partitionByLeadId <- function(inData, outFilesName, numSplits, LocalIntermediateDir)  {
     
-    #library(hashFunction)
+    library(hashFunction)
     
     previousContext <- rxSetComputeContext('local')
     

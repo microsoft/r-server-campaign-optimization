@@ -30,9 +30,9 @@
         },
         "clusterWorkerNodeCount": {
             "type": "int",
-            "defaultValue": 3,
+            "defaultValue": 4,
             "metadata": {
-                "description": "The number of nodes in the HDInsight cluster. Make sure to set this to at least 3 so the cluster will have one Edge node, and two Worker nodes."
+                "description": "The number of nodes in the HDInsight cluster. Make sure to set this to at least 4 so the cluster will have one Edge node, and three Worker nodes."
             }
         },
         "sshUserName": {
@@ -113,7 +113,7 @@
                         {
                             "autoscale": null,
                             "name": "workernode",
-                            "targetInstanceCount": 1,
+                            "targetInstanceCount": "[parameters('clusterWorkerNodeCount')]",
                             "hardwareProfile": {
                                 "vmSize": "Standard_D4_V2"
                             },

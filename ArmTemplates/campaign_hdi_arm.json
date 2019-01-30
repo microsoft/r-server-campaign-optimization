@@ -30,9 +30,9 @@
         },
         "clusterWorkerNodeCount": {
             "type": "int",
-            "defaultValue": 4,
+            "defaultValue": 3,
             "metadata": {
-                "description": "The number of nodes in the HDInsight cluster. Make sure to set this to at least 4 so the cluster will have one Edge node, and three Worker nodes."
+                "description": "The number of nodes in the HDInsight cluster. Make sure to set this to at least 3."
             }
         },
         "sshUserName": {

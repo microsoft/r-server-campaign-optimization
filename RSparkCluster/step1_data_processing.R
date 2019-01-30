@@ -300,7 +300,7 @@ data_process <- function(Campaign_Detail,
   
   
   # use rxSummary function to get missing information
-  # rxSparkConnect(reset = F) if large data
+  rxSparkConnect(reset = F)
   summary <- rxSummary(formula, Campaign_Product_Market_Lead_txt, byTerm = TRUE)
   var_with_NA <- summary$sDataFrame[summary$sDataFrame$MissingObs > 0, 1]
   

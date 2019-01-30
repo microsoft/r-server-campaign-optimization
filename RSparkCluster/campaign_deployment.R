@@ -35,7 +35,7 @@ remoteLogin(
 )
 
 # Specify working directories on edge node and HDFS
-LocalProdDir <- paste("/var/RevoShare/", Sys.info()[["user"]], "/Campaign/prod", sep="" ) 
+LocalProdDir <- paste("/var/RevoShare/", Sys.info()[["user"]], "/Campaign/dev", sep="" ) 
 HDFSProdDir <- "/Campaign/prod"
 
 

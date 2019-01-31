@@ -1,14 +1,14 @@
 author:
         name: Microsoft
 
-description: Use SQL Server 2016 + R Services to build and deploy a machine learning model which recommends actions to maximize the purchase rate of leads targeted by a campaign.
+description: Use SQL Server ML Services to build and deploy a machine learning model which recommends actions to maximize the purchase rate of leads targeted by a campaign.
 
 gems:
   - jekyll-redirect-from
 
-cig_text: SQL Server 2017 on Azure
-onp_text: SQL Server 2016/2017 On-Prem 
-hdi_text: HDInsight Spark 
+cig_text: SQL Server VM on Azure
+onp_text: SQL Server On-Premises 
+hdi_text: HDInsight Spark
 
 db_name: Campaign_R
 folder_name: Campaign

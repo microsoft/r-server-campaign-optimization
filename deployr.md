@@ -24,7 +24,7 @@ For instructions on how to use the terminal to connect to your HDInsight Spark c
 <a href="http://go.microsoft.com/fwlink/p/?LinkID=619886">Azure documentation</a>.  The edge node address is of the form <code>sshuser@CLUSTERNAME-ed-ssh.azurehdinsight.net</code>
 </li>
 <li>
-<strong>All platforms:</strong> Your login name and password are the ones you created when you deployed this solution using the 'Deploy to Azure' button on the <a href="START_HERE.md">Quick start</a> page.  
+<strong>All platforms:</strong> Your login name and password are the ones you created when you deployed this solution using the 'Deploy to Azure' button on the <a href="START_HERE.html">Quick start</a> page.  
 </li>
 </ul>
 

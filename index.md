@@ -21,19 +21,19 @@ This solution predicts the probability of a lead conversion from each channel, a
 <h2>Select the platform you wish to explore:</h2>
  <form style="margin-left:30px"> 
     <label class="radio">
-      <input type="radio" name="optradio" class="rb" value="cig" >{{ site.cig_text }}, deployed from the <a href="START_HERE.md">Quick Start Page</a>.
+      <input type="radio" name="optradio" class="rb" value="cig" >{{ site.cig_text }}, deployed from the <a href="START_HERE.html">Quick Start Page</a>.
     </label>
     <label class="radio">
       <input type="radio" name="optradio" class="rb" value="onp">{{ site.onp_text }}
     </label>
    <label class="radio">
-      <input type="radio" name="optradio" class="rb" value="hdi">{{ site.hdi_text }}, deployed from the <a href="START_HERE.md">Quick Start Page</a>.
+      <input type="radio" name="optradio" class="rb" value="hdi">{{ site.hdi_text }}, deployed from the <a href="START_HERE.html">Quick Start Page</a>.
     </label> 
 </form>
 </div>
 <p></p>
 <div class="cig">
-On the VM created for youusing the 'Deploy to Azure' button on the <a href="START_HERE.md">Quick start</a> page, the SQL Server 2017 database <code>Campaign</code> contains all the data and results of the end-to-end modeling process.  
+On the VM created for youusing the 'Deploy to Azure' button on the <a href="START_HERE.html">Quick start</a> page, the SQL Server 2017 database <code>Campaign</code> contains all the data and results of the end-to-end modeling process.  
 </div>
 
 <div class="onp">
@@ -41,7 +41,7 @@ For customers who prefer an on-premise solution, the implementation with SQL Ser
 </div>
 
 <div class="hdi">
-This solution shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on the  HDInsight Spark cluster with Microsoft R Server deployed using the 'Deploy to Azure' button on the <a href="START_HERE.md">Quick start</a> page.
+This solution shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on the  HDInsight Spark cluster with Microsoft R Server deployed using the 'Deploy to Azure' button on the <a href="START_HERE.html">Quick start</a> page.
 <p></p>
 <strong>HDInsight Spark cluster billing starts once a cluster is created and stops when the cluster is deleted. See <a href="hdinsight.html"> these instructions for important information</a> about deleting a cluster and re-using your files on a new cluster.</strong>
 

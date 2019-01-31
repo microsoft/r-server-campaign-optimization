@@ -12,7 +12,7 @@ solution.
 ## HDInsight Cluster 
 --------------------------------
 
-An initial cluster was created when you used the 'Deploy to Azure' button on the <a href="START_HERE.md">Quick start</a> page. Along with the cluster, a storage account was created.  This is where all data is stored.  
+An initial cluster was created when you used the 'Deploy to Azure' button on the <a href="START_HERE.html">Quick start</a> page. Along with the cluster, a storage account was created.  This is where all data is stored.  
 
 When you are finished using the entire solution, you can delete all your resources from Azure.
 

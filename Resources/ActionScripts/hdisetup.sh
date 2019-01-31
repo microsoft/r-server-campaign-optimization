@@ -26,11 +26,3 @@ Rscript step0_data_generation.R
 
 #run campaign_main.R
 Rscript campaign_main.R
-
-#run other scripts as well?
-##this does not work yet. remoteLogin issues.
-Rscript campaign_deployment.R
-
-#Rscript campaign_web_scoring.R
-
-#Rscript campaign_scoring.R

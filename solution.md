@@ -9,7 +9,3 @@ title: HDInsight Solution
 solution.
  {% include choices.md %}
 </div> 
-
-## HDInsight Spark Deployment from Azure AI Gallery 
-
- [Click here](https://aka.ms/campaign-hdi) to access the HDInsight Spark Deployment - if it comes back to this page, this version of the solution has not yet been published in the Azure AI Gallery.

@@ -53,7 +53,7 @@ If you want to follow along and have *not* run the PowerShell script, you must t
 
 <div class="cig">
 <p/><p>
-This step has already been done on your deployed Azure AI Gallery VM.
+This step has already been done on your VM if you deployed it using the 'Deploy to Azure' button.
 </p>
 </div>
 
@@ -65,7 +65,7 @@ You can perform these steps in your environment by using the instructions  <a hr
 
 <div class="hdi">
 <p/><p>
-The cluster has been created and data loaded for you when you used the <code>Deploy</code> button in the <a href="https://aka.ms/campaign-hdi">Azure AI Gallery</a>. <strong>Once you complete the walkthrough, you will want to delete this cluster as it incurs expense whether it is in use or not - see <a href="hdinsight">HDInsight Cluster Maintenance</a> for more details.</strong>
+The cluster has been created and data loaded for you when you used the <code>Deploy to Azure</code> button on the <a href="START_HERE.md">Quick Start</a> page. <strong>Once you complete the walkthrough, you will want to delete this cluster as it incurs expense whether it is in use or not - see <a href="hdinsight">HDInsight Cluster Maintenance</a> for more details.</strong>
 </p>
 </div>
 
@@ -93,7 +93,7 @@ On your VM, R Tools for Visual Studio is installed, as well as RStudio.
 <p/>
 <a name="rstudiologin"></a>
 
-Debra will develop her R scripts in  the Open Source Edition of RStudio Server, installed on her cluster's edge node.  You can follow along on <a href="https://aka.ms/campaign-hdi">your own cluster deployed by Cortana Analytics Gallery</a>.  Access RStudio by using the url of the form: <br/> <code>http://CLUSTERNAME.azurehdinsight.net/rstudio</code>. 
+Debra will develop her R scripts in  the Open Source Edition of RStudio Server, installed on her cluster's edge node.  You can follow along on <a href="START_HERE.md">your own cluster deployed by to Azure automatically</a>.  Access RStudio by using the url of the form: <br/> <code>http://CLUSTERNAME.azurehdinsight.net/rstudio</code>. 
 <p/>
 <div class="alert alert-info" role="alert">
 When you first visit the url to access RStudio, you will see two different logins.  Use the username and  password you created when you deployed the HDInsight solution for both of these prompts.

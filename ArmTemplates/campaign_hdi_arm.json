@@ -158,7 +158,19 @@
                                 }
                             },
                             "virtualNetworkProfile": null,
-                            "scriptActions": []
+                            "scriptActions": [
+                                {
+                                    "name": "hdisetup",
+                                    "uri": "https://raw.githubusercontent.com/Microsoft/r-server-campaign-optimization/master/Resources/ActionScripts/hdisetup.sh",
+                                    "parameters": "",
+                                    "isHeadNode": false,
+                                    "isWorkerNode": false,
+                                    "isPersisted": true,
+                                    "isZookeeperNode": false,
+                                    "isEdgeNode": true,
+                                    "applicationName": null
+                                }
+                            ]
                         }
                     ]
                 }

@@ -5,7 +5,7 @@
 ### Deploy to Azure on SQL Server
 [![Deploy to Azure (SQL Server)](https://raw.githubusercontent.com/Azure/Azure-CortanaIntelligence-SolutionAuthoringWorkspace/master/docs/images/DeployToAzure.PNG)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMicrosoft%2Fr-server-campaign-optimization%2Fmaster%2FArmTemplates%2Fcampaign_arm.json)
 
-### Deploy to Azure on HDInsight (does not yet configure your environment)
+### Deploy to Azure on HDInsight
 [![Deploy to Azure (HDInsight)](https://raw.githubusercontent.com/Azure/Azure-CortanaIntelligence-SolutionAuthoringWorkspace/master/docs/images/DeployToAzure.PNG)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMicrosoft%2Fr-server-campaign-optimization%2Fmaster%2FArmTemplates%2Fcampaign_hdi_arm.json)
 
 ## Implemented on SQL Server 2016 R Services

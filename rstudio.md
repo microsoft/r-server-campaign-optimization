@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Using RStudio with R Server
+title: Using RStudio with ML Server
 ---
 <div class="alert alert-success" role="alert"> This page describes the 
 <strong>
@@ -25,16 +25,16 @@ RStudio is already installed and configured on the edge node of your cluster.  T
 </div>
 
 ## Set Up RStudio for R Client
-RStudio needs to use R Server for the code in this solution.  Follow the instructions below to set up RStudio to use R Server and/or to verify that you are using the correct version.  
+RStudio needs to use ML Server for the code in this solution.  Follow the instructions below to set up RStudio to use ML Server and/or to verify that you are using the correct version.  
 <div class="hdi">(These steps are is not necessary for the version on the cluster edge node.)</div>
 <ol>
 <li>Launch RStudio.</li>
 <li> Update the path to R.</li>
 <ol type="a">
 <li>From the <code>Tools</code> menu, choose <code>Global Options</code>.</li>
-<li>In the General tab, update the path to R to point to R Server:</li>
+<li>In the General tab, update the path to R to point to ML Server:</li>
 <ul><li>On the VM deployed using the 'Deploy to Azure' button on the <a href="START_HERE.html">Quick start</a> page the path is <code>C:\Program Files\Microsoft SQL Server\130\R_SERVER</code></li>
-<li>If you installed R Server on your own computer, the path is <code>C:\Program Files\Microsoft\R Client\R_SERVER\bin\x6b</code></li></ul>
+<li>If you installed ML Server on your own computer, the path is <code>C:\Program Files\Microsoft\R Client\R_SERVER\bin\x6b</code></li></ul>
 </ol>
 <li>If you changed the path, exit RStudio. When you relaunch RStudio, R Client will now be the default R engine.</li>
 </ol>

@@ -49,5 +49,5 @@ Once your cluster is ready, go to RStudio and Import the files by with the <code
 ## Scaling a Cluster
 You can also [use the Azure portal](https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-administer-use-portal-linux#scale-clusters) to scale your cluster.
 
-## Scaling Microsoft R Server Operationalization Compute Nodes
+## Scaling Microsoft ML Server Operationalization Compute Nodes
 This solution currently uses a single node for Operationalization - the cluster edge node.  [View instructions here](https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-hadoop-r-server-get-started#how-to-scale-microsoft-r-server-operationalization-compute-nodes-on-hdinsight-worker-nodes) to add compute nodes to the Operationalization Server.

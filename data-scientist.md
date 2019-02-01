@@ -29,14 +29,14 @@ solution.
     </div>
     <div class="col-md-6">
         <div class="sql">
-        SQL Server R Services takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server package) by allowing R to run on the same server as the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
+        SQL Server ML Services takes advantage of the power of SQL Server and RevoScaleR (Microsoft ML Server package) by allowing R to run on the same server as the database. It includes a database service that runs outside the SQL Server process and communicates securely with the R runtime. 
         <p></p>
         This solution package shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on the SQL Server machine. 
         </div>
         <div class="hdi">
-        HDInsight is a cloud Spark and Hadoop service for the enterprise.  HDInsight is also the only managed cloud Hadoop solution with integration to Microsoft R Server.
+        HDInsight is a cloud Spark and Hadoop service for the enterprise.  HDInsight is also the only managed cloud Hadoop solution with integration to Microsoft ML Server.
         <p></p>
-        This solution shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on an HDInsight Spark cluster with Microsoft R Server. 
+        This solution shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on an HDInsight Spark cluster with Microsoft ML Server. 
         </div>
     </div>
 </div>
@@ -158,7 +158,7 @@ The deployed data resides in a newly created database table, showing recommendat
 </div>
 <div class="hdi">
 <h2>Deploy</h2>
-The script <strong>campaign_deployment.R </strong> creates and tests a analytic web service.  The web service can then be used from another application to score future data.  The file <strong>web_scoring.R</strong> can be downloaded to invoke this web service locally on any computer with Microsoft R Server 9.0.1 installed. 
+The script <strong>campaign_deployment.R </strong> creates and tests a analytic web service.  The web service can then be used from another application to score future data.  The file <strong>web_scoring.R</strong> can be downloaded to invoke this web service locally on any computer with Microsoft ML Server 9.0.1 or later installed. 
 <p></p>
 <div class="alert alert-info" role="alert">
 Before running  <strong>campaign_web_scoring.R</strong> on any computer, you must first connect to edge node from that computer.
@@ -181,10 +181,10 @@ The final step of this solution visualizes these recommendations.
 
 The following are required to run the scripts in this solution:
 <ul>
-<li>SQL Server 2016 with Microsoft R Server  (version 9.0.1) installed and configured.  </li>   
+<li>SQL Server 2016 with Microsoft R Server (version 9.0.1) installed and configured.  </li>   
 <li>The SQL user name and password, and the user configured properly to execute R scripts in-memory.</li> 
 <li>SQL Database which the user has write permission and execute stored procedures.</li> 
-<li>For more information about SQL server 2016 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li> 
+<li>For more information about SQL server 2016 and ML Services, please visit: <a href="https://docs.microsoft.com/en-us/sql/advanced-analytics/what-s-new-in-sql-server-machine-learning-services">https://docs.microsoft.com/en-us/sql/advanced-analytics/what-s-new-in-sql-server-machine-learning-services</a></li> 
 </ul>
 </div>
 

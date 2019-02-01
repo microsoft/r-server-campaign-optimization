@@ -75,12 +75,12 @@ The cluster has been created and data loaded for you when you used the <code>Dep
 ## Step 2: Data Prep and Modeling with Debra the Data Scientist
 -----------------------------------------------------------------
 
-Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. <span class="sql">Debra's preferred language for developing the models is using R and SQL. She uses Microsoft R Services with SQL Server 2017 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open Source R.</span><span class="hdi">Debra will develop these models using <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight</a>, the managed cloud Hadoop solution with integration to Microsoft R Server.</span>  
+Now let's meet Debra, the Data Scientist. Debra's job is to use historical data to predict a model for future campaigns. <span class="sql">Debra's preferred language for developing the models is using R and SQL. She uses Microsoft ML Services with SQL Server 2017 as it provides the capability to run large datasets and also is not constrained by memory restrictions of Open Source R.</span><span class="hdi">Debra will develop these models using <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight</a>, the managed cloud Hadoop solution with integration to Microsoft ML Server.</span>  
 
 After analyzing the data she opted to create multiple models and choose the best one.  She will create two machine learning models and compare them, then use the one she likes best to compute a prediction for each combination of day, time, and channel for each lead, and then select the combination with the highest probability of conversion - this will be the recommendation for that lead.  
 
 <div class="sql">
-Debra will work on her own machine, using  <a href = "https://msdn.microsoft.com/en-us/microsoft-r/install-r-client-windows">R Client</a> to execute these R scripts. <span class="cig">R Client is already installed on the VM.</span>  She will also use an IDE to run R.  
+Debra will work on her own machine, using  <a href = "https://docs.microsoft.com/en-us/machine-learning-server/r-client/what-is-microsoft-r-client">R Client</a> to execute these R scripts. <span class="cig">R Client is already installed on the VM.</span>  She will also use an IDE to run R.  
 </div>
 
 <div class="cig">

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Operationalization with R Server
+title: Operationalization with ML Server
 ---
 <div class="alert alert-success" role="alert"> This page describes the 
 <strong>
@@ -9,9 +9,9 @@ title: Operationalization with R Server
 solution.
 </div> 
 
-##  Operationalization with R Server
+##  Operationalization with ML Server
 ---------------------------------------
-To use R Server Operationalization services from your local computer, you must first connect to the edge node using the steps below.   
+To use ML Server Operationalization services from your local computer, you must first connect to the edge node using the steps below.   
 
 ## Connect to Edge Node
 <ul>

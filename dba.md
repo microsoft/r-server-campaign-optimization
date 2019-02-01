@@ -38,7 +38,7 @@ solution.
 Among the key variables to learn from data are the best communication channel (e.g. SMS, Email, Call), the day of the week and the time of the day through which/ during which a given potential customer is targeted by a marketing campaign. This template provides a customer-oriented business with an analytics tool that helps determine the best combination of these three variables for each customer, based (among others) on financial and demographic data.
 </p>
 
-For businesses that prefer an on-prem solution, the implementation with SQL Server R Services is a great option, which takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server). In this template, we implemented all steps in SQL stored procedures: data preprocessing, and feature engineering are implemented in pure SQL, while data cleaning, and the model training, scoring and evaluation steps are implemented with SQL stored procedures calling R (Microsoft R Server) code. 
+For businesses that prefer an on-prem solution, the implementation with SQL Server ML Services is a great option, which takes advantage of the power of SQL Server and RevoScaleR (Microsoft ML Server). In this template, we implemented all steps in SQL stored procedures: data preprocessing, and feature engineering are implemented in pure SQL, while data cleaning, and the model training, scoring and evaluation steps are implemented with SQL stored procedures calling R (Microsoft ML Server) code. 
 
 All the steps can be executed on SQL Server client environment (SQL Server Management Studio). We provide a Windows PowerShell script which invokes the SQL scripts and demonstrates the end-to-end modeling process.
 
@@ -47,10 +47,10 @@ All the steps can be executed on SQL Server client environment (SQL Server Manag
 
 The following are required to run the scripts in this solution:
 <ul>
-<li>SQL Server 2016 or higher with Microsoft R Server installed and configured.  </li>   
+<li>SQL Server 2016 or higher with Microsoft ML Server installed and configured.  </li>   
 <li>The SQL user name and password, and the user configured properly to execute R scripts in-memory.</li> 
 <li>SQL Database which the user has write permission and execute stored procedures.</li> 
-<li>For more information about SQL server 2017 and R service, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li> 
+<li>For more information about SQL server 2017 and ML Services, please visit: <a href="https://docs.microsoft.com/en-us/sql/advanced-analytics/what-s-new-in-sql-server-machine-learning-services">https://docs.microsoft.com/en-us/sql/advanced-analytics/what-s-new-in-sql-server-machine-learning-services</a></li> 
 </ul>
 
 
@@ -248,7 +248,7 @@ Before proceeding to the next step, the user might want to inspect the metrics_t
 
 In this step, we create two stored procedures that use the selected prediction model to provide channel-day-time recommendations for every customer. 
 
-The first one, `[dbo].[scoring]`, scores the full data set through R services, by using the selected model stored in table `Campaign_Models`. The results are written in a table called `Prob_Id`, containing part of the full table in addition to the scored probability. The full data set is created on the fly through a SQL query: every row (every customer Lead_Id) of `CM_AD_N` is replicated 63 times, each row corresponding to a different combination of `Channel`, `Day_Of_Time` and `Day_Of_Week`.
+The first one, `[dbo].[scoring]`, scores the full data set through ML services, by using the selected model stored in table `Campaign_Models`. The results are written in a table called `Prob_Id`, containing part of the full table in addition to the scored probability. The full data set is created on the fly through a SQL query: every row (every customer Lead_Id) of `CM_AD_N` is replicated 63 times, each row corresponding to a different combination of `Channel`, `Day_Of_Time` and `Day_Of_Week`.
 
 The second one, `[dbo].[campaign_recommendation]`, is the only one called by the PowerShell. It first executes the first stored procedure, and then select from `Prob_Id` the rows corresponding to the channel-day-time with the highest predicted conversion probability. If for a given customer, two or more combinations give the highest predicted probability, one is selected randomly. This is stored in an intermediate table called `Recommended_Combinations`. Finally, an inner join adds back demographic and financial variables to the previous table, and the result is stored in `Recommendations`_N. Denormalization is performed through this query for the variables of interest. This table will be used for visualization in PowerBI.
 

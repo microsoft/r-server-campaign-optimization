@@ -1,6 +1,7 @@
 <img src="Resources/Images/management.png" align="right">
 
 # Campaign Optimization - Predicting How and When to Contact Leads
+Being able to optimize when and how to contact potential customers improves success rates and customer experience.<br/>This is an important scenario in many industries, including Retail, Services and Finance. This solution provides a way to optimize marketing campaigns targeting leads.
 
 ### Deploy to Azure on SQL Server
 [![Deploy to Azure (SQL Server)](https://raw.githubusercontent.com/Azure/Azure-CortanaIntelligence-SolutionAuthoringWorkspace/master/docs/images/DeployToAzure.PNG)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMicrosoft%2Fr-server-campaign-optimization%2Fmaster%2FArmTemplates%2Fcampaign_arm.json)

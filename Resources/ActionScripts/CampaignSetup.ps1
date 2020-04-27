@@ -62,6 +62,8 @@ $startTime = Get-Date
 Write-Host 
 ("Start time: $startTime")
 
+[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls
 
 if ($SampleWeb -eq "Yes") 
     {
